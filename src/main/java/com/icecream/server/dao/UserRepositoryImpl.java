@@ -12,7 +12,12 @@ import java.util.Optional;
 public class UserRepositoryImpl implements UserRepository {
 
     @Override
-    public User findByUsername(String username) {
+    public User findUserByUsername(String username) {
+        return null;
+    }
+
+    @Override
+    public User findUserByPhoneNumber(String phoneNumber) {
         return null;
     }
 
