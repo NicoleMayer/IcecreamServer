@@ -3,8 +3,9 @@ package com.icecream.server.service;
 import com.icecream.server.dao.UserRepository;
 import com.icecream.server.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -12,9 +13,9 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     /**
-     * @description: Save the user to user repository. Before saving, encode the password.
      * @param user
      * @return void
+     * @description: Save the user to user repository. Before saving, encode the password.
      * @author Kemo
      * @date 2019-04-14
      */
@@ -24,37 +25,24 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * @description: check whether the password is right
      * @param user, password
      * @return boolean
+     * @description: check whether the password is right
      * @author NicoleMayer
      * @date 2019-04-16
      */
     @Override
     public boolean check(User user, String password) {
-        if (user == null || !user.getPassword().equals(password))
-            return false;
-        else
-            return true;
+        return user != null && user.getPassword().equals(password);
     }
 
     /**
-     * @description: Find the user by username
-     * @param username
-     * @return The result user
-     * @author Kemo
-     * @date 2019-04-14
+     * @param phoneNumber
+     * @return
+     * @description find user by phone number
      */
     @Override
-    public User findUserByUsername(String username) {
-        return userRepository.findUserByUsername(username);
+    public User findByPhoneNumber(String phoneNumber) {
+        return userRepository.findByPhoneNumber(phoneNumber);
     }
-
-    @Override
-    public User findUserByPhoneNumber(String phoneNumber) {
-        return userRepository.findUserByPhoneNumber(phoneNumber);
-    }
-
-
-
 }

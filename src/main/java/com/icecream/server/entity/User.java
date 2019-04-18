@@ -14,15 +14,20 @@ public class User {
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private Long id;
 
+    @Column(unique = true)
     private String phoneNumber;
 
     private String username;
 
     private String password;
 
-    public Long getId() { return id; }
+    public Long getId() {
+        return id;
+    }
 
-    public void setId(Long id) { this.id = id; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getPhoneNumber() {
         return phoneNumber;
@@ -54,7 +59,7 @@ public class User {
         this.password = password;
     }
 
-    public User(){
+    public User() {
 
     }
 }

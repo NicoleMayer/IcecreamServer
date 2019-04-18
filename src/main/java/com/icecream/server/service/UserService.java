@@ -7,7 +7,5 @@ public interface UserService {
 
     boolean check(User user, String password);
 
-    User findUserByUsername(String username);
-
-    User findUserByPhoneNumber(String phoneNumber);
+    User findByPhoneNumber(String phoneNumber);
 }
