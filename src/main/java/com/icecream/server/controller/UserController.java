@@ -4,7 +4,7 @@ import com.icecream.server.entity.User;
 import com.icecream.server.service.UserService;
 import com.icecream.server.service.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.json.*;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,73 +16,47 @@ public class UserController {
     private UserValidator userValidator;
 
     /**
-     * @description: deal with login request
      * @param phoneNumber, username, password
      * @return String
+     * @description deal with login request
      * @author Kemo / modified by NicoleMayer
      * @date 2019-04-14
      */
     @GetMapping("/login")
-    public String login(@RequestParam(name="phone",required=false) String phoneNumber,
-                        @RequestParam(required=false) String username,
+    public String login(@RequestParam(name = "phone", required = false) String phoneNumber,
                         @RequestParam String password) {
-        User user;
-
-
-
-        if (username!=null && !username.isEmpty()) {
-            user = userService.findUserByUsername(username);
+        UserValidator.ValidationResult result = userValidator.loginValidate(phoneNumber, password);
+        String response = "fail";
+        try {
+            response = new JSONObject().put("state", result).toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-        else if  (phoneNumber!=null && !phoneNumber.isEmpty()){
-            user = userService.findUserByPhoneNumber(phoneNumber);
-        }
-        else {
-            return "fail";
-        }
-
-        if (userService.check(user, password))
-            return "login";
-        else
-            return "fail";
+        return response;
     }
 
     /**
-     * @description: deal with register request
      * @param phoneNumber, username, password
      * @return String
+     * @description deal with register request
      * @author Kemo / modified by NicoleMayer
      * @date 2019-04-14
      */
-    @PostMapping(path = "/register")
+    @GetMapping(path = "/register")
     public @ResponseBody
-    String register(@RequestParam(name="phone") String phoneNumber,
+    String register(@RequestParam(name = "phone") String phoneNumber,
                     @RequestParam String username,
                     @RequestParam String password) {
-        switch (userValidator.validate(phoneNumber, username, password)) {
-            case Valid:
-                User user = new User(phoneNumber, username, password);
-                System.out.println(phoneNumber+" "+ username+" "+password);
-                userService.save(user);
-                return "User saved";
-            case DuplicatePhoneNumber:
-                return "Phone Number already registered";
-            case DuplicateUserName:
-                return "Username has already been used";
-            case UsernameEmpty:
-                return "Empty username";
-            case UsernameTooShort:
-                return "username too short";
-            case UsernameTooLong:
-                return "username too long";
-            case PasswordEmpty:
-                return "Empty password";
-            case PasswordTooShort:
-                return "password too short";
-            case PasswordTooLong:
-                return "password too long";
-            default:
-                return "";
+        UserValidator.ValidationResult result = userValidator.registerValidate(phoneNumber);
+        if (result == UserValidator.ValidationResult.Valid) {
+            userService.save(new User(phoneNumber, username, password));
         }
-
+        String response = "fail";
+        try {
+            response = new JSONObject().put("state", result).toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return response;
     }
 }

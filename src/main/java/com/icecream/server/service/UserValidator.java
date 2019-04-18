@@ -1,5 +1,6 @@
 package com.icecream.server.service;
 
+import com.icecream.server.entity.User;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -10,51 +11,51 @@ public class UserValidator {
         this.userService = userService;
     }
 
-    //TODO maybe string length check is done in the front end
     public enum ValidationResult {
         DuplicatePhoneNumber,
-        DuplicateUserName,
-        UsernameEmpty,
-        UsernameTooShort,
-        UsernameTooLong,
-        PasswordEmpty,
-        PasswordTooShort,
-        PasswordTooLong,
+        NoSuchUser,
+        WrongPassword,
         Valid
     }
 
-
-    public ValidationResult validate(String phoneNumber, String username, String password) {
-        if (userService.findUserByPhoneNumber(phoneNumber) != null) {
-            return ValidationResult.DuplicatePhoneNumber;
+    /**
+     * @param phoneNumber
+     * @param password
+     * @return
+     * @description Validate login information
+     * @author kemo
+     */
+    public ValidationResult loginValidate(String phoneNumber, String password) {
+        User user = null;
+        if (checkNotEmpty(phoneNumber)) {
+            user = userService.findByPhoneNumber(phoneNumber);
         }
-        if (userService.findUserByUsername(username) != null) {
-            return ValidationResult.DuplicateUserName;
+        if (user == null) {
+            return ValidationResult.NoSuchUser;
         }
-        if (checkEmptyOrWhitespace(username)) {
-            return ValidationResult.UsernameEmpty;
+        System.out.println(user.getUsername()+ " " + user.getPassword() + " " + user.getPhoneNumber());
+        if (userService.check(user, password)) {
+            return ValidationResult.Valid;
+        } else {
+            return ValidationResult.WrongPassword;
         }
-        if (username.length() < 4) {
-            return ValidationResult.UsernameTooShort;
-        }
-        if (username.length() > 16) {
-            return ValidationResult.UsernameTooLong;
-        }
-
-        if (checkEmptyOrWhitespace(password)) {
-            return ValidationResult.PasswordEmpty;
-        }
-        if (password.length() < 4) {
-            return ValidationResult.PasswordTooShort;
-        }
-        if (password.length() > 16) {
-            return ValidationResult.PasswordTooLong;
-        }
-
-        return ValidationResult.Valid;
     }
 
-    private boolean checkEmptyOrWhitespace(String input) {
-        return (input == null || input.trim().length() == 0);
+    /**
+     * @param phoneNumber
+     * @return
+     * @description Validate register information
+     */
+    public ValidationResult registerValidate(String phoneNumber) {
+        if (userService.findByPhoneNumber(phoneNumber) != null) {
+            return ValidationResult.DuplicatePhoneNumber;
+        } else {
+            return ValidationResult.Valid;
+        }
+    }
+
+
+    private boolean checkNotEmpty(String input) {
+        return (input != null && input.trim().length() != 0);
     }
 }
