@@ -19,14 +19,14 @@ public class UserController {
     private UserValidator userValidator;
 
     /**
-     * @param phoneNumber, username, password
+     * @param phoneNumber, password
      * @return String
      * @description deal with login request
      * @author Kemo / modified by NicoleMayer
      * @date 2019-04-14
      */
-    @GetMapping("/login")
-    public String login(@RequestParam(name = "phone", required = false) String phoneNumber,
+    @PostMapping(path = "/login")
+    public String login(@RequestParam(name = "phone") String phoneNumber,
                         @RequestParam String password) {
         UserValidator.ValidationResult result = userValidator.loginValidate(phoneNumber, password);
         String response = "fail";
@@ -45,9 +45,8 @@ public class UserController {
      * @author Kemo / modified by NicoleMayer
      * @date 2019-04-14
      */
-    @GetMapping(path = "/register")
-    public @ResponseBody
-    String register(@RequestParam(name = "phone") String phoneNumber,
+    @PostMapping(path = "/register")
+    public String register(@RequestParam(name = "phone") String phoneNumber,
                     @RequestParam String username,
                     @RequestParam String password) {
         UserValidator.ValidationResult result = userValidator.registerValidate(phoneNumber);

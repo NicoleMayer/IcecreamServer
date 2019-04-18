@@ -56,22 +56,27 @@ public class UserControllerTest {
     *
     */
     @Test
-    public void testLogin() throws URISyntaxException, UnsupportedEncodingException {
-
-        assertEquals(testLoginUtils("12345623456","nicolemayer","12345656"),"login");
-        assertEquals(testLoginUtils(null,"nicolemayer","12345656"),"login");
-        assertEquals(testLoginUtils("12345623456",null,"12345656"),"login");
-        assertEquals(testLoginUtils(null,null,"12345656"),"fail");
-        assertEquals(testLoginUtils("1234562456","nicole2mayer","1235656"),"fail");
+    public void testLogin() throws Exception{
+        testLoginValid();
+        testLoginInvalid();
     }
 
-    public String testLoginUtils(String phone, String username, String password) throws URISyntaxException, UnsupportedEncodingException {
-        String url = LOGIN_URL+"?phone={phone}&username={username}&password={password}";
-        URI expanded = new UriTemplate(url).expand(phone, username, password); // this is what RestTemplate uses
-        url = URLDecoder.decode(expanded.toString(), "UTF-8"); // java.net class
+    public void testLoginValid() throws Exception{
+        assertEquals(testLoginUtils("12345623456","12345656"),"{\"state\":\"Valid\"}");
+    }
 
-        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
-        return response.getBody();
+    public void testLoginInvalid() throws Exception{
+        assertEquals(testLoginUtils("1234562456","1235656"),"{\"state\":\"NoSuchUser\"}");
+    }
+
+    public String testLoginUtils(String phone, String password) throws Exception{
+        HttpHeaders headers = new HttpHeaders();
+        MultiValueMap<String, String> mapInfo = new LinkedMultiValueMap<String, String>();
+        mapInfo.add("phone", phone);
+        mapInfo.add("password", password);
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(mapInfo, headers);
+
+        return restTemplate.postForObject(LOGIN_URL, request, String.class);
     }
 
     /**
@@ -79,22 +84,21 @@ public class UserControllerTest {
     * Method: register(@RequestParam(name="phone") String phoneNumber, @RequestParam String username, @RequestParam String password)
     *
     */
+
     @Test
     public void testRegister() throws Exception {
-        assertEquals(testRegisterUntils("12345623456","nicolemayer", "123123243545665768798"),"password too long");
-        assertEquals(testRegisterUntils("12345623456","nicolemayer", "123"),"password too short");
-        assertEquals(testRegisterUntils("12345623456","nicolemayer", ""),"Empty password");
-
-        assertEquals(testRegisterUntils("12345623456","", "123"),"Empty username");
-        assertEquals(testRegisterUntils("12345623456","ni", "123454565"),"username too short");
-        assertEquals(testRegisterUntils("12345623456","ni34354546576u87798", "123454565"),"username too long");
-
-        assertEquals(testRegisterUntils("12345623456","nicolemayer", "12345656"),"User saved");
-
-        assertEquals(testRegisterUntils("12345623456","nicolemayer2", "12345656"),"Phone Number already registered");
-        assertEquals(testRegisterUntils("12345623457","nicolemayer", "12345656"),"Username has already been used");
+        testRegisterValid();
+        testRegisterInvalid();
+    }
 
 
+    public void testRegisterValid() throws Exception {
+        assertEquals(testRegisterUntils("12345623456","nicolemayer", "12345656"),"{\"state\":\"Valid\"}");
+
+    }
+
+    public void testRegisterInvalid() throws Exception {
+        assertEquals(testRegisterUntils("12345623456","nicolemayer", "12345656"),"{\"state\":\"DuplicatePhoneNumber\"}");
     }
 
     public String testRegisterUntils(String phone, String username, String password) throws Exception {
