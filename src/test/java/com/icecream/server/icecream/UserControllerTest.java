@@ -1,4 +1,4 @@
-package test.com.icecream.server.controller; 
+package com.icecream.server.icecream;
 
 
 import org.junit.After;
