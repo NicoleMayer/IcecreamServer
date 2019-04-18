@@ -1,26 +1,30 @@
 # IcecreamServer
 ## Overview
 
+It uses Spring Boot framework to realize HTTP connection and database connection.
+
 ## API list
 
 ### login
 
-url example: `/login?phone=111&username=111&password=111`
+URL example: `http://server_ip/login?phone=123&password=123`
 
-| name | type | description |
+| Name | Type | Description |
 | - | - | - |
-| phone | parameter | not necessary |
-| username |  parameter | not necessary |
+| phone | parameter | necessary |
 | password |  parameter | necessary |
-| status    | return | login success / login fail |
+| status | return | not registered / password wrong / valid |
 
 ### register
-| name | type | description |
+
+URL example: `http://server_ip/register?phone=123&username=123&password=123`
+
+| Name | Type | Description |
 | - | - | - |
 | phone | parameter | necessary |
 | username |  parameter | necessary |
 | password |  parameter | necessary |
-| status    | return | User saved / Phone Number already registered / Username has already been used / Empty username / username too short / username too long / Empty password / password too short / password too long|
+| status    | return | already registered / valid |
 
 
 ## Tests
@@ -31,6 +35,7 @@ I write 5 tests for login and my results are correct.
 I write 9 tests for register and find some bugs. 
 
 ## Next plans
-* [ ] use token to keep login state
-* [ ] design api returns in a systematic way (maybe use a json format)
+* [ ] Use token to keep login state
+* [ ] Design api returns in a systematic way (maybe use a Json format)
+* [ ] Use post and encryption to increase security
 

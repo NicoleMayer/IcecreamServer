@@ -33,7 +33,6 @@ public class UserValidator {
         if (user == null) {
             return ValidationResult.NoSuchUser;
         }
-        System.out.println(user.getUsername()+ " " + user.getPassword() + " " + user.getPhoneNumber());
         if (userService.check(user, password)) {
             return ValidationResult.Valid;
         } else {
