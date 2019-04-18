@@ -48,6 +48,7 @@ public class UserValidator {
      */
     public ValidationResult registerValidate(String phoneNumber) {
         if (userService.findByPhoneNumber(phoneNumber) != null) {
+            System.out.println("find same phone");
             return ValidationResult.DuplicatePhoneNumber;
         } else {
             return ValidationResult.Valid;
