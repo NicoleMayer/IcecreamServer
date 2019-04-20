@@ -18,21 +18,28 @@ public class UserValidator {
     Valid
   }
 
-    /**
-     * @param phoneNumber
-     * @param password
-     * @return
-     * @description Validate login information
-     * @author kemo
-     */
-    public ValidationResult loginValidate(String phoneNumber, String password) {
-      if (!checkNotEmpty(phoneNumber)) { return ValidationResult.NoSuchUser; }
-      User user;
-      user = userService.findByPhoneNumber(phoneNumber);
-      if (user == null) { return ValidationResult.NoSuchUser; }
-      if (userService.check(user, password)) { return ValidationResult.Valid; }
-      else { return ValidationResult.WrongPassword; }
+  /**
+   * @param phoneNumber
+   * @param password
+   * @return
+   * @description Validate login information
+   * @author kemo
+   */
+  public ValidationResult loginValidate(String phoneNumber, String password) {
+    if (!checkNotEmpty(phoneNumber)) {
+      return ValidationResult.NoSuchUser;
     }
+    User user;
+    user = userService.findByPhoneNumber(phoneNumber);
+    if (user == null) {
+      return ValidationResult.NoSuchUser;
+    }
+    if (userService.check(user, password)) {
+      return ValidationResult.Valid;
+    } else {
+      return ValidationResult.WrongPassword;
+    }
+  }
 
 
   /**
@@ -49,9 +56,11 @@ public class UserValidator {
   }
 
   private boolean checkNotEmpty(String str) {
-    if(str == null){ return false; }
-    for(int i = 0; i < str.length(); i++) {
-      if(!Character.isWhitespace(str.charAt(i))) {
+    if (str == null) {
+      return false;
+    }
+    for (int i = 0; i < str.length(); i++) {
+      if (!Character.isWhitespace(str.charAt(i))) {
         return false;
       }
     }

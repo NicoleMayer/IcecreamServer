@@ -55,6 +55,7 @@ task findbugs(type: FindBugs) {
     source 'src'
     classpath = files()
     effort 'max'
+    reportLevel = "medium"
     reportLevel = "high"
     excludeFilter file('./code_quality_tools/google_findbugs.xml')
 //    excludeFilter file('./code_quality_tools/findbugs-exclude.xml')

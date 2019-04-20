@@ -1,6 +1,5 @@
 package com.icecream.server.controller;
 
-import java.util.logging.Logger;
 import com.icecream.server.entity.User;
 import com.icecream.server.service.UserService;
 import com.icecream.server.service.UserValidator;
@@ -12,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.logging.Logger;
+
 /**
  * @description This class is a rest controller for user login and register
  */
@@ -22,6 +23,7 @@ public class UserController {
   private final UserValidator userValidator;
 
   private final String failState = "{\"state\":\"Fail\"}";
+  static final Logger logger = Logger.getLogger(String.valueOf(UserController.class));
 
   public UserController(UserService userService, UserValidator userValidator) {
     this.userService = userService;
@@ -69,7 +71,7 @@ public class UserController {
       return failState;
     }
     if (userValidator.registerValidate(phoneNumber)
-        != UserValidator.ValidationResult.Valid) {
+            != UserValidator.ValidationResult.Valid) {
       return failState;
     }
     String result = "Valid";
