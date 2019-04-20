@@ -1,17 +1,12 @@
 package com.icecream.server;
 
-import static org.junit.Assert.assertEquals;
-
 import com.icecream.server.entity.User;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+
+import static org.junit.Assert.assertEquals;
 
 
 /**
@@ -23,77 +18,73 @@ import org.springframework.web.client.RestTemplate;
  */
 public class UserControllerTest {
 
-  @Autowired
-  private RestTemplate restTemplate = new RestTemplate();
+  private final RestTemplate restTemplate = new RestTemplate();
 
-  private static String PROTOCOL = "http";
-  private static String HOST = "localhost";
-  private static String PORT = "8080";
-  private static String PRE_URL = PROTOCOL + "://" + HOST + ":" + PORT + "/";
+  private static final String PROTOCOL = "http";
+  private static final String HOST = "localhost";
+  private static final String PORT = "8080";
+  private static final String MAIN_URL = PROTOCOL + "://" + HOST + ":" + PORT + "/";
 
-  private static String LOGIN_URL = PRE_URL + "login";
-  private static String REGISTER_URL = PRE_URL + "register";
-  private static String BEFORE_REGISTER_URL = PRE_URL + "before-register";
+  private static final String LOGIN_URL = MAIN_URL + "login";
+  private static final String REGISTER_URL = MAIN_URL + "register";
+  private static final String BEFORE_REGISTER_URL = MAIN_URL + "before-register";
 
   @Before
-  public void before() throws Exception {
+  public void before() {
 
   }
 
   @After
-  public void after() throws Exception {
+  public void after() {
   }
 
   @Test
-  public void testLoginValid() throws Exception {
-    assertEquals("{\"state\":\"Valid\"}",
-        testLoginUtils("12345623456", "12345656"));
+  public void testLoginValid() {
+    assertEquals("valid login", "{\"state\":\"Valid\"}",
+        restTemplate.postForObject(
+            LOGIN_URL,
+            new User("12345623456", null, "12345656"),
+            String.class)
+    );
   }
 
   @Test
-  public void testLoginInvalid() throws Exception {
-    assertEquals("{\"state\":\"NoSuchUser\"}",
-        testLoginUtils("1234562456", "1235656"));
+  public void testLoginInvalid() {
+    assertEquals("invalid login", "{\"state\":\"NoSuchUser\"}",
+        restTemplate.postForObject(
+            LOGIN_URL,
+            new User("1234562456", null, "1235656"),
+            String.class)
+    );
   }
 
   @Test
-  public void testBeforeRegister() throws Exception {
-    assertEquals("{\"state\":\"DuplicatePhoneNumber\"}",
-        testRegisterUtils(BEFORE_REGISTER_URL, "12345623467", null, null));
-    assertEquals("{\"state\":\"Valid\"}",
-        testRegisterUtils(BEFORE_REGISTER_URL, "12345623477", null, null));
+  public void testDuplicatePhoneBeforeRegister() {
+    assertEquals("duplicate phone", "{\"state\":\"DuplicatePhoneNumber\"}",
+        restTemplate.postForObject(
+            BEFORE_REGISTER_URL,
+            new User("12345623467", null, null),
+            String.class)
+    );
   }
 
   @Test
-  public void testRegister() throws Exception {
-    assertEquals("{\"state\":\"Valid\"}", testRegisterUtils(REGISTER_URL, "12345623456",
-        "nicolemayer", "12345656"));
-    assertEquals("{\"state\":\"Valid\"}", testRegisterUtils(REGISTER_URL, "12345623467",
-        "nicolemayer", "12345656"));
+  public void testValidPhoneBeforeRegister() {
+    assertEquals("valid phone", "{\"state\":\"Valid\"}",
+        restTemplate.postForObject(
+            BEFORE_REGISTER_URL,
+            new User("12345623477", null, null),
+            String.class)
+    );
   }
 
-  public String testLoginUtils(String phone, String password) throws Exception {
-//    HttpHeaders headers = new HttpHeaders();
-//    MultiValueMap<String, String> mapInfo = new LinkedMultiValueMap<String, String>();
-//    mapInfo.add("phone", phone);
-//    mapInfo.add("password", password);
-//    HttpEntity<MultiValueMap<String, String>> request
-//            = new HttpEntity<MultiValueMap<String, String>>(mapInfo, headers);
-    return restTemplate.postForObject(LOGIN_URL, new User(phone, null, password), String.class);
-  }
-
-  public String testRegisterUtils(String url, String phone, String username, String password)
-      throws Exception {
-//    HttpHeaders headers = new HttpHeaders();
-//    MultiValueMap<String, String> mapInfo = new LinkedMultiValueMap<String, String>();
-//    mapInfo.add("phone", phone);
-//    if (url.equals(REGISTER_URL)){
-//      mapInfo.add("username", username);
-//      mapInfo.add("password", password);
-//    }
-//
-//    HttpEntity<MultiValueMap<String, String>> request
-//            = new HttpEntity<MultiValueMap<String, String>>(mapInfo, headers);
-    return restTemplate.postForObject(url, new User(phone, username, password), String.class);
+  @Test
+  public void testRegister() {
+    assertEquals("valid register", "{\"state\":\"Valid\"}",
+        restTemplate.postForObject(
+            REGISTER_URL,
+            new User("12345623456", "nicolemayer", "12345656"),
+            String.class)
+    );
   }
 }
