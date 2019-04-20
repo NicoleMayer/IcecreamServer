@@ -1,5 +1,6 @@
 package com.icecream.server.controller;
 
+import java.util.logging.Logger;
 import com.icecream.server.entity.User;
 import com.icecream.server.service.UserService;
 import com.icecream.server.service.UserValidator;
@@ -17,10 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserController {
   @Autowired
-  private UserService userService;
+  private transient UserService userService;
 
   @Autowired
-  private UserValidator userValidator;
+  private transient UserValidator userValidator;
+
+  static final Logger logger = Logger.getLogger(String.valueOf(UserController.class));
 
   /**
    * @param phoneNumber, password
@@ -33,11 +36,12 @@ public class UserController {
   public String login(@RequestParam(name = "phone") String phoneNumber,
                       @RequestParam String password) {
     UserValidator.ValidationResult result = userValidator.loginValidate(phoneNumber, password);
-    String response = "fail";
+    String response;
     try {
       response = new JSONObject().put("state", result).toString();
     } catch (JSONException e) {
-      e.printStackTrace();
+      response = "json fail";
+      logger.warning("json sexception");
     }
     return response;
   }
@@ -54,7 +58,7 @@ public class UserController {
                          @RequestParam String username,
                          @RequestParam String password) {
     String result = "Valid";
-    String response = result;
+    String response;
     try {
       userService.save(new User(phoneNumber, username, password));
     } catch (DataAccessException ex) {
@@ -64,7 +68,8 @@ public class UserController {
     try {
       response = new JSONObject().put("state", result).toString();
     } catch (JSONException e) {
-      e.printStackTrace();
+      response = "json fail";
+      logger.warning("json sexception");
     }
     return response;
   }
@@ -80,11 +85,10 @@ public class UserController {
   public String beforeRegister(@RequestParam(name = "phone") String phoneNumber) {
     UserValidator.ValidationResult result = userValidator.registerValidate(phoneNumber);
     String response = "fail";
-    System.out.println(result+"?????");
     try {
       response = new JSONObject().put("state", result).toString();
     } catch (JSONException e) {
-      e.printStackTrace();
+      logger.warning("json sexception");
     }
     return response;
   }

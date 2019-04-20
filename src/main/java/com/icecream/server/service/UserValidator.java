@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserValidator {
-  private final UserService userService;
+  private transient final UserService userService;
 
   public UserValidator(UserService userService) {
     this.userService = userService;
@@ -26,18 +26,12 @@ public class UserValidator {
      * @author kemo
      */
     public ValidationResult loginValidate(String phoneNumber, String password) {
-        User user = null;
-        if (checkNotEmpty(phoneNumber)) {
-            user = userService.findByPhoneNumber(phoneNumber);
-        }
-        if (user == null) {
-            return ValidationResult.NoSuchUser;
-        }
-        if (userService.check(user, password)) {
-            return ValidationResult.Valid;
-        } else {
-            return ValidationResult.WrongPassword;
-        }
+      if (!checkNotEmpty(phoneNumber)) { return ValidationResult.NoSuchUser; }
+      User user;
+      user = userService.findByPhoneNumber(phoneNumber);
+      if (user == null) { return ValidationResult.NoSuchUser; }
+      if (userService.check(user, password)) { return ValidationResult.Valid; }
+      else { return ValidationResult.WrongPassword; }
     }
 
 
@@ -48,15 +42,20 @@ public class UserValidator {
    */
   public ValidationResult registerValidate(String phoneNumber) {
     if (userService.findByPhoneNumber(phoneNumber) != null) {
-      System.out.println("find same phone");
       return ValidationResult.DuplicatePhoneNumber;
     } else {
       return ValidationResult.Valid;
     }
   }
 
-
-  private boolean checkNotEmpty(String input) {
-    return (input != null && input.trim().length() != 0);
+  private boolean checkNotEmpty(String str) {
+    if(str == null){ return false; }
+    for(int i = 0; i < str.length(); i++) {
+      if(!Character.isWhitespace(str.charAt(i))) {
+        return false;
+      }
+    }
+    return true;
   }
+
 }

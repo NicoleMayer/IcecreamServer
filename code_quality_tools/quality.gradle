@@ -38,7 +38,7 @@ task pmd(type: Pmd) {
         html.enabled = true
     }
 
-    ignoreFailures = false
+    ignoreFailures = true
 }
 
 apply plugin: 'findbugs'

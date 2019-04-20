@@ -23,7 +23,7 @@ import org.springframework.web.client.RestTemplate;
 public class UserControllerTest {
 
   @Autowired
-  private RestTemplate restTemplate = new RestTemplate();
+  private transient RestTemplate restTemplate = new RestTemplate();
 
   private static String PROTOCOL = "http";
   private static String HOST = "localhost";
@@ -33,6 +33,10 @@ public class UserControllerTest {
   private static String LOGIN_URL = PRE_URL + "login";
   private static String REGISTER_URL = PRE_URL + "register";
   private static String BEFORE_REGISTER_URL = PRE_URL + "beforeregister";
+
+  private static String VALID_STATE = "{\"state\":\"Valid\"}";
+  private static String DUPLICATE_STATE = "{\"state\":\"DuplicatePhoneNumber\"}";
+  private static String NOUSER_STATE = "{\"state\":\"NoSuchUser\"}";
 
   @Before
   public void before() throws Exception {
@@ -45,17 +49,10 @@ public class UserControllerTest {
 
   @Test
   public void testLogin() throws Exception {
-    testLoginValid();
-    testLoginInvalid();
+    assertEquals(testLoginUtils("12345623456", "12345656"), VALID_STATE);
+    assertEquals(testLoginUtils("1234562456", "1235656"), NOUSER_STATE);
   }
 
-  public void testLoginValid() throws Exception {
-    assertEquals(testLoginUtils("12345623456", "12345656"), "{\"state\":\"Valid\"}");
-  }
-
-  public void testLoginInvalid() throws Exception {
-    assertEquals(testLoginUtils("1234562456", "1235656"), "{\"state\":\"NoSuchUser\"}");
-  }
 
   public String testLoginUtils(String phone, String password) throws Exception {
     HttpHeaders headers = new HttpHeaders();
@@ -72,16 +69,16 @@ public class UserControllerTest {
   @Test
   public void testRegister() throws Exception {
     assertEquals(testRegisterUntils(REGISTER_URL, "12345623456",
-            "nicolemayer", "12345656"), "{\"state\":\"Valid\"}");
+            "nicolemayer", "12345656"), VALID_STATE);
     assertEquals(testRegisterUntils(REGISTER_URL, "12345623467",
-            "nicolemayer", "12345656"), "{\"state\":\"Valid\"}");
+            "nicolemayer", "12345656"), VALID_STATE);
 
   }
 
   @Test
   public void testBeforeRegister() throws Exception {
-    assertEquals(testRegisterUntils(BEFORE_REGISTER_URL, "12345623467", null, null), "{\"state\":\"DuplicatePhoneNumber\"}");
-    assertEquals(testRegisterUntils(BEFORE_REGISTER_URL, "12345623477", null, null), "{\"state\":\"Valid\"}");
+    assertEquals(testRegisterUntils(BEFORE_REGISTER_URL, "12345623467", null, null), DUPLICATE_STATE);
+    assertEquals(testRegisterUntils(BEFORE_REGISTER_URL, "12345623477", null, null), VALID_STATE);
   }
 
   public String testRegisterUntils(String url, String phone, String username, String password)
