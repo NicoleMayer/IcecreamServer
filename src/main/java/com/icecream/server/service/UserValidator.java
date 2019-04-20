@@ -33,11 +33,27 @@ public class UserValidator {
     if (user == null) {
       return ValidationResult.NoSuchUser;
     }
-    System.out.println(user.getUsername() + " " + user.getPassword() + " " + user.getPhoneNumber());
-    if (userService.check(user, password)) {
-      return ValidationResult.Valid;
-    } else {
-      return ValidationResult.WrongPassword;
+
+    /**
+     * @param phoneNumber
+     * @param password
+     * @return
+     * @description Validate login information
+     * @author kemo
+     */
+    public ValidationResult loginValidate(String phoneNumber, String password) {
+        User user = null;
+        if (checkNotEmpty(phoneNumber)) {
+            user = userService.findByPhoneNumber(phoneNumber);
+        }
+        if (user == null) {
+            return ValidationResult.NoSuchUser;
+        }
+        if (userService.check(user, password)) {
+            return ValidationResult.Valid;
+        } else {
+            return ValidationResult.WrongPassword;
+        }
     }
   }
 
