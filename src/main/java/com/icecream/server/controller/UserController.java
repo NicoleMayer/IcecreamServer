@@ -6,9 +6,9 @@ import com.icecream.server.service.UserService;
 import com.icecream.server.service.UserValidator;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,24 +17,31 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class UserController {
-  @Autowired
-  private transient UserService userService;
+  private final UserService userService;
 
-  @Autowired
-  private transient UserValidator userValidator;
+  private final UserValidator userValidator;
 
-  static final Logger logger = Logger.getLogger(String.valueOf(UserController.class));
+  private final String failState = "{\"state\":\"Fail\"}";
+
+  public UserController(UserService userService, UserValidator userValidator) {
+    this.userService = userService;
+    this.userValidator = userValidator;
+  }
 
   /**
-   * @param phoneNumber, password
+   * @param user user in the post data
    * @return String
    * @description deal with login request
    * @author Kemo / modified by NicoleMayer
    * @date 2019-04-14
    */
   @PostMapping(path = "/login")
-  public String login(@RequestParam(name = "phone") String phoneNumber,
-                      @RequestParam String password) {
+  public String login(final @RequestBody User user) {
+    final String phoneNumber = user.getPhoneNumber();
+    final String password = user.getPassword();
+    if (phoneNumber == null || password == null) {
+      return failState;
+    }
     UserValidator.ValidationResult result = userValidator.loginValidate(phoneNumber, password);
     String response;
     try {
@@ -47,20 +54,28 @@ public class UserController {
   }
 
   /**
-   * @param phoneNumber, username, password
+   * @param user user in the post data
    * @return String
    * @description deal with register request
    * @author Kemo / modified by NicoleMayer
    * @date 2019-04-14
    */
   @PostMapping(path = "/register")
-  public String register(@RequestParam(name = "phone") String phoneNumber,
-                         @RequestParam String username,
-                         @RequestParam String password) {
+  public String register(final @RequestBody User user) {
+    final String phoneNumber = user.getPhoneNumber();
+    final String password = user.getPassword();
+    final String username = user.getUsername();
+    if (phoneNumber == null || password == null || username == null) {
+      return failState;
+    }
+    if (userValidator.registerValidate(phoneNumber)
+        != UserValidator.ValidationResult.Valid) {
+      return failState;
+    }
     String result = "Valid";
     String response;
     try {
-      userService.save(new User(phoneNumber, username, password));
+      userService.save(user);
     } catch (DataAccessException ex) {
       result = "Fail";
     }
@@ -75,9 +90,9 @@ public class UserController {
   }
 
   /**
-   * @description: check if the phone number already exists
    * @param phoneNumber, username, password
    * @return java.lang.String
+   * @description: check if the phone number already exists
    * @author NicoleMayer
    * @date 2019-04-20
    */
