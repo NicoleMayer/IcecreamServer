@@ -62,6 +62,12 @@ public class User {
     this.password = password;
   }
 
+  /**
+   * This is a constructor for User class.
+   * @param phoneNumber The input phone number.
+   * @param username The input username.
+   * @param password The input password.
+   */
   public User(String phoneNumber, String username, String password) {
     this.phoneNumber = phoneNumber;
     this.username = username;

@@ -70,12 +70,13 @@ public class UserValidator {
       return ValidationResult.Valid;
     }
   }
-/**
- * Check if the string is empty, until method.
- *
- * @param str Input String.
- * @return boolean Whether the input String is empty.
- */
+
+  /**
+   * Check if the string is empty, until method.
+   *
+   * @param str Input String.
+   * @return boolean Whether the input String is empty.
+   */
   private boolean isEmpty(String str) {
     if (str == null) {
       return true;

@@ -1,30 +1,25 @@
 package com.icecream.server;
 
-import com.icecream.server.dao.UserRepository;
-import com.icecream.server.entity.User;
-import com.icecream.server.service.UserService;
-import com.icecream.server.service.UserServiceImpl;
-import com.icecream.server.service.UserValidator;
-import org.junit.Test;
-import org.junit.Before; 
-import org.junit.After;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.junit4.SpringRunner;
-
-import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import com.icecream.server.entity.User;
+import com.icecream.server.service.UserService;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+
 /** 
-* UserServiceImpl Tester. 
-* 
-* @author <Authors name> 
-* @since <pre>Apr 20, 2019</pre> 
-* @version 1.0 
+ * UserServiceImpl Tester.
+ *
+ * @author nicolemayer
+ * @version 1.0
+ * @since <pre>Apr 19, 2019</pre>
 */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = IceCreamServerApplication.class)
@@ -41,25 +36,21 @@ public class UserServiceImplTest {
   }
 
   /**
-  *
-  * Method: save(User user)
-  *
-  */
+   * Test if the save has exception.
+   */
   @Test
   public void testValidSave() throws Exception {
-    try{
+    try {
       userService.save(new User("12345456","niiiiiii","1243545566"));
       userService.save(new User("12345453","niiiii1i","124354556"));
-    }catch (Exception e){
+    } catch (Exception e) {
       fail("method should not fail!");
     }
   }
 
   /**
-  *
-  * Method: check(User user, String password)
-  *
-  */
+   * Check if the password user input the same as original password.
+   */
   @Test
   public void testCheck() throws Exception {
     User user = new User("12345456","niiiiiii","124354556");
@@ -68,9 +59,7 @@ public class UserServiceImplTest {
   }
 
   /**
-  *
-  * Method: findByPhoneNumber(String phoneNumber)
-  *
+  * Check if the phone number has been used.
   */
   @Test
   public void testFindByPhoneNumber() throws Exception {
@@ -78,11 +67,15 @@ public class UserServiceImplTest {
     assertEquals("test find results", false, testFindByPhoneNumberUtils("1234546"));
   }
 
+  /**
+   * Until method for testFindByPhoneNumber, return true if finds one.
+   */
   public boolean testFindByPhoneNumberUtils(String phone) throws Exception {
-    if(userService.findByPhoneNumber(phone)!=null)
+    if (userService.findByPhoneNumber(phone) != null) {
       return true;
-    else
+    } else {
       return false;
+    }
   }
 
 

@@ -103,9 +103,8 @@ public class UserControllerTest {
         restTemplate.postForObject(
             REGISTER_URL,
                 new User(PHONE, "nicolemayer", "12345656"),
-            String.class)
-    );
-    assertEquals("valid register", FAIL_STATE ,
+            String.class));
+    assertEquals("valid register", FAIL_STATE,
             restTemplate.postForObject(
                     REGISTER_URL,
                     new User(PHONE, "nicolemayer", "12345656"),

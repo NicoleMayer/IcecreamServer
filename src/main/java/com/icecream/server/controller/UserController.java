@@ -80,7 +80,8 @@ public class UserController {
   }
 
   /**
-   * Check if the phone number already exists, before registering, the check code will send only if the phone number is correct.
+   * Check if the phone number already exists, before registering,
+   * the check code will send only if the phone number is correct.
    *
    * @param user user in the post data, which is an instance of {@link User}.
    * @return java.lang.String The request state.

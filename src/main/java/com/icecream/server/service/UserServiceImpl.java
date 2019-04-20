@@ -6,16 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * This class is the implementation of {@link UserService}
+ * This class is the implementation of {@link UserService}.
  */
-
 @Service
 public class UserServiceImpl implements UserService {
   @Autowired
   private final transient UserRepository userRepository;
 
-  public UserServiceImpl(UserRepository userRepository){ this.userRepository = userRepository;}
-
+  public UserServiceImpl(UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
 
   @Override
   public void save(User user) {
