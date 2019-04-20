@@ -1,13 +1,12 @@
 package com.icecream.server;
 
+import static org.junit.Assert.assertEquals;
+
 import com.icecream.server.entity.User;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.client.RestTemplate;
-
-import static org.junit.Assert.assertEquals;
-
 
 /**
  * UserController Tester.
@@ -18,7 +17,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class UserControllerTest {
 
-  private final RestTemplate restTemplate = new RestTemplate();
+  private final transient RestTemplate restTemplate = new RestTemplate();
 
   private static final String PROTOCOL = "http";
   private static final String HOST = "localhost";
@@ -32,19 +31,26 @@ public class UserControllerTest {
   private static String VALID_STATE = "{\"state\":\"Valid\"}";
   private static String DUPLICATE_STATE = "{\"state\":\"DuplicatePhoneNumber\"}";
   private static String NOUSER_STATE = "{\"state\":\"NoSuchUser\"}";
+  private static String FAIL_STATE = "{\"state\":\"Fail\"}";
 
   @Before
   public void before() {
-
   }
 
   @After
   public void after() {
   }
 
+  /**
+   * @description: test when the login is valid
+   * @param []
+   * @return void
+   * @author NicoleMayer
+   * @date 2019-04-20
+   */
   @Test
   public void testLoginValid() {
-    assertEquals("valid login", "{\"state\":\"Valid\"}",
+    assertEquals("valid login", VALID_STATE,
         restTemplate.postForObject(
             LOGIN_URL,
             new User("12345623456", null, "12345656"),
@@ -52,9 +58,16 @@ public class UserControllerTest {
     );
   }
 
+  /**
+   * @description: test when the login is invalid
+   * @param []
+   * @return void
+   * @author NicoleMayer
+   * @date 2019-04-20
+   */
   @Test
   public void testLoginInvalid() {
-    assertEquals("invalid login", "{\"state\":\"NoSuchUser\"}",
+    assertEquals("invalid login", NOUSER_STATE,
         restTemplate.postForObject(
             LOGIN_URL,
             new User("1234562456", null, "1235656"),
@@ -62,19 +75,33 @@ public class UserControllerTest {
     );
   }
 
+  /**
+   * @description: test if the phone is duplicate before registering
+   * @param
+   * @return void
+   * @author NicoleMayer
+   * @date 2019-04-20
+   */
   @Test
   public void testDuplicatePhoneBeforeRegister() {
-    assertEquals("duplicate phone", "{\"state\":\"DuplicatePhoneNumber\"}",
+    assertEquals("duplicate phone", DUPLICATE_STATE,
         restTemplate.postForObject(
             BEFORE_REGISTER_URL,
-            new User("12345623467", null, null),
+            new User("12345623456", null, null),
             String.class)
     );
   }
 
+  /**
+   * @description: check if the phone is valid before registering
+   * @param []
+   * @return void
+   * @author NicoleMayer
+   * @date 2019-04-20
+   */
   @Test
   public void testValidPhoneBeforeRegister() {
-    assertEquals("valid phone", "{\"state\":\"Valid\"}",
+    assertEquals("valid phone", VALID_STATE,
         restTemplate.postForObject(
             BEFORE_REGISTER_URL,
             new User("12345623477", null, null),
@@ -82,13 +109,26 @@ public class UserControllerTest {
     );
   }
 
+  /**
+   * @description: check if the register is succeed
+   * @param []
+   * @return void
+   * @author NicoleMayer
+   * @date 2019-04-20
+   */
   @Test
   public void testRegister() {
-    assertEquals("valid register", "{\"state\":\"Valid\"}",
+    assertEquals("valid register", VALID_STATE,
         restTemplate.postForObject(
             REGISTER_URL,
-            new User("12345623456", "nicolemayer", "12345656"),
+                new User("12345623456", "nicolemayer", "12345656"),
             String.class)
+    );
+    assertEquals("valid register", FAIL_STATE ,
+            restTemplate.postForObject(
+                    REGISTER_URL,
+                    new User("12345623456", "nicolemayer", "12345656"),
+                    String.class)
     );
   }
 }

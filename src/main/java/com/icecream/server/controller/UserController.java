@@ -3,26 +3,26 @@ package com.icecream.server.controller;
 import com.icecream.server.entity.User;
 import com.icecream.server.service.UserService;
 import com.icecream.server.service.UserValidator;
+import java.util.logging.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.dao.DataAccessException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.logging.Logger;
 
 /**
  * @description This class is a rest controller for user login and register
  */
 @RestController
 public class UserController {
-  private final UserService userService;
+  private final transient UserService userService;
 
-  private final UserValidator userValidator;
+  private final transient UserValidator userValidator;
 
-  private final String failState = "{\"state\":\"Fail\"}";
+  private static final String FAIL = "{\"state\":\"Fail\"}";
+
   static final Logger logger = Logger.getLogger(String.valueOf(UserController.class));
 
   public UserController(UserService userService, UserValidator userValidator) {
@@ -31,8 +31,8 @@ public class UserController {
   }
 
   /**
-   * @param user user in the post data
-   * @return String
+   * @param user user in the post data, which is an instance of User
+   * @return String a state whether is login or not
    * @description deal with login request
    * @author Kemo / modified by NicoleMayer
    * @date 2019-04-14
@@ -44,20 +44,15 @@ public class UserController {
     if (phoneNumber == null || password == null) {
       return FAIL;
     }
+
     UserValidator.ValidationResult result = userValidator.loginValidate(phoneNumber, password);
-    String response;
-    try {
-      response = new JSONObject().put("state", result).toString();
-    } catch (JSONException e) {
-      response = "json fail";
-      logger.warning("json sexception");
-    }
-    return response;
+    return outputResponse(result.toString());
+
   }
 
   /**
-   * @param user user in the post data
-   * @return String
+   * @param user user in the post data, which is an instance of User
+   * @return String a state whether the user is registered or not
    * @description deal with register request
    * @author Kemo / modified by NicoleMayer
    * @date 2019-04-14
@@ -75,26 +70,19 @@ public class UserController {
       return FAIL;
     }
     String result = "Valid";
-    String response;
     try {
       userService.save(user);
     } catch (DataAccessException ex) {
       result = "Fail";
     }
 
-    try {
-      response = new JSONObject().put("state", result).toString();
-    } catch (JSONException e) {
-      response = "json fail";
-      logger.warning("json sexception");
-    }
-    return response;
+    return outputResponse(result);
   }
 
   /**
    * @param user
    * @return java.lang.String
-   * @description check if the phone number already exists
+   * @description check if the phone number already exists, before registering, the check code will send only if the phone number is correct
    * @author NicoleMayer
    * @date 2019-04-20
    */
@@ -105,10 +93,22 @@ public class UserController {
       return FAIL;
     }
     UserValidator.ValidationResult result = userValidator.registerValidate(phoneNumber);
-    String response = "fail";
+    return outputResponse(result.toString());
+  }
+
+  /**
+   * @description: TODO
+   * @param This is a until method, just for turn the output response from a json object to the string
+   * @return java.lang.String
+   * @author NicoleMayer
+   * @date 2019-04-20
+   */
+  public String outputResponse(String result) {
+    String response;
     try {
       response = new JSONObject().put("state", result).toString();
     } catch (JSONException e) {
+      response = "json fail";
       logger.warning("json sexception");
     }
     return response;

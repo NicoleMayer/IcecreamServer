@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserValidator {
-  private transient final UserService userService;
+  private final transient UserService userService;
 
   public UserValidator(UserService userService) {
     this.userService = userService;
@@ -22,15 +22,17 @@ public class UserValidator {
    * @param phoneNumber
    * @param password
    * @return
-   * @description Validate login information
+   * @description Validate login information, check if the password is right with given phone number
    * @author kemo
    */
   public ValidationResult loginValidate(String phoneNumber, String password) {
-    if (!checkNotEmpty(phoneNumber)) {
+
+    if (isEmpty(phoneNumber)) {
       return ValidationResult.NoSuchUser;
     }
     User user;
     user = userService.findByPhoneNumber(phoneNumber);
+
     if (user == null) {
       return ValidationResult.NoSuchUser;
     }
@@ -45,7 +47,7 @@ public class UserValidator {
   /**
    * @param phoneNumber
    * @return
-   * @description Validate register information
+   * @description Validate register information, check if there doesn't exist a duplicate phone
    */
   public ValidationResult registerValidate(String phoneNumber) {
     if (userService.findByPhoneNumber(phoneNumber) != null) {
@@ -54,10 +56,16 @@ public class UserValidator {
       return ValidationResult.Valid;
     }
   }
-
-  private boolean checkNotEmpty(String str) {
+/**
+ * @description: check if the string is empty, until method
+ * @param
+ * @return boolean
+ * @author NicoleMayer
+ * @date 2019-04-20
+ */
+  private boolean isEmpty(String str) {
     if (str == null) {
-      return false;
+      return true;
     }
     for (int i = 0; i < str.length(); i++) {
       if (!Character.isWhitespace(str.charAt(i))) {

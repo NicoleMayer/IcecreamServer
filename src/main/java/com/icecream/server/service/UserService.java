@@ -8,4 +8,5 @@ public interface UserService {
   boolean check(User user, String password);
 
   User findByPhoneNumber(String phoneNumber);
+
 }
