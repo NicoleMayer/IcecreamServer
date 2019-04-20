@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,16 +24,15 @@ public class UserController {
   private UserValidator userValidator;
 
   /**
-   * @param phoneNumber, password
+   * @param user user in the post data
    * @return String
    * @description deal with login request
    * @author Kemo / modified by NicoleMayer
    * @date 2019-04-14
    */
   @PostMapping(path = "/login")
-  public String login(@RequestParam(name = "phone") String phoneNumber,
-                      @RequestParam String password) {
-    UserValidator.ValidationResult result = userValidator.loginValidate(phoneNumber, password);
+  public String login(final @RequestBody User user) {
+    UserValidator.ValidationResult result = userValidator.loginValidate(user.getPhoneNumber(), user.getPassword());
     String response = "fail";
     try {
       response = new JSONObject().put("state", result).toString();
@@ -43,20 +43,22 @@ public class UserController {
   }
 
   /**
-   * @param phoneNumber, username, password
+   * @param user user in the post data
    * @return String
    * @description deal with register request
    * @author Kemo / modified by NicoleMayer
    * @date 2019-04-14
    */
   @PostMapping(path = "/register")
-  public String register(@RequestParam(name = "phone") String phoneNumber,
-                         @RequestParam String username,
-                         @RequestParam String password) {
+  public String register(final @RequestBody User user) {
+    if (userValidator.registerValidate(user.getPhoneNumber())
+        != UserValidator.ValidationResult.Valid) {
+      return "{\"state\":\"Fail\"}";
+    }
     String result = "Valid";
     String response = result;
     try {
-      userService.save(new User(phoneNumber, username, password));
+      userService.save(user);
     } catch (DataAccessException ex) {
       result = "Fail";
     }
@@ -70,9 +72,9 @@ public class UserController {
   }
 
   /**
-   * @description: check if the phone number already exists
    * @param phoneNumber, username, password
    * @return java.lang.String
+   * @description: check if the phone number already exists
    * @author NicoleMayer
    * @date 2019-04-20
    */
@@ -80,7 +82,6 @@ public class UserController {
   public String beforeRegister(@RequestParam(name = "phone") String phoneNumber) {
     UserValidator.ValidationResult result = userValidator.registerValidate(phoneNumber);
     String response = "fail";
-    System.out.println(result+"?????");
     try {
       response = new JSONObject().put("state", result).toString();
     } catch (JSONException e) {
