@@ -103,7 +103,7 @@ public class UserController {
    * @author NicoleMayer
    * @date 2019-04-20
    */
-  public String outputResponse(String result) {
+  private String outputResponse(String result) {
     String response;
     try {
       response = new JSONObject().put("state", result).toString();

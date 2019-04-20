@@ -32,6 +32,7 @@ public class UserControllerTest {
   private static String DUPLICATE_STATE = "{\"state\":\"DuplicatePhoneNumber\"}";
   private static String NOUSER_STATE = "{\"state\":\"NoSuchUser\"}";
   private static String FAIL_STATE = "{\"state\":\"Fail\"}";
+  private static String PHONE = "12345623456";
 
   @Before
   public void before() {
@@ -53,7 +54,7 @@ public class UserControllerTest {
     assertEquals("valid login", VALID_STATE,
         restTemplate.postForObject(
             LOGIN_URL,
-            new User("12345623456", null, "12345656"),
+            new User(PHONE, null, "12345656"),
             String.class)
     );
   }
@@ -87,7 +88,7 @@ public class UserControllerTest {
     assertEquals("duplicate phone", DUPLICATE_STATE,
         restTemplate.postForObject(
             BEFORE_REGISTER_URL,
-            new User("12345623456", null, null),
+            new User(PHONE, null, null),
             String.class)
     );
   }
@@ -121,13 +122,13 @@ public class UserControllerTest {
     assertEquals("valid register", VALID_STATE,
         restTemplate.postForObject(
             REGISTER_URL,
-                new User("12345623456", "nicolemayer", "12345656"),
+                new User(PHONE, "nicolemayer", "12345656"),
             String.class)
     );
     assertEquals("valid register", FAIL_STATE ,
             restTemplate.postForObject(
                     REGISTER_URL,
-                    new User("12345623456", "nicolemayer", "12345656"),
+                    new User(PHONE, "nicolemayer", "12345656"),
                     String.class)
     );
   }
