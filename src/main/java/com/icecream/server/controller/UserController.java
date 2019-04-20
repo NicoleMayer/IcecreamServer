@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 /**
- * @description This class is a rest controller for user login and register
+ * This class is a rest controller for user login and register.
+ * @author Kemo
+ * @author NicoleMayer
  */
 @RestController
 public class UserController {
@@ -31,11 +33,10 @@ public class UserController {
   }
 
   /**
-   * @param user user in the post data, which is an instance of User
-   * @return String a state whether is login or not
-   * @description deal with login request
-   * @author Kemo / modified by NicoleMayer
-   * @date 2019-04-14
+   * This method is to deal with login request.
+   *
+   * @param user user in the post data, which is an instance of User.
+   * @return String a state whether is login or not.
    */
   @PostMapping(path = "/login")
   public String login(final @RequestBody User user) {
@@ -51,11 +52,10 @@ public class UserController {
   }
 
   /**
-   * @param user user in the post data, which is an instance of User
-   * @return String a state whether the user is registered or not
-   * @description deal with register request
-   * @author Kemo / modified by NicoleMayer
-   * @date 2019-04-14
+   * This method is to deal with login request.
+   *
+   * @param user user in the post data, which is an instance of {@link User}.
+   * @return String a state whether the user is registered or not.
    */
   @PostMapping(path = "/register")
   public String register(final @RequestBody User user) {
@@ -80,11 +80,10 @@ public class UserController {
   }
 
   /**
-   * @param user
-   * @return java.lang.String
-   * @description check if the phone number already exists, before registering, the check code will send only if the phone number is correct
-   * @author NicoleMayer
-   * @date 2019-04-20
+   * Check if the phone number already exists, before registering, the check code will send only if the phone number is correct.
+   *
+   * @param user user in the post data, which is an instance of {@link User}.
+   * @return java.lang.String The request state.
    */
   @PostMapping(path = "/before-register")
   public String beforeRegister(final @RequestBody User user) {
@@ -97,11 +96,10 @@ public class UserController {
   }
 
   /**
-   * @description: TODO
-   * @param This is a until method, just for turn the output response from a json object to the string
-   * @return java.lang.String
-   * @author NicoleMayer
-   * @date 2019-04-20
+   * This is a until method, just for turn the output response from a json object to the string.
+   *
+   * @param result The result needed to be parsed to a response.
+   * @return java.lang.String The response.
    */
   public String outputResponse(String result) {
     String response;

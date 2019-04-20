@@ -4,14 +4,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @description: This is the home page for icecream server
- * @param
- * @return
+ * The class to holds to home page.
  * @author NicoleMayer
- * @date 2019-04-20
  */
 @RestController
 public class Hello {
+
+  /**
+   * This is the home page for icecream server.
+   */
   @RequestMapping("/")
   public String hello() {
     return "Welcome to Icecream";

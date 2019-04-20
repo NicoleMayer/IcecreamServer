@@ -10,7 +10,9 @@ import org.hibernate.annotations.GenericGenerator;
 
 
 /**
- * @description This class is a data class for User
+ * This class is a data class for User.
+ *
+ * @author NicoleMayer
  */
 @Entity
 @Table(name = "user")

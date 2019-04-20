@@ -42,11 +42,7 @@ public class UserControllerTest {
   }
 
   /**
-   * @description: test when the login is valid
-   * @param []
-   * @return void
-   * @author NicoleMayer
-   * @date 2019-04-20
+   * Test when the login is valid.
    */
   @Test
   public void testLoginValid() {
@@ -59,11 +55,7 @@ public class UserControllerTest {
   }
 
   /**
-   * @description: test when the login is invalid
-   * @param []
-   * @return void
-   * @author NicoleMayer
-   * @date 2019-04-20
+   * Test when the login is invalid.
    */
   @Test
   public void testLoginInvalid() {
@@ -76,11 +68,7 @@ public class UserControllerTest {
   }
 
   /**
-   * @description: test if the phone is duplicate before registering
-   * @param
-   * @return void
-   * @author NicoleMayer
-   * @date 2019-04-20
+   * Test if the phone is duplicate before registering.
    */
   @Test
   public void testDuplicatePhoneBeforeRegister() {
@@ -93,11 +81,7 @@ public class UserControllerTest {
   }
 
   /**
-   * @description: check if the phone is valid before registering
-   * @param []
-   * @return void
-   * @author NicoleMayer
-   * @date 2019-04-20
+   * Check if the phone is valid before registering.
    */
   @Test
   public void testValidPhoneBeforeRegister() {
@@ -110,11 +94,7 @@ public class UserControllerTest {
   }
 
   /**
-   * @description: check if the register is succeed
-   * @param []
-   * @return void
-   * @author NicoleMayer
-   * @date 2019-04-20
+   * Check if the register is succeed.
    */
   @Test
   public void testRegister() {

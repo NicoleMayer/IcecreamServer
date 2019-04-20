@@ -7,17 +7,18 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
- * @description This class is used for database query
+ * This class is used for database query.
+ *
+ * @author NicoleMayer
  */
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
   /**
-   * @description: This is an interface for query the database
-   * @param
-   * @return
-   * @author NicoleMayer
-   * @date 2019-04-20
+   * This is an interface for query the database.
+   *
+   * @param phoneNumber The phone number.
+   * @return A instance of {@link User} with input phone number.
    */
   @Query("SELECT u FROM User u WHERE u.phoneNumber = :phoneNumber")
   User findByPhoneNumber(@Param("phoneNumber") String phoneNumber);
