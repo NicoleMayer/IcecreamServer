@@ -18,22 +18,6 @@ public class UserValidator {
     Valid
   }
 
-  /**
-   * @param phoneNumber
-   * @param password
-   * @return
-   * @description Validate login information
-   * @author kemo
-   */
-  public ValidationResult loginValidate(String phoneNumber, String password) {
-    User user = null;
-    if (checkNotEmpty(phoneNumber)) {
-      user = userService.findByPhoneNumber(phoneNumber);
-    }
-    if (user == null) {
-      return ValidationResult.NoSuchUser;
-    }
-
     /**
      * @param phoneNumber
      * @param password
@@ -55,7 +39,7 @@ public class UserValidator {
             return ValidationResult.WrongPassword;
         }
     }
-  }
+
 
   /**
    * @param phoneNumber
