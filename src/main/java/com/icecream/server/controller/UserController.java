@@ -5,7 +5,6 @@ import com.icecream.server.service.UserService;
 import com.icecream.server.service.UserValidator;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,11 +16,16 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class UserController {
-  @Autowired
-  private UserService userService;
+  private final UserService userService;
 
-  @Autowired
-  private UserValidator userValidator;
+  private final UserValidator userValidator;
+
+  private final String failState = "{\"state\":\"Fail\"}";
+
+  public UserController(UserService userService, UserValidator userValidator) {
+    this.userService = userService;
+    this.userValidator = userValidator;
+  }
 
   /**
    * @param user user in the post data
@@ -32,7 +36,12 @@ public class UserController {
    */
   @PostMapping(path = "/login")
   public String login(final @RequestBody User user) {
-    UserValidator.ValidationResult result = userValidator.loginValidate(user.getPhoneNumber(), user.getPassword());
+    final String phoneNumber = user.getPhoneNumber();
+    final String password = user.getPassword();
+    if (phoneNumber == null || password == null) {
+      return failState;
+    }
+    UserValidator.ValidationResult result = userValidator.loginValidate(phoneNumber, password);
     String response = "fail";
     try {
       response = new JSONObject().put("state", result).toString();
@@ -51,9 +60,15 @@ public class UserController {
    */
   @PostMapping(path = "/register")
   public String register(final @RequestBody User user) {
-    if (userValidator.registerValidate(user.getPhoneNumber())
+    final String phoneNumber = user.getPhoneNumber();
+    final String password = user.getPassword();
+    final String username = user.getUsername();
+    if (phoneNumber == null || password == null || username == null) {
+      return failState;
+    }
+    if (userValidator.registerValidate(phoneNumber)
         != UserValidator.ValidationResult.Valid) {
-      return "{\"state\":\"Fail\"}";
+      return failState;
     }
     String result = "Valid";
     String response = result;
