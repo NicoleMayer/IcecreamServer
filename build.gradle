@@ -1,0 +1,49 @@
+
+
+//// I'M NOT SURE whether this part is needed or not
+//buildscript {
+//
+//    repositories {
+//        mavenCentral()
+//    }
+//
+//    dependencies {
+//        classpath 'com.android.tools.build:gradle:1.0.0+'
+//    }
+//
+//}
+
+
+// ref https://stackoverflow.com/questions/45366305/anrdoid-checkstyle-8-1-error-unable-to-create-root-module
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.3.2'
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+
+// important for gradle !!
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
+
+//project属性
+    //group/name(artifact)/version
+    //属性的其他设置方法：ext或者直接在gradle.properties里面读取（一定是此名称）
+//project方法
+    //apply 应用插件
+    //dependencies 添加依赖
+    //repositories 添加仓库
+    //task 定义任务
+
+//apply plugin:'base'
+apply plugin: 'java' // pmd need
+apply from: 'code_quality_tools/quality.gradle'
