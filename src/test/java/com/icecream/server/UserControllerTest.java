@@ -2,6 +2,7 @@ package com.icecream.server;
 
 import static org.junit.Assert.assertEquals;
 
+import com.icecream.server.entity.User;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,7 +33,7 @@ public class UserControllerTest {
 
   private static String LOGIN_URL = PRE_URL + "login";
   private static String REGISTER_URL = PRE_URL + "register";
-  private static String BEFORE_REGISTER_URL = PRE_URL + "beforeregister";
+  private static String BEFORE_REGISTER_URL = PRE_URL + "before-register";
 
   @Before
   public void before() throws Exception {
@@ -44,61 +45,55 @@ public class UserControllerTest {
   }
 
   @Test
-  public void testLogin() throws Exception {
-    testLoginValid();
-    testLoginInvalid();
-  }
-
   public void testLoginValid() throws Exception {
-    assertEquals(testLoginUtils("12345623456", "12345656"), "{\"state\":\"Valid\"}");
+    assertEquals("{\"state\":\"Valid\"}",
+        testLoginUtils("12345623456", "12345656"));
   }
-
-  public void testLoginInvalid() throws Exception {
-    assertEquals(testLoginUtils("1234562456", "1235656"), "{\"state\":\"NoSuchUser\"}");
-  }
-
-  public String testLoginUtils(String phone, String password) throws Exception {
-    HttpHeaders headers = new HttpHeaders();
-    MultiValueMap<String, String> mapInfo = new LinkedMultiValueMap<String, String>();
-    mapInfo.add("phone", phone);
-    mapInfo.add("password", password);
-    HttpEntity<MultiValueMap<String, String>> request
-            = new HttpEntity<MultiValueMap<String, String>>(mapInfo, headers);
-
-    return restTemplate.postForObject(LOGIN_URL, request, String.class);
-  }
-
 
   @Test
-  public void testRegister() throws Exception {
-    assertEquals(testRegisterUntils(REGISTER_URL, "12345623456",
-            "nicolemayer", "12345656"), "{\"state\":\"Valid\"}");
-    assertEquals(testRegisterUntils(REGISTER_URL, "12345623467",
-            "nicolemayer", "12345656"), "{\"state\":\"Valid\"}");
-
+  public void testLoginInvalid() throws Exception {
+    assertEquals("{\"state\":\"NoSuchUser\"}",
+        testLoginUtils("1234562456", "1235656"));
   }
 
   @Test
   public void testBeforeRegister() throws Exception {
-    assertEquals(testRegisterUntils(BEFORE_REGISTER_URL, "12345623467", null, null), "{\"state\":\"DuplicatePhoneNumber\"}");
-    assertEquals(testRegisterUntils(BEFORE_REGISTER_URL, "12345623477", null, null), "{\"state\":\"Valid\"}");
+    assertEquals("{\"state\":\"DuplicatePhoneNumber\"}",
+        testRegisterUtils(BEFORE_REGISTER_URL, "12345623467", null, null));
+    assertEquals("{\"state\":\"Valid\"}",
+        testRegisterUtils(BEFORE_REGISTER_URL, "12345623477", null, null));
   }
 
-  public String testRegisterUntils(String url, String phone, String username, String password)
-          throws Exception {
-    HttpHeaders headers = new HttpHeaders();
-    MultiValueMap<String, String> mapInfo = new LinkedMultiValueMap<String, String>();
-    mapInfo.add("phone", phone);
-    if (url.equals(REGISTER_URL)){
-      mapInfo.add("username", username);
-      mapInfo.add("password", password);
-    }
-
-    HttpEntity<MultiValueMap<String, String>> request
-            = new HttpEntity<MultiValueMap<String, String>>(mapInfo, headers);
-
-    return restTemplate.postForObject(url, request, String.class);
+  @Test
+  public void testRegister() throws Exception {
+    assertEquals("{\"state\":\"Valid\"}", testRegisterUtils(REGISTER_URL, "12345623456",
+        "nicolemayer", "12345656"));
+    assertEquals("{\"state\":\"Valid\"}", testRegisterUtils(REGISTER_URL, "12345623467",
+        "nicolemayer", "12345656"));
   }
 
+  public String testLoginUtils(String phone, String password) throws Exception {
+//    HttpHeaders headers = new HttpHeaders();
+//    MultiValueMap<String, String> mapInfo = new LinkedMultiValueMap<String, String>();
+//    mapInfo.add("phone", phone);
+//    mapInfo.add("password", password);
+//    HttpEntity<MultiValueMap<String, String>> request
+//            = new HttpEntity<MultiValueMap<String, String>>(mapInfo, headers);
+    return restTemplate.postForObject(LOGIN_URL, new User(phone, null, password), String.class);
+  }
 
+  public String testRegisterUtils(String url, String phone, String username, String password)
+      throws Exception {
+//    HttpHeaders headers = new HttpHeaders();
+//    MultiValueMap<String, String> mapInfo = new LinkedMultiValueMap<String, String>();
+//    mapInfo.add("phone", phone);
+//    if (url.equals(REGISTER_URL)){
+//      mapInfo.add("username", username);
+//      mapInfo.add("password", password);
+//    }
+//
+//    HttpEntity<MultiValueMap<String, String>> request
+//            = new HttpEntity<MultiValueMap<String, String>>(mapInfo, headers);
+    return restTemplate.postForObject(url, new User(phone, username, password), String.class);
+  }
 }

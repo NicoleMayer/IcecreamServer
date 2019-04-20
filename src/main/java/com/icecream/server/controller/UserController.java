@@ -20,7 +20,7 @@ public class UserController {
 
   private final UserValidator userValidator;
 
-  private final String failState = "{\"state\":\"Fail\"}";
+  private final String FAIL = "{\"state\":\"Fail\"}";
 
   public UserController(UserService userService, UserValidator userValidator) {
     this.userService = userService;
@@ -39,7 +39,7 @@ public class UserController {
     final String phoneNumber = user.getPhoneNumber();
     final String password = user.getPassword();
     if (phoneNumber == null || password == null) {
-      return failState;
+      return FAIL;
     }
     UserValidator.ValidationResult result = userValidator.loginValidate(phoneNumber, password);
     String response = "fail";
@@ -64,11 +64,11 @@ public class UserController {
     final String password = user.getPassword();
     final String username = user.getUsername();
     if (phoneNumber == null || password == null || username == null) {
-      return failState;
+      return FAIL;
     }
     if (userValidator.registerValidate(phoneNumber)
         != UserValidator.ValidationResult.Valid) {
-      return failState;
+      return FAIL;
     }
     String result = "Valid";
     String response = result;
@@ -87,14 +87,18 @@ public class UserController {
   }
 
   /**
-   * @param phoneNumber, username, password
+   * @param user
    * @return java.lang.String
-   * @description: check if the phone number already exists
+   * @description check if the phone number already exists
    * @author NicoleMayer
    * @date 2019-04-20
    */
-  @PostMapping(path = "/beforeregister")
-  public String beforeRegister(@RequestParam(name = "phone") String phoneNumber) {
+  @PostMapping(path = "/before-register")
+  public String beforeRegister(final @RequestBody User user) {
+    String phoneNumber = user.getPhoneNumber();
+    if (phoneNumber == null) {
+      return FAIL;
+    }
     UserValidator.ValidationResult result = userValidator.registerValidate(phoneNumber);
     String response = "fail";
     try {
