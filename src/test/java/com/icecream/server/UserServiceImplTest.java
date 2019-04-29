@@ -53,7 +53,7 @@ public class UserServiceImplTest {
    */
   @Test
   public void testCheck() throws Exception {
-    User user = new User("12345456","niiiiiii","124354556");
+    User user = new User("12345456","niiiiiii","1243545566");
     assertEquals("test password equal", true, userService.check(user, "1243545566"));
     assertEquals("test password equal", false, userService.check(user, "12435456"));
   }

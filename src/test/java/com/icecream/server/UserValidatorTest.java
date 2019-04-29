@@ -58,6 +58,6 @@ public class UserValidatorTest {
     assertEquals("wrong password", UserValidator.ValidationResult.WrongPassword,
             userValidator.loginValidate("12345456", "12454556"));
     assertEquals("valid", UserValidator.ValidationResult.Valid,
-            userValidator.loginValidate("12345456", "124354556"));
+            userValidator.loginValidate("12345453", "124354556"));
   }
 } 

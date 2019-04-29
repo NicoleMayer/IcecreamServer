@@ -1,15 +1,15 @@
 package com.icecream.server.controller;
 
+import com.icecream.server.entity.RssFeed;
 import com.icecream.server.entity.User;
+import com.icecream.server.service.RssFeedService;
 import com.icecream.server.service.UserService;
 import com.icecream.server.service.UserValidator;
 import java.util.logging.Logger;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.dao.DataAccessException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.json.JSONObject;
+import org.json.JSONException;
+import org.springframework.web.bind.annotation.*;
 
 
 /**
@@ -69,14 +69,14 @@ public class UserController {
         != UserValidator.ValidationResult.Valid) {
       return FAIL;
     }
-    String result = "Valid";
     try {
       userService.save(user);
+      return outputResponse("Valid");
     } catch (DataAccessException ex) {
-      result = "Fail";
+      return outputResponse("Fail");
     }
 
-    return outputResponse(result);
+
   }
 
   /**
@@ -103,13 +103,11 @@ public class UserController {
    * @return java.lang.String The response.
    */
   private String outputResponse(String result) {
-    String response;
     try {
-      response = new JSONObject().put("state", result).toString();
+      return new JSONObject().put("state", result).toString();
     } catch (JSONException e) {
-      response = "json fail";
       logger.warning("json sexception");
+      return "json fail";
     }
-    return response;
   }
 }
