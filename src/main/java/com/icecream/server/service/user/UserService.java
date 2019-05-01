@@ -1,5 +1,7 @@
 package com.icecream.server.service.user;
 
+import com.icecream.server.client.LoginResponse;
+import com.icecream.server.client.NormalResponse;
 import com.icecream.server.entity.User;
 
 import java.util.List;
@@ -12,11 +14,7 @@ import java.util.Optional;
  */
 public interface UserService {
 
-  void saveUser(User user);
-
   List<User> getAllUsers();
-
-  boolean check(User user, String password);
 
   User findByPhoneNumber(String phoneNumber);
 
@@ -24,5 +22,9 @@ public interface UserService {
 
   List<User> findAll();
 
-  User getCurrentUser();
+  LoginResponse loginUser(User user);
+
+  NormalResponse registerUser(User user);
+
+  Long verifyToken(String token);
 }

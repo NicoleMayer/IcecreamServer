@@ -1,12 +1,12 @@
 package com.icecream.server;
 
-import static org.junit.Assert.assertEquals;
-
 import com.icecream.server.entity.User;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.client.RestTemplate;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * UserController Tester.
@@ -24,8 +24,8 @@ public class UserControllerTest {
   private static final String PORT = "8080";
   private static final String MAIN_URL = PROTOCOL + "://" + HOST + ":" + PORT + "/";
 
-  private static final String LOGIN_URL = MAIN_URL + "login";
-  private static final String REGISTER_URL = MAIN_URL + "register";
+  private static final String LOGIN_URL = MAIN_URL + "signin";
+  private static final String REGISTER_URL = MAIN_URL + "signup";
   private static final String BEFORE_REGISTER_URL = MAIN_URL + "before-register";
 
   private static String VALID_STATE = "{\"state\":\"Valid\"}";
@@ -50,7 +50,7 @@ public class UserControllerTest {
     assertEquals("valid login", VALID_STATE,
         restTemplate.postForObject(
             LOGIN_URL,
-            new User(PHONE, null, "12345656"),
+            new User("1234", null, "123456"),
             String.class)
     );
   }
@@ -102,12 +102,12 @@ public class UserControllerTest {
     assertEquals("valid register", VALID_STATE,
         restTemplate.postForObject(
             REGISTER_URL,
-                new User(PHONE, "nicolemayer", "12345656"),
+                new User("1234", "nicolemayer", "123456"),
             String.class));
     assertEquals("valid register", FAIL_STATE,
             restTemplate.postForObject(
                     REGISTER_URL,
-                    new User(PHONE, "nicolemayer", "12345656"),
+                    new User("123456", "nicolemayer", "123456"),
                     String.class)
     );
   }

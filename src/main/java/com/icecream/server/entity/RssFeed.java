@@ -1,16 +1,19 @@
 package com.icecream.server.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.validator.constraints.URL;
+import org.apache.log4j.Logger;
+
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
-
+/**
+ * This class is a data class for rss feed.
+ *
+ * @author NicoleMayer
+ */
 @Entity
 @Table(name = "rss_feed")
 public class RssFeed implements Serializable {
@@ -114,8 +117,6 @@ public class RssFeed implements Serializable {
                 ", url='" + url + '\'' +
                 ", channelName='" + channelName + '\'' +
                 ", category='" + category + '\'' +
-                ", userEntities=" + userEntities +
-                ", articleEntities=" + articleEntities +
                 '}';
     }
 }

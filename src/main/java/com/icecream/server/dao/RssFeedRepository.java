@@ -9,7 +9,8 @@ import java.util.List;
 public interface RssFeedRepository extends JpaRepository<RssFeed, Long> {
   List<RssFeed> findByUserEntities(User user);
   List<RssFeed> findByCategory(String category);
-  List<RssFeed> findByUrl(String url); //TODO future for query add new source
+  RssFeed findByUrl(String url);
+  RssFeed findByChannelName(String channelName);
 //  List<String>  findDistinctCategory();
 
 }

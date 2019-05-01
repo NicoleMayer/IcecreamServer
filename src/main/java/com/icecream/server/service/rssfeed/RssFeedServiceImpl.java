@@ -11,13 +11,9 @@ import com.icecream.server.rss.ObjectFactory;
 import com.icecream.server.rss.TRss;
 import com.icecream.server.rss.TRssChannel;
 import com.icecream.server.rss.TRssItem;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.access.method.P;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -25,17 +21,12 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
-import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 
 @Service
-@Transactional
 public class RssFeedServiceImpl implements RssFeedService {
 
     @Autowired
@@ -47,21 +38,29 @@ public class RssFeedServiceImpl implements RssFeedService {
     @Autowired
     private ArticleRepository articleRepository;
 
-    private static final Logger LOGGER = Logger.getLogger(RssFeedServiceImpl.class);
-
     @Override
-    public boolean addChannel(RssFeed rssFeedEntity, User user) throws RSSException{
-
-        if (user.getRssFeedEntities().add(rssFeedRepository.save(rssFeedEntity)))
-        {
-            LOGGER.debug("save the new channel");
-            userRepository.save(user);
-            LOGGER.debug("crawl some articles for the new channel");
-            addArticles(rssFeedEntity);
-            return true;
+    public boolean addChannel(RssFeed rssFeedEntity, User user) {
+        RssFeed exist_rss_feed = rssFeedRepository.findByUrl(rssFeedEntity.getUrl());
+        if (exist_rss_feed == null) {
+            rssFeedRepository.save(rssFeedEntity);
+        } else if (exist_rss_feed.getUserEntities().contains(user)){ //alreay have the feed
+            return false;
         }
 
+        if (user.getRssFeedEntities().add(rssFeedEntity))
+        {
+            System.out.println("save the new channel");
+            userRepository.save(user);
+            System.out.println("crawl some articles for the new channel");
+            addArticles(rssFeedRepository.findByUrl(rssFeedEntity.getUrl()));
+            return true;
+        }
         return false;
+    }
+
+    @Override
+    public RssFeed findByChannelName(String channelName) {
+        return rssFeedRepository.findByChannelName(channelName);
     }
 
     @Override
@@ -77,19 +76,22 @@ public class RssFeedServiceImpl implements RssFeedService {
                 }
             });
         } catch (RSSException e) {
-            LOGGER.debug("Could not save the channel");
+            System.out.println("Could not save the channel");
         }
     }
 
-    @Scheduled(cron = "${com.icecream.server.service.scheduleCron}") //TODO 定时任务
+    @Scheduled(cron = "0 5/10 0 * *") //TODO 定时任务
     public void reloadChannels() {
         rssFeedRepository.findAll().stream().forEach(this::addArticles);
     }
 
     @Override
-//    @PreAuthorize("#blog.userEntity. == authentication.name")
-    public void deleteChannel(RssFeed rssFeedEntity) {
-        rssFeedRepository.delete(rssFeedEntity);
+    public boolean deleteChannel(RssFeed rssFeed, User user) {
+        if (user.getRssFeedEntities().remove(rssFeed)){
+            userRepository.save(user);
+            return true;
+        }
+        return false;
     }
 
     private List<Article> crawlArticles(Source source) throws RSSException {
@@ -124,6 +126,11 @@ public class RssFeedServiceImpl implements RssFeedService {
     @Override
     public List<Article> crawlArticles(String url) throws RSSException {
         return this.crawlArticles(new StreamSource(url));
+    }
+
+    @Override
+    public Optional<RssFeed> findById(long id){
+        return rssFeedRepository.findById(id);
     }
 }
 

@@ -1,9 +1,16 @@
 package com.icecream.server.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 
 
+/**
+ * This class is a data class for article.
+ *
+ * @author NicoleMayer
+ */
 @Entity
 @Table(name = "article")
 public class Article {
@@ -25,6 +32,7 @@ public class Article {
     private Date publishedTime;
 
     @ManyToOne
+    @JsonIgnore
     private RssFeed rssFeedEntity;
 
     public Long getId() {
@@ -80,7 +88,7 @@ public class Article {
                 ", link='" + link + '\'' +
                 ", description='" + description + '\'' +
                 ", publishedTime=" + publishedTime +
-                ", rssFeedEntity=" + rssFeedEntity +
+                ", rssFeedEntity=" + rssFeedEntity.getChannelName() +
                 '}';
     }
 }

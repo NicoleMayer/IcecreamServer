@@ -3,14 +3,12 @@ package com.icecream.server.service.rssfeed;
 import com.icecream.server.dao.ArticleRepository;
 import com.icecream.server.entity.Article;
 import com.icecream.server.entity.RssFeed;
-import com.icecream.server.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -23,21 +21,31 @@ public class ArticleServiceImpl implements ArticleService {
         return articleRepository.findAll();
     }
 
-//    public List<Article> find10NewestArticles() {
-//        PageRequest pageRequest = PageRequest.of(0, 10, Sort.Direction.DESC, "publishedTime");
-//        return articleRepository.findAll(pageRequest).getContent();
-//    }
-
+    /**
+     * find 30 newest articles from one feed
+     * @param rssFeed one rssfeed to find newest articles
+     * @return 30 newest articles
+     */
     public List<Article> find30NewestArticlesFromOneFeed(RssFeed rssFeed) {
         PageRequest pageRequest = PageRequest.of(0, 30, Sort.Direction.DESC, "publishedTime");
-        return articleRepository.findByRssFeedEntity(rssFeed, pageRequest); //TODO 没了GETCONTENT 不知道对不对
+        return articleRepository.findByRssFeedEntity(rssFeed, pageRequest);
     }
 
+    /**
+     * find 30 newest articles from many feeds
+     * @param rssFeeds rssfeeds to find newest articles
+     * @return 30 newest articles
+     */
     public List<Article> find30NewestArticlesFromManyFeeds(Set<RssFeed> rssFeeds) {
         PageRequest pageRequest = PageRequest.of(0, 30, Sort.Direction.DESC, "publishedTime");
         return articleRepository.findByRssFeedEntityIsIn(rssFeeds, pageRequest);
     }
 
+    /**
+     * find an article entity with given id
+     * @param id article id
+     * @return article entity
+     */
     public Article findById(Long id) {
         return articleRepository.findById(id).get();
     }

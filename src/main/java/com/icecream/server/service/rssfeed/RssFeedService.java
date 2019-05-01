@@ -6,10 +6,11 @@ import com.icecream.server.entity.User;
 import com.icecream.server.exception.RSSException;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface RssFeedService {
 
-    boolean addChannel(RssFeed rssFeedEntity, User user) throws RSSException;
+    boolean addChannel(RssFeed rssFeedEntity, User user);
 
     void addArticles(RssFeed rssFeedEntity);
 
@@ -17,5 +18,9 @@ public interface RssFeedService {
 
     void reloadChannels();
 
-    void deleteChannel(RssFeed rssFeedEntity);
+    boolean deleteChannel(RssFeed rssFeedEntity, User user);
+
+    Optional<RssFeed> findById(long id);
+
+    RssFeed findByChannelName(String channelName);
 }

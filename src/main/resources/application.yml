@@ -16,10 +16,9 @@ spring:
     hibernate:
 #      ddl-auto: create
       ddl-auto: update
+      connection:
+        characterEncoding: utf-8
     show-sql: true
 
-# scheduler
-#com.icecream.server.service.scheduleCron: 00 00 * * * ?
-
-#spring.mvc.view.prefix: /static/
-#spring.mvc.view.suffix: .html
+log4j:
+  debug: true

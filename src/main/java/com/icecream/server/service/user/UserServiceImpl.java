@@ -1,23 +1,14 @@
 package com.icecream.server.service.user;
 
-import com.icecream.server.dao.ArticleRepository;
-import com.icecream.server.dao.RssFeedRepository;
+import com.icecream.server.JwtTokenProvider;
+import com.icecream.server.client.LoginResponse;
+import com.icecream.server.client.NormalResponse;
 import com.icecream.server.dao.UserRepository;
-import com.icecream.server.entity.Article;
-import com.icecream.server.entity.RssFeed;
 import com.icecream.server.entity.User;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,46 +17,76 @@ import java.util.Optional;
  */
 @Service
 public class UserServiceImpl implements UserService {
+
   @Autowired
-  private final UserRepository userRepository;
+  private UserRepository userRepository;
 
-  private static final Logger LOGGER = Logger.getLogger(UserServiceImpl.class);
+  @Autowired
+  private PasswordEncoder passwordEncoder;
 
-  public UserServiceImpl(UserRepository userRepository) {
-    this.userRepository = userRepository;
-  }
-
-  @Override
-  public void saveUser(User user) {
-    LOGGER.debug("Save the new user to DB");
-//    user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword())); //TODO 不太明白这里加密的作用
-
-    userRepository.save(user);
-  }
+  @Autowired
+  private JwtTokenProvider jwtTokenProvider;
 
   @Override
   public List<User> getAllUsers() {
-    LOGGER.debug("Getting all users");
+    System.out.println("Getting all users");
     return userRepository.findAll();
   }
 
   @Override
-  public boolean check(User user, String password) {
-    LOGGER.debug(String.format("Check the password %s", password));
-    return user != null && user.getPassword().equals(password);
-  }
-
-  @Override
   public User findByPhoneNumber(String phoneNumber) {
-    LOGGER.debug(String.format("Getting user by phone number=%s", phoneNumber));
+    System.out.println(String.format("Getting user by phone number=%s", phoneNumber));
     return userRepository.findByPhoneNumber(phoneNumber);
   }
 
   @Override
   public Optional<User> findById(long id) {
-    LOGGER.debug(String.format("Getting user=%d", id));
+    System.out.println(String.format("Getting user=%d", id));
     return userRepository.findById(id);
   }
+
+
+  public LoginResponse loginUser(User user) {
+    String phoneNumber = user.getPhoneNumber();
+    String password = user.getPassword();
+
+    User real_user = userRepository.findByPhoneNumber(phoneNumber);
+    if (real_user == null) {
+      return new LoginResponse("can't find phone number", 0, "");
+    }
+
+    LoginResponse loginResponse = new LoginResponse();
+    String encodedPassword = real_user.getPassword();
+
+    if (passwordEncoder.matches(password, encodedPassword)) {
+      String token = jwtTokenProvider.generateToken(real_user);
+      loginResponse.setMessage("login succeed");
+      loginResponse.setMsgCode(2);
+      loginResponse.setToken(token);
+    }
+    else {
+      loginResponse.setMessage("wrong password");
+      loginResponse.setMsgCode(1);
+      loginResponse.setToken("");
+    }
+
+    return loginResponse;
+  }
+
+  @Override
+  public NormalResponse registerUser(User user){
+    // client already deal with the length of username password, before registering, the phone number has been checked
+    // so here I don't handle these problems
+    NormalResponse normalResponse = new NormalResponse("register status");
+
+    user.setPassword(passwordEncoder.encode(user.getPassword()));
+    userRepository.save(user);
+    normalResponse.setMessage("register succeed");
+    normalResponse.setMsgCode(0);
+    return normalResponse;
+  }
+
+
 
   @Override
   public List<User> findAll() {
@@ -73,27 +94,13 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User getCurrentUser(){
-    String phoneNumber = null;
-    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-    if (principal instanceof UserDetails) {
-      phoneNumber = ((UserDetails)principal).getUsername();
-    } else {
-      phoneNumber = principal.toString();
+  public Long verifyToken(String token) {
+    Long id = null;
+    boolean validToken = jwtTokenProvider.validateToken(token);
+    if (validToken == true) {
+      id = jwtTokenProvider.getUserIdFromJWT(token);
     }
-    return findByPhoneNumber(phoneNumber);
-  }
 
-//  @Override
-//  public User findAllChannels(User user) {
-//    List<RssFeed> rssFeedEntities = rssFeedRepository.findByUserEntity(user);
-//    for (RssFeed rssFeedEntity : rssFeedEntities) {
-//      Pageable publishedDate = PageRequest.of(0, 10, Sort.Direction.DESC, "publishedTime");
-//      List<Article> articleEntities = articleRepository.findByRssFeedEntity(rssFeedEntity, publishedDate);
-//      rssFeedEntity.setArticleEntities(articleEntities);
-//    }
-//    user.setRssFeedEntities(rssFeedEntities);
-//    return user;
-//  }
+    return id;
+  }
 }

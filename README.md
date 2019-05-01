@@ -17,12 +17,12 @@ URL example: `http://server_ip/login?phone=123&password=123`
 
 ### register
 
-URL example: `http://server_ip/register?phone=123&username=123&password=123`
+URL example: `http://server_ip/register?phone=123&phoneNumber=123&password=123`
 
 | Name | Type | Description |
 | - | - | - |
 | phone | parameter | necessary |
-| username |  parameter | necessary |
+| phoneNumber |  parameter | necessary |
 | password |  parameter | necessary |
 | status    | return | already registered / valid |
 

@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class IceCreamServerApplication {
 
   public static void main(String[] args) {
+
     SpringApplication.run(IceCreamServerApplication.class, args);
   }
-
 }

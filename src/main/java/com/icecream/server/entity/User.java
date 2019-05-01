@@ -1,9 +1,7 @@
 package com.icecream.server.entity;
 
 import javax.persistence.*;
-
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 
@@ -30,12 +28,18 @@ public class User  {
   @Column(nullable = false)
   private String password;
 
-  @Column(nullable = false)
-  @Enumerated(EnumType.STRING)
-  private Role role;
-
   @ManyToMany(fetch = FetchType.EAGER)
   private Set<RssFeed> rssFeedEntities;
+
+  @Column(name="auth_token")
+  private String authtoken;
+
+  public String getAuthtoken() {
+    return authtoken;
+  }
+  public void setAuthtoken(String authtoken) {
+    this.authtoken = authtoken;
+  }
 
   public Long getId() {
     return id;
@@ -77,14 +81,6 @@ public class User  {
     this.rssFeedEntities = rssFeedEntities;
   }
 
-  public Role getRole() {
-    return role;
-  }
-
-  public void setRole(Role role) {
-    this.role = role;
-  }
-
   public User() {
     super();
   }
@@ -107,8 +103,7 @@ public class User  {
   public String toString() {
     return "User{" +
             "id=" + id +
-            ", phonenumber=" + password +
-            ", password=" + password +
+            ", username=" + username +
             '}';
   }
 }
