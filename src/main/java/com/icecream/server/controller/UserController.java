@@ -1,15 +1,17 @@
 package com.icecream.server.controller;
 
-import com.icecream.server.entity.RssFeed;
 import com.icecream.server.entity.User;
-import com.icecream.server.service.RssFeedService;
-import com.icecream.server.service.UserService;
-import com.icecream.server.service.UserValidator;
-import java.util.logging.Logger;
+import com.icecream.server.service.user.UserService;
+import com.icecream.server.service.user.UserValidator;
+import org.apache.log4j.Logger;
 import org.springframework.dao.DataAccessException;
 import org.json.JSONObject;
 import org.json.JSONException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+
+import java.security.Principal;
+import java.util.List;
 
 
 /**
@@ -23,9 +25,11 @@ public class UserController {
 
   private final transient UserValidator userValidator;
 
+  private final transient RestTemplate restTemplate = new RestTemplate();
+
   private static final String FAIL = "{\"state\":\"Fail\"}";
 
-  static final Logger logger = Logger.getLogger(String.valueOf(UserController.class));
+  private static final Logger LOGGER = Logger.getLogger(UserController.class);
 
   public UserController(UserService userService, UserValidator userValidator) {
     this.userService = userService;
@@ -38,10 +42,11 @@ public class UserController {
    * @param user user in the post data, which is an instance of User.
    * @return String a state whether is login or not.
    */
-  @PostMapping(path = "/login")
+  @RequestMapping(value = "/login", method = RequestMethod.GET)
   public String login(final @RequestBody User user) {
     final String phoneNumber = user.getPhoneNumber();
     final String password = user.getPassword();
+    System.out.println("???????????");
     if (phoneNumber == null || password == null) {
       return FAIL;
     }
@@ -50,6 +55,18 @@ public class UserController {
     return outputResponse(result.toString());
 
   }
+
+  @RequestMapping(value = "/loginPage", method = RequestMethod.GET)
+  public String loginPage(){
+    String res = restTemplate.getForObject(
+            "http://localhost:8080/login",
+            String.class,
+            new User("123456", null, "111111"));
+    if(res == null)
+      res = "res is null";
+    return res;
+  }
+
 
   /**
    * This method is to deal with login request.
@@ -70,7 +87,7 @@ public class UserController {
       return FAIL;
     }
     try {
-      userService.save(user);
+      userService.saveUser(user);
       return outputResponse("Valid");
     } catch (DataAccessException ex) {
       return outputResponse("Fail");
@@ -96,17 +113,44 @@ public class UserController {
     return outputResponse(result.toString());
   }
 
+  @RequestMapping(value = {"/list/users" }, method = RequestMethod.GET) //TODO maybe
+  public String listAllUsers() throws JSONException{
+    List<User> users = userService.findAll();
+    JSONObject msg = new JSONObject().put("users", users);
+    return msg.toString();
+  }
+
+  @RequestMapping(value = "/myusername", method = RequestMethod.GET)
+  @ResponseBody
+  public String currentUserName(Principal principal) {
+    return principal.getName();
+  }
+
+//  @RequestMapping(value = "/Access_Denied", method = RequestMethod.GET) //TODO maybe
+//  public String accessDeniedPage() {
+//    return "accessDenied";
+//  }
+//
+//  @RequestMapping(value="/logout", method = RequestMethod.GET)
+//  public String logout (HttpServletRequest request, HttpServletResponse response) { //TODO 不知道对不对
+//    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//    if (auth != null){
+//      new SecurityContextLogoutHandler().logout(request, response, auth);
+//    }
+//    return "logout";
+//  }
+
   /**
    * This is a until method, just for turn the output response from a json object to the string.
    *
    * @param result The result needed to be parsed to a response.
    * @return java.lang.String The response.
    */
-  private String outputResponse(String result) {
+  public String outputResponse(String result) {
     try {
       return new JSONObject().put("state", result).toString();
     } catch (JSONException e) {
-      logger.warning("json sexception");
+      LOGGER.debug("json sexception");
       return "json fail";
     }
   }

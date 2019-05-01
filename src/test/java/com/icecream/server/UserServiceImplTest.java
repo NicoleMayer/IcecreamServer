@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import com.icecream.server.entity.User;
-import com.icecream.server.service.UserService;
+import com.icecream.server.service.user.UserService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,13 +36,13 @@ public class UserServiceImplTest {
   }
 
   /**
-   * Test if the save has exception.
+   * Test if the addChannel has exception.
    */
   @Test
   public void testValidSave() throws Exception {
     try {
-      userService.save(new User("12345456","niiiiiii","1243545566"));
-      userService.save(new User("12345453","niiiii1i","124354556"));
+      userService.saveUser(new User("12345456","niiiiiii","1243545566"));
+      userService.saveUser(new User("12345453","niiiii1i","124354556"));
     } catch (Exception e) {
       fail("method should not fail!");
     }

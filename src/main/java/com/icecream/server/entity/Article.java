@@ -3,9 +3,7 @@ package com.icecream.server.entity;
 import javax.persistence.*;
 import java.util.Date;
 
-/**
- * Author: Daniel
- */
+
 @Entity
 @Table(name = "article")
 public class Article {
@@ -73,14 +71,15 @@ public class Article {
         this.rssFeedEntity = rssFeedEntity;
     }
 
+
     @Override
     public String toString() {
         return "Article{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
+                ", link='" + link + '\'' +
                 ", description='" + description + '\'' +
                 ", publishedTime=" + publishedTime +
-                ", link='" + link + '\'' +
                 ", rssFeedEntity=" + rssFeedEntity +
                 '}';
     }

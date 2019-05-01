@@ -1,37 +1,67 @@
 package com.icecream.server.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.URL;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import org.apache.log4j.Logger;
 
 @Entity
 @Table(name = "rss_feed")
-public class RssFeed {
+public class RssFeed implements Serializable {
+
+    private static final Logger LOG = Logger.getLogger(RssFeed.class);
+
+    private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonIgnore
     private Long id;
 
-    @URL(message = "Invalid URL!") //TODO usage?
-    @Size(min = 1, message = "Invalid URL!")
-    @Column(length = 1000)
+    @Column(unique=true)
     private String url;
 
-    @Size(min = 1, message = "Name must be at least 1 character!")
-    private String name;
+    @Column(name = "channel_name", unique=true)
+    private String channelName;
 
     private String category;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User userEntity;
+    @JsonIgnore
+    @ManyToMany(mappedBy = "rssFeedEntities", fetch = FetchType.EAGER)
+    private Set<User> userEntities;
 
     @OneToMany(mappedBy = "rssFeedEntity", cascade = CascadeType.REMOVE)
     private List<Article> articleEntities;
 
-    public Long getId() { return id; }
+    @JsonIgnore
+    public RssFeed() {
+        super();
+    }
+
+    public RssFeed(String url) {
+        super();
+        this.url = url;
+    }
+
+    @JsonIgnore
+    public RssFeed(User user, String url) {
+        this.url = url;
+        if (userEntities == null) {
+            LOG.debug("users is null");
+            userEntities = new HashSet<>();
+        }
+        userEntities.add(user);
+    }
+
+    public Long getId() {
+        return id;
+    }
 
     public void setId(Long id) {
         this.id = id;
@@ -45,20 +75,28 @@ public class RssFeed {
         this.url = url;
     }
 
-    public String getName() {
-        return name;
+    public String getChannelName() {
+        return channelName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setChannelName(String channelName) {
+        this.channelName = channelName;
     }
 
-    public User getUserEntity() {
-        return userEntity;
+    public String getCategory() {
+      return category;
     }
 
-    public void setUserEntity(User userEntity) {
-        this.userEntity = userEntity;
+    public void setCategory(String category) {
+      this.category = category;
+    }
+
+    public Set<User> getUserEntities() {
+        return userEntities;
+    }
+
+    public void setUserEntities(Set<User> userEntities) {
+        this.userEntities = userEntities;
     }
 
     public List<Article> getArticleEntities() {
@@ -69,16 +107,14 @@ public class RssFeed {
         this.articleEntities = articleEntities;
     }
 
-    public String getCategory() { return category; }
-
-    public void setCategory(String category) { this.category = category; }
     @Override
     public String toString() {
         return "RssFeed{" +
                 "id=" + id +
                 ", url='" + url + '\'' +
-                ", name='" + name + '\'' +
-                ", userEntity=" + userEntity +
+                ", channelName='" + channelName + '\'' +
+                ", category='" + category + '\'' +
+                ", userEntities=" + userEntities +
                 ", articleEntities=" + articleEntities +
                 '}';
     }

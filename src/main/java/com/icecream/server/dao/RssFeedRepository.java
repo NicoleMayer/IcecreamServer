@@ -7,5 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface RssFeedRepository extends JpaRepository<RssFeed, Long> {
-  List<RssFeed> findByUserEntity(User userEntity);
+  List<RssFeed> findByUserEntities(User user);
+  List<RssFeed> findByCategory(String category);
+  List<RssFeed> findByUrl(String url); //TODO future for query add new source
+//  List<String>  findDistinctCategory();
+
 }

@@ -1,6 +1,7 @@
-package com.icecream.server.service;
+package com.icecream.server.service.user;
 
 import com.icecream.server.entity.User;
+import com.icecream.server.service.user.UserService;
 import org.springframework.stereotype.Component;
 
 /**

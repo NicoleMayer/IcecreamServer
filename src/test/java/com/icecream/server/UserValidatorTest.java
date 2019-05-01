@@ -2,7 +2,7 @@ package com.icecream.server;
 
 import static org.junit.Assert.assertEquals;
 
-import com.icecream.server.service.UserValidator;
+import com.icecream.server.service.user.UserValidator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

@@ -1,11 +1,10 @@
 package com.icecream.server.entity;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 
-import org.hibernate.annotations.GenericGenerator;
-
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -15,28 +14,28 @@ import java.util.List;
  */
 @Entity
 @Table(name = "user")
-public class User {
+public class User  {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @GenericGenerator(name = "system-uuid", strategy = "uuid") //TODO WHY NEED THIS?
+  @Column(nullable = false, updatable = false)
   private Long id;
 
-  @Column(unique = true)
+  @Column(name = "phone_number", nullable = false, unique = true)
   private String phoneNumber;
 
-  @Size(min = 3, message = "Username must be at least 3 characters!")
-//  @UsernameUnique(message = "Such username already exists") TODO USE or NOT
+  @Column(nullable = false)
   private String username;
 
-  @Size(min = 5, message = "Password must be at least 5 characters!")
+  @Column(nullable = false)
   private String password;
 
-  @OneToMany(mappedBy = "userEntity", cascade = CascadeType.REMOVE)
-  private List<RssFeed> rssFeedEntities;
+  @Column(nullable = false)
+  @Enumerated(EnumType.STRING)
+  private Role role;
 
-  @ManyToOne
-  private Country countryEntity;
+  @ManyToMany(fetch = FetchType.EAGER)
+  private Set<RssFeed> rssFeedEntities;
 
   public Long getId() {
     return id;
@@ -70,17 +69,25 @@ public class User {
     this.password = password;
   }
 
-  public List<RssFeed> getRssFeedEntities() {
+  public Set<RssFeed> getRssFeedEntities() {
     return rssFeedEntities;
   }
 
-  public void setRssFeedEntities(List<RssFeed> rssFeedEntities) {
+  public void setRssFeedEntities(Set<RssFeed> rssFeedEntities) {
     this.rssFeedEntities = rssFeedEntities;
   }
 
-  public Country getCountryEntity() { return countryEntity; }
+  public Role getRole() {
+    return role;
+  }
 
-  public void setCountryEntity(Country countryEntity) { this.countryEntity = countryEntity; }
+  public void setRole(Role role) {
+    this.role = role;
+  }
+
+  public User() {
+    super();
+  }
 
   /**
    * This is a constructor for User class.
@@ -89,12 +96,19 @@ public class User {
    * @param password The input password.
    */
   public User(String phoneNumber, String username, String password) {
+    super();
     this.phoneNumber = phoneNumber;
     this.username = username;
     this.password = password;
+    this.rssFeedEntities = new HashSet<>();
   }
 
-  public User() {
-    // This constructor is intentionally empty. Nothing special is needed here.
+  @Override
+  public String toString() {
+    return "User{" +
+            "id=" + id +
+            ", phonenumber=" + password +
+            ", password=" + password +
+            '}';
   }
 }
