@@ -11,12 +11,12 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-//  private static final Logger logger = Logger.getLogger(JwtTokenProvider.class);
+  //  private static final Logger logger = Logger.getLogger(JwtTokenProvider.class);
   private static final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
 
-  private String jwtSecret = "JWTSuperSecretKey";
+  private final String jwtSecret = "JWTSuperSecretKey";
 
-  private long jwtExpirationInMs = 604800000; // 1month
+  private final long jwtExpirationInMs = 604800000; // 1month
 
   public String generateToken(User user) {
 
@@ -26,20 +26,20 @@ public class JwtTokenProvider {
     System.out.println(expiryDate);
 
     System.out.println(now.getTime());
-    System.out.println(now.getTime()+jwtExpirationInMs);
+    System.out.println(now.getTime() + jwtExpirationInMs);
     return Jwts.builder()
-            .setSubject(Long.toString(user.getId()))
-            .setIssuedAt(now)
-            .setExpiration(expiryDate)
-            .signWith(SignatureAlgorithm.HS512, jwtSecret)
-            .compact();
+        .setSubject(Long.toString(user.getId()))
+        .setIssuedAt(now)
+        .setExpiration(expiryDate)
+        .signWith(SignatureAlgorithm.HS512, jwtSecret)
+        .compact();
   }
 
   public Long getUserIdFromJWT(String token) {
     Claims claims = Jwts.parser()
-            .setSigningKey(jwtSecret)
-            .parseClaimsJws(token)
-            .getBody();
+        .setSigningKey(jwtSecret)
+        .parseClaimsJws(token)
+        .getBody();
 
     return Long.parseLong(claims.getSubject());
   }

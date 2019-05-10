@@ -1,7 +1,8 @@
 package com.icecream.server.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -18,105 +19,105 @@ import java.util.Set;
 @Table(name = "rss_feed")
 public class RssFeed implements Serializable {
 
-    private static final Logger LOG = Logger.getLogger(RssFeed.class);
+  private static final Logger LOG = LogManager.getLogger(RssFeed.class);
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @JsonIgnore
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @JsonIgnore
+  private Long id;
 
-    @Column(unique=true)
-    private String url;
+  @Column(unique = true)
+  private String url;
 
-    @Column(name = "channel_name", unique=true)
-    private String channelName;
+  @Column(name = "channel_name", unique = true)
+  private String channelName;
 
-    private String category;
+  private String category;
 
-    @JsonIgnore
-    @ManyToMany(mappedBy = "rssFeedEntities", fetch = FetchType.EAGER)
-    private Set<User> userEntities;
+  @JsonIgnore
+  @ManyToMany(mappedBy = "rssFeedEntities", fetch = FetchType.EAGER)
+  private Set<User> userEntities;
 
-    @OneToMany(mappedBy = "rssFeedEntity", cascade = CascadeType.REMOVE)
-    private List<Article> articleEntities;
+  @OneToMany(mappedBy = "rssFeedEntity", cascade = CascadeType.REMOVE)
+  private List<Article> articleEntities;
 
-    @JsonIgnore
-    public RssFeed() {
-        super();
+  @JsonIgnore
+  public RssFeed() {
+    super();
+  }
+
+  public RssFeed(String url) {
+    super();
+    this.url = url;
+  }
+
+  @JsonIgnore
+  public RssFeed(User user, String url) {
+    this.url = url;
+    if (userEntities == null) {
+      LOG.debug("users is null");
+      userEntities = new HashSet<>();
     }
+    userEntities.add(user);
+  }
 
-    public RssFeed(String url) {
-        super();
-        this.url = url;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    @JsonIgnore
-    public RssFeed(User user, String url) {
-        this.url = url;
-        if (userEntities == null) {
-            LOG.debug("users is null");
-            userEntities = new HashSet<>();
-        }
-        userEntities.add(user);
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public String getUrl() {
+    return url;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public void setUrl(String url) {
+    this.url = url;
+  }
 
-    public String getUrl() {
-        return url;
-    }
+  public String getChannelName() {
+    return channelName;
+  }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
+  public void setChannelName(String channelName) {
+    this.channelName = channelName;
+  }
 
-    public String getChannelName() {
-        return channelName;
-    }
+  public String getCategory() {
+    return category;
+  }
 
-    public void setChannelName(String channelName) {
-        this.channelName = channelName;
-    }
+  public void setCategory(String category) {
+    this.category = category;
+  }
 
-    public String getCategory() {
-      return category;
-    }
+  public Set<User> getUserEntities() {
+    return userEntities;
+  }
 
-    public void setCategory(String category) {
-      this.category = category;
-    }
+  public void setUserEntities(Set<User> userEntities) {
+    this.userEntities = userEntities;
+  }
 
-    public Set<User> getUserEntities() {
-        return userEntities;
-    }
+  public List<Article> getArticleEntities() {
+    return articleEntities;
+  }
 
-    public void setUserEntities(Set<User> userEntities) {
-        this.userEntities = userEntities;
-    }
+  public void setArticleEntities(List<Article> articleEntities) {
+    this.articleEntities = articleEntities;
+  }
 
-    public List<Article> getArticleEntities() {
-        return articleEntities;
-    }
-
-    public void setArticleEntities(List<Article> articleEntities) {
-        this.articleEntities = articleEntities;
-    }
-
-    @Override
-    public String toString() {
-        return "RssFeed{" +
-                "id=" + id +
-                ", url='" + url + '\'' +
-                ", channelName='" + channelName + '\'' +
-                ", category='" + category + '\'' +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "RssFeed{" +
+        "id=" + id +
+        ", url='" + url + '\'' +
+        ", channelName='" + channelName + '\'' +
+        ", category='" + category + '\'' +
+        '}';
+  }
 }
