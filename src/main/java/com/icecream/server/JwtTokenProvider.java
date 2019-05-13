@@ -13,7 +13,11 @@ public class JwtTokenProvider {
 
   private static final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
 
-  private final String jwtSecret = "JWTSuperSecretKey";
+  private final String jwtSecret = "IceCreamServerJWTSuperSecretKey1234567890" +
+      "IceCreamServerJWTSuperSecretKey1234567890" +
+      "IceCreamServerJWTSuperSecretKey1234567890" +
+      "IceCreamServerJWTSuperSecretKey1234567890" +
+      "IceCreamServerJWTSuperSecretKey1234567890";
 
   private final long jwtExpirationInMs = 604800000; // 1month
 
