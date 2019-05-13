@@ -5,11 +5,11 @@ package com.icecream.server.exception;
  *
  * @author NicoleMayer
  */
-public class RSSException extends Exception {
+public class RssException extends Exception {
 
   private static final long serialVersionUID = 1000L;
 
-  public RSSException(Throwable cause) {
+  public RssException(Throwable cause) {
     super(cause);
   }
 

@@ -6,7 +6,7 @@ import com.icecream.server.dao.UserRepository;
 import com.icecream.server.entity.Article;
 import com.icecream.server.entity.RssFeed;
 import com.icecream.server.entity.User;
-import com.icecream.server.exception.RSSException;
+import com.icecream.server.exception.RssException;
 import com.icecream.server.rss.ObjectFactory;
 import com.icecream.server.rss.TRss;
 import com.icecream.server.rss.TRssChannel;
@@ -44,12 +44,13 @@ public class RssFeedServiceImpl implements RssFeedService {
 
   @Override
   public boolean addChannel(RssFeed rssFeedEntity, User user) {
-    RssFeed exist_rss_feed = rssFeedRepository.findByUrl(rssFeedEntity.getUrl());
-    if (exist_rss_feed == null || exist_rss_feed.getUserEntities().contains(user)) { //alreay have the feed
+    RssFeed existRssFeed = rssFeedRepository.findByUrl(rssFeedEntity.getUrl());
+    if (existRssFeed == null
+            || existRssFeed.getUserEntities().contains(user)) { //alreay have the feed
       return false;
     }
 
-    if (user.getRssFeedEntities().add(exist_rss_feed)) {
+    if (user.getRssFeedEntities().add(existRssFeed)) {
       userRepository.save(user);
       logger.info("crawl some articles for the new channel");
       addArticles(rssFeedRepository.findByUrl(rssFeedEntity.getUrl()));
@@ -64,13 +65,14 @@ public class RssFeedServiceImpl implements RssFeedService {
       List<Article> articles = crawlArticles(rssFeedEntity.getUrl());
       articles.forEach(entry -> {
         Article savedArticle =
-                articleRepository.findByRssFeedEntityAndLink(rssFeedEntity, entry.getLink()); //no repeat articles
+                articleRepository.findByRssFeedEntityAndLink(
+                        rssFeedEntity, entry.getLink()); //no repeat articles
         if (savedArticle == null) {
           entry.setRssFeedEntity(rssFeedEntity);
           articleRepository.save(entry);
         }
       });
-    } catch (RSSException e) {
+    } catch (RssException e) {
       logger.info("Could not save the channel");
     }
   }
@@ -89,7 +91,7 @@ public class RssFeedServiceImpl implements RssFeedService {
     return false;
   }
 
-  private List<Article> crawlArticles(Source source) throws RSSException {
+  private List<Article> crawlArticles(Source source) throws RssException {
     List<Article> list = new ArrayList<>();
     try {
       JAXBContext jaxbContext = JAXBContext.newInstance(ObjectFactory.class);
@@ -113,13 +115,13 @@ public class RssFeedServiceImpl implements RssFeedService {
       }
 
     } catch (JAXBException | ParseException e) {
-      throw new RSSException(e);
+      throw new RssException(e);
     }
     return list;
   }
 
   @Override
-  public List<Article> crawlArticles(String url) throws RSSException {
+  public List<Article> crawlArticles(String url) throws RssException {
     return this.crawlArticles(new StreamSource(url));
   }
 

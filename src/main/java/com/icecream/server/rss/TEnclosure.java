@@ -6,9 +6,8 @@ import java.math.BigInteger;
 
 
 /**
- * <p>Java class for tEnclosure complex type.
- *
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * Java class for tEnclosure complex type.
+ * The following schema fragment specifies the expected content contained within this class.
  *
  * <pre>
  * &lt;complexType name="tEnclosure">

@@ -12,7 +12,10 @@ import java.util.Map;
 
 
 /**
- * An item may represent a "story" -- much like a story in a newspaper or magazine; if so its description is a synopsis of the story, and the link points to the full story. An item may also be complete in itself, if so, the description contains the text (entity-encoded HTML is allowed), and the link and title may be omitted.
+ * An item may represent a "story" -- much like a story in a newspaper or magazine;
+ * if so its description is a synopsis of the story, and the link points to the full story.
+ * An item may also be complete in itself, if so, the description contains the text
+ * (entity-encoded HTML is allowed), and the link and title may be omitted.
  *
  * <p>Java class for tRssItem complex type.
  *
@@ -253,21 +256,14 @@ public class TRssItem {
 
   /**
    * Gets the value of the any property.
-   *
-   * <p>
    * This accessor method returns a reference to the live list,
    * not a snapshot. Therefore any modification you make to the
    * returned list will be present inside the JAXB object.
    * This is why there is not a <CODE>set</CODE> method for the any property.
-   *
-   * <p>
    * For example, to add a new item, do as follows:
    * <pre>
    *    getAny().add(newItem);
    * </pre>
-   *
-   *
-   * <p>
    * Objects of the following type(s) are allowed in the list
    * {@link Element }
    * {@link Object }
@@ -281,14 +277,10 @@ public class TRssItem {
 
   /**
    * Gets a map that contains attributes that aren't bound to any typed property on this class.
-   *
-   * <p>
    * the map is keyed by the name of the attribute and
    * the value is the string value of the attribute.
-   * <p>
    * the map returned by this method is live, and you can add new attribute
    * by updating the map directly. Because of this design, there's no setter.
-   *
    * @return always non-null
    */
   public Map<QName, String> getOtherAttributes() {

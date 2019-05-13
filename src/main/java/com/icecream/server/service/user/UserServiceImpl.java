@@ -46,17 +46,17 @@ public class UserServiceImpl implements UserService {
   public LoginResponse loginUser(User user) {
     String phoneNumber = user.getPhoneNumber();
 
-    User real_user = userRepository.findByPhoneNumber(phoneNumber);
-    if (real_user == null) {
+    User realUser = userRepository.findByPhoneNumber(phoneNumber);
+    if (realUser == null) {
       return new LoginResponse("can't find phone number", 0, "");
     }
 
     LoginResponse loginResponse = new LoginResponse();
-    String encodedPassword = real_user.getPassword();
+    String encodedPassword = realUser.getPassword();
 
     String password = user.getPassword();
     if (passwordEncoder.matches(password, encodedPassword)) {
-      String token = jwtTokenProvider.generateToken(real_user);
+      String token = jwtTokenProvider.generateToken(realUser);
       loginResponse.setMessage("login succeed");
       loginResponse.setMsgCode(2);
       loginResponse.setToken(token);
@@ -71,7 +71,8 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public NormalResponse registerUser(User user) {
-    // client already deal with the length of username password, before registering, the phone number has been checked
+    // client already deal with the length of username password,
+    // before registering, the phone number has been checked
     // so here I don't handle these problems
     NormalResponse normalResponse = new NormalResponse("register status");
 
@@ -88,7 +89,7 @@ public class UserServiceImpl implements UserService {
     Long id = null;
     boolean validToken = jwtTokenProvider.validateToken(token);
     if (validToken) {
-      id = jwtTokenProvider.getUserIdFromJWT(token);
+      id = jwtTokenProvider.getUserIdFromJwt(token);
     }
 
     return id;

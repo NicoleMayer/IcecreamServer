@@ -5,7 +5,9 @@ import javax.xml.bind.annotation.*;
 
 
 /**
- * The purpose of this element is something of a mystery! You can use it to specify a search engine box. Or to allow a reader to provide feedback. Most aggregators ignore it.
+ * The purpose of this element is something of a mystery!
+ * You can use it to specify a search engine box. Or to allow a reader to provide feedback.
+ * Most aggregators ignore it.
  *
  * <p>Java class for tTextInput complex type.
  *

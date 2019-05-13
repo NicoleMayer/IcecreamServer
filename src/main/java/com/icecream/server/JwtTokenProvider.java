@@ -43,7 +43,7 @@ public class JwtTokenProvider {
    * @param token a representation of a user
    * @return the id of this user
    */
-  public Long getUserIdFromJWT(String token) {
+  public Long getUserIdFromJwt(String token) {
     Claims claims = Jwts.parser()
             .setSigningKey(jwtSecret)
             .parseClaimsJws(token)

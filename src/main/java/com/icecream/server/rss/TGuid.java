@@ -5,9 +5,8 @@ import javax.xml.bind.annotation.*;
 
 
 /**
- * <p>Java class for tGuid complex type.
- *
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * Java class for tGuid complex type.
+ * The following schema fragment specifies the expected content contained within this class.
  *
  * <pre>
  * &lt;complexType name="tGuid">

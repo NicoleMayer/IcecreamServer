@@ -18,7 +18,7 @@ public class ArticleServiceImpl implements ArticleService {
   private transient ArticleRepository articleRepository;
 
   /**
-   * find 30 newest articles from one feed
+   * find 30 newest articles from one feed.
    *
    * @param rssFeed one rssfeed to find newest articles
    * @return 30 newest articles
@@ -29,7 +29,7 @@ public class ArticleServiceImpl implements ArticleService {
   }
 
   /**
-   * find 30 newest articles from many feeds
+   * find 30 newest articles from many feeds.
    *
    * @param rssFeeds rssfeeds to find newest articles
    * @return 30 newest articles
