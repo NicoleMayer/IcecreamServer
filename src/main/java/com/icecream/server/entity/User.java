@@ -37,6 +37,7 @@ public class User  {
   public String getAuthtoken() {
     return authtoken;
   }
+
   public void setAuthtoken(String authtoken) {
     this.authtoken = authtoken;
   }
@@ -73,9 +74,7 @@ public class User  {
     this.password = password;
   }
 
-  public Set<RssFeed> getRssFeedEntities() {
-    return rssFeedEntities;
-  }
+  public Set<RssFeed> getRssFeedEntities() { return rssFeedEntities; }
 
   public void setRssFeedEntities(Set<RssFeed> rssFeedEntities) {
     this.rssFeedEntities = rssFeedEntities;
@@ -99,6 +98,11 @@ public class User  {
     this.rssFeedEntities = new HashSet<>();
   }
 
+  /**
+   * String representation of the user.
+   *
+   * @return String stands for the user.
+   */
   @Override
   public String toString() {
     return "User{" +

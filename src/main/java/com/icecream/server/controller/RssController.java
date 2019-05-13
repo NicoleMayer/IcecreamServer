@@ -18,11 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * This class is a rest controller for rss subscribe
- * @author NicoleMayer
+ * @author nicolemayer
  */
 @RestController
 public class RssController {
@@ -162,11 +161,6 @@ public class RssController {
       return normalResponse;
     }
 
-//    RssFeed rssFeedEntity = new RssFeed();
-//    rssFeedEntity.setUrl("http://www.feng.com/rss.xml");
-//    rssFeedEntity.setCategory("news");
-//    rssFeedEntity.setChannelName("zheng zhi");
-
     if (!rssFeedService.addChannel(rssFeedEntity, user)) {
       normalResponse.setMsgCode(2);
       normalResponse.setMessage("add failed");
@@ -206,60 +200,6 @@ public class RssController {
       normalResponse.setMsgCode(3);
       normalResponse.setMessage("delete succeed");
     }
-    return normalResponse;
-  }
-
-  @RequestMapping(value = {"/freshChannel"}, method = RequestMethod.GET)
-  public NormalResponse freshChannel(String token){
-    Long user_id = userService.verifyToken(token);
-    NormalResponse normalResponse = new NormalResponse("fresh channels");
-    if (user_id == null) {
-      normalResponse.setMsgCode(0);
-      normalResponse.setMessage("wrong token");
-      return normalResponse;
-    }
-    User user = userService.findById(user_id).get();
-    Set<RssFeed> rssFeedSet = user.getRssFeedEntities();
-    for(RssFeed rssFeed: rssFeedSet){
-      rssFeedService.addArticles(rssFeed);
-    }
-    normalResponse.setMsgCode(1);
-    normalResponse.setMessage("update succeed");
-    return normalResponse;
-  }
-
-  // 逻辑上存在问题：一用户修改，其它用户都被修改
-  // TODO maybe 在建一张只有link的表 用户的分类是另一张表 / 什么都不做，用户无更新权限只能订阅
-  @RequestMapping(value = {"/updateChannel"}, method = RequestMethod.GET)
-  public NormalResponse updateChannel(String token, RssFeed rssFeedEntity) {
-    Long user_id = userService.verifyToken(token);
-    NormalResponse normalResponse = new NormalResponse("update a channel");
-    if (user_id == null) {
-      normalResponse.setMsgCode(0);
-      normalResponse.setMessage("wrong token");
-      return normalResponse;
-    }
-    RssFeed existRssFeedEntity = rssFeedService.findById(rssFeedEntity.getId()).get();
-    User user = userService.findById(user_id).get();
-
-    if (existRssFeedEntity == null) {
-      normalResponse.setMsgCode(1);
-      normalResponse.setMessage("channel not find");
-      return normalResponse;
-    }
-
-    if (rssFeedService.findByChannelName(rssFeedEntity.getChannelName()) != null) {
-      normalResponse.setMsgCode(2);
-      normalResponse.setMessage("channel name already exists");
-      return normalResponse;
-    }
-
-    existRssFeedEntity.setChannelName(rssFeedEntity.getChannelName());
-    existRssFeedEntity.setCategory(rssFeedEntity.getCategory());
-
-    normalResponse.setMsgCode(3);
-    normalResponse.setMessage("update succeed");
-
     return normalResponse;
   }
 }

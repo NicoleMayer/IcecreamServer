@@ -1,7 +1,6 @@
 package com.icecream.server.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.apache.log4j.Logger;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -17,8 +16,6 @@ import java.util.Set;
 @Entity
 @Table(name = "rss_feed")
 public class RssFeed implements Serializable {
-
-    private static final Logger LOG = Logger.getLogger(RssFeed.class);
 
     private static final long serialVersionUID = 1L;
 
@@ -42,21 +39,33 @@ public class RssFeed implements Serializable {
     @OneToMany(mappedBy = "rssFeedEntity", cascade = CascadeType.REMOVE)
     private List<Article> articleEntities;
 
+    /**
+     * This is a constructor for RssFeed class.
+     */
     @JsonIgnore
     public RssFeed() {
         super();
     }
 
+    /**
+     * This is a constructor for RssFeed class.
+     * @param url The input url.
+     */
     public RssFeed(String url) {
         super();
         this.url = url;
     }
 
+    /**
+     * This is a constructor for RssFeed class.
+     * @param user The input user object.
+     * @param url The input url.
+     */
     @JsonIgnore
     public RssFeed(User user, String url) {
         this.url = url;
         if (userEntities == null) {
-            LOG.debug("users is null");
+            System.out.println("users is null");
             userEntities = new HashSet<>();
         }
         userEntities.add(user);
@@ -110,6 +119,11 @@ public class RssFeed implements Serializable {
         this.articleEntities = articleEntities;
     }
 
+    /**
+     * String representation of the rss feed.
+     *
+     * @return String stands for the rss feed.
+     */
     @Override
     public String toString() {
         return "RssFeed{" +

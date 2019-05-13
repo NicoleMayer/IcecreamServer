@@ -79,7 +79,11 @@ public class Article {
         this.rssFeedEntity = rssFeedEntity;
     }
 
-
+    /**
+     * String representation of the article.
+     *
+     * @return String stands for the article.
+     */
     @Override
     public String toString() {
         return "Article{" +

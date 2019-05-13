@@ -14,13 +14,9 @@ import java.util.Optional;
  */
 public interface UserService {
 
-  List<User> getAllUsers();
-
   User findByPhoneNumber(String phoneNumber);
 
   Optional<User> findById(long id);
-
-  List<User> findAll();
 
   LoginResponse loginUser(User user);
 
