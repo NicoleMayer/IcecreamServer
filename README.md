@@ -111,30 +111,6 @@ URL example: `http://server_ip/deleteChannel`
 | status    | return |2 "delete failed" |
 | status    | return |2 "delete succeed" |
 
-### fresh all subscribed channels
-GET
-URL example: `http://server_ip/freshChannel`
-
-| Name | Type | Description |
-| - | - | - |
-| token | parameter | check the user |
-| id | parameter | channel id |
-| status    | return |0 "wrong token" |
-| status    | return |1 "update succeed" |
-
-### update a channel
-GET
-URL example: `http://server_ip/updateChannel`
-
-| Name | Type | Description |
-| - | - | - |
-| token | parameter | check the user |
-| rssFeedEntity | parameter | the updated channel info |
-| status    | return |0 "wrong token" |
-| status    | return |1 "channel not find" |
-| status    | return |2 "channel name already exists" |
-| status    | return |3 "update succeed" |
-
 
 ## Tests
 inside `test/com/icecream/server/controller`
@@ -147,7 +123,7 @@ I write 9 tests for register and find some bugs.
 * [X] Use token to keep login state
 * [X] Design api returns in a systematic way (maybe use a Json format)
 * [X] Use post and encryption to increase security
-* [ ] Write junit test for rss part
-* [ ] Some weird logic about update a channel and subscirbe channel
+* [X] Write junit test for rss part
+* [X] Some weird logic about update a channel and subscirbe channel
   * determine if the sources are given by the app and user can't add a customized rss feed
 

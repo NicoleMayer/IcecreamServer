@@ -17,10 +17,6 @@ public class ArticleServiceImpl implements ArticleService {
     @Autowired
     private ArticleRepository articleRepository;
 
-    public List<Article> findAll() {
-        return articleRepository.findAll();
-    }
-
     /**
      * find 30 newest articles from one feed
      * @param rssFeed one rssfeed to find newest articles
@@ -39,15 +35,6 @@ public class ArticleServiceImpl implements ArticleService {
     public List<Article> find30NewestArticlesFromManyFeeds(Set<RssFeed> rssFeeds) {
         PageRequest pageRequest = PageRequest.of(0, 30, Sort.Direction.DESC, "publishedTime");
         return articleRepository.findByRssFeedEntityIsIn(rssFeeds, pageRequest);
-    }
-
-    /**
-     * find an article entity with given id
-     * @param id article id
-     * @return article entity
-     */
-    public Article findById(Long id) {
-        return articleRepository.findById(id).get();
     }
 
 }

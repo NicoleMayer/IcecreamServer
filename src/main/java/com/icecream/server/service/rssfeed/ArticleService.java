@@ -9,12 +9,8 @@ import java.util.Set;
 
 public interface ArticleService {
 
-    List<Article> findAll();
-
     List<Article> find30NewestArticlesFromOneFeed(RssFeed rssFeed);
 
     List<Article> find30NewestArticlesFromManyFeeds(Set<RssFeed> rssFeeds);
-
-    Article findById(Long id);
 
 }

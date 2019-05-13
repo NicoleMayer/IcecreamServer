@@ -91,16 +91,6 @@ public class UserServiceImplTest {
 
   /**
   *
-  * Method: findAll()
-  *
-  */
-  @Test
-  public void testFindAll() throws Exception {
-  //TODO: Test goes here...
-  }
-
-  /**
-  *
   * Method: verifyToken(String token)
   *
   */

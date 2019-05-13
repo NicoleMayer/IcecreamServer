@@ -4,6 +4,7 @@ import com.icecream.server.client.ArticleResponse;
 import com.icecream.server.client.ArticlesResponse;
 import com.icecream.server.client.FeedsResponse;
 import com.icecream.server.client.NormalResponse;
+import com.icecream.server.dao.ArticleRepository;
 import com.icecream.server.entity.Article;
 import com.icecream.server.entity.RssFeed;
 import com.icecream.server.entity.User;
@@ -32,6 +33,8 @@ public class RssController {
 
   private ArticleService articleService;
 
+  private ArticleRepository articleRepository;
+
   public RssController(UserService userService, RssFeedService rssFeedService, ArticleService articleService) {
     this.userService = userService;
     this.rssFeedService = rssFeedService;
@@ -58,7 +61,7 @@ public class RssController {
     if (id == null) {
       return new FeedsResponse("wrong token", 0, new HashSet<>());
     }
-    User user = userService.findById(id).get();
+    User user = userService.findById(id).isPresent()?userService.findById(id).get():null;
     if (user == null) {
       return new FeedsResponse("user not find", 1, new HashSet<>());
     }
@@ -76,12 +79,11 @@ public class RssController {
     if (user_id == null) {
       return new ArticlesResponse("wrong token", 0, new ArrayList<>());
     }
-    User user = userService.findById(user_id).get();
+    User user = userService.findById(user_id).isPresent()?userService.findById(user_id).get():null;
     if (user == null) {
       return new ArticlesResponse("user not find", 1, new ArrayList<>());
     }
-
-    RssFeed rssFeed = rssFeedService.findById(id).get();
+    RssFeed rssFeed = rssFeedService.findById(id).isPresent()?rssFeedService.findById(id).get():null;
     if (rssFeed == null) {
       return new ArticlesResponse("feed not find", 2, new ArrayList<>());
     }
@@ -103,7 +105,7 @@ public class RssController {
     if (id == null) {
       return new ArticlesResponse("wrong token", 0, new ArrayList<>());
     }
-    User user = userService.findById(id).get();
+    User user = userService.findById(id).isPresent()?userService.findById(id).get():null;
     if (user == null) {
       return new ArticlesResponse("user not find", 1, new ArrayList<>());
     }
@@ -126,7 +128,7 @@ public class RssController {
     if (user_id == null) {
       return new ArticleResponse("wrong token", 0);
     }
-    Article article = articleService.findById(id);
+    Article article = articleRepository.findById(id).isPresent()?articleRepository.findById(id).get():null;
     if (article == null) {
       return new ArticleResponse("article not find", 1);
     }
@@ -154,7 +156,7 @@ public class RssController {
       normalResponse.setMessage("wrong token");
       return normalResponse;
     }
-    User user = userService.findById(id).get();
+    User user = userService.findById(id).isPresent()?userService.findById(id).get():null;
     if (user == null) {
       normalResponse.setMsgCode(1);
       normalResponse.setMessage("user not find");
@@ -177,8 +179,8 @@ public class RssController {
    * @param channel_id channel id
    * @return NormalResponse
    */
-  @RequestMapping(value = {"/deleteChannel"}, method = RequestMethod.GET)
-  public NormalResponse deleteChannel(String token, Long channel_id) {
+  @RequestMapping(value = {"/deleteChannel/{id}"}, method = RequestMethod.GET)
+  public NormalResponse deleteChannel(@PathVariable("id") Long channel_id, String token) {
     Long user_id = userService.verifyToken(token);
     NormalResponse normalResponse = new NormalResponse("delete a channel");
     if (user_id == null) {
@@ -186,8 +188,8 @@ public class RssController {
       normalResponse.setMessage("wrong token");
       return normalResponse;
     }
-    RssFeed rssFeedEntity = rssFeedService.findById(channel_id).get();
-    User user = userService.findById(user_id).get();
+    RssFeed rssFeedEntity = rssFeedService.findById(channel_id).isPresent()?rssFeedService.findById(channel_id).get():null;
+    User user = userService.findById(user_id).isPresent()?userService.findById(user_id).get():null;
     if (rssFeedEntity == null) {
       normalResponse.setMsgCode(1);
       normalResponse.setMessage("channel not find");

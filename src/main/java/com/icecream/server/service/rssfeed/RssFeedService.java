@@ -22,5 +22,4 @@ public interface RssFeedService {
 
     Optional<RssFeed> findById(long id);
 
-    RssFeed findByChannelName(String channelName);
 }

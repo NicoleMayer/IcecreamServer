@@ -40,14 +40,14 @@ public class RssFeedServiceImpl implements RssFeedService {
 
     @Override
     public boolean addChannel(RssFeed rssFeedEntity, User user) {
+        System.out.println("!!! get url  "+rssFeedEntity.getUrl());
         RssFeed exist_rss_feed = rssFeedRepository.findByUrl(rssFeedEntity.getUrl());
-        if (exist_rss_feed == null) {
-            rssFeedRepository.save(rssFeedEntity);
-        } else if (exist_rss_feed.getUserEntities().contains(user)){ //alreay have the feed
+        System.out.println("!!! exist rss feed "+exist_rss_feed);
+        if (exist_rss_feed == null || exist_rss_feed.getUserEntities().contains(user)){ //alreay have the feed
             return false;
         }
 
-        if (user.getRssFeedEntities().add(rssFeedEntity))
+        if (user.getRssFeedEntities().add(exist_rss_feed))
         {
             System.out.println("save the new channel");
             userRepository.save(user);
@@ -56,11 +56,6 @@ public class RssFeedServiceImpl implements RssFeedService {
             return true;
         }
         return false;
-    }
-
-    @Override
-    public RssFeed findByChannelName(String channelName) {
-        return rssFeedRepository.findByChannelName(channelName);
     }
 
     @Override
@@ -87,9 +82,12 @@ public class RssFeedServiceImpl implements RssFeedService {
 
     @Override
     public boolean deleteChannel(RssFeed rssFeed, User user) {
-        if (user.getRssFeedEntities().remove(rssFeed)){
-            userRepository.save(user);
-            return true;
+        for (RssFeed rssFeedEntity: user.getRssFeedEntities()) {
+            if(rssFeedEntity.getId() == rssFeed.getId()) {
+                user.getRssFeedEntities().remove(rssFeedEntity);
+                userRepository.save(user);
+                return true;
+            }
         }
         return false;
     }

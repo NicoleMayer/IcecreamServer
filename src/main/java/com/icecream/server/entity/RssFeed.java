@@ -36,6 +36,7 @@ public class RssFeed implements Serializable {
     @ManyToMany(mappedBy = "rssFeedEntities", fetch = FetchType.EAGER)
     private Set<User> userEntities;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "rssFeedEntity", cascade = CascadeType.REMOVE)
     private List<Article> articleEntities;
 
