@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * This class is a rest controller for user login and register.
+ *
  * @author Kemo
  * @author NicoleMayer
  */
@@ -31,7 +32,7 @@ public class UserController {
    * @return String a state whether is login or not.
    */
   @RequestMapping(value = "/signin", method = RequestMethod.POST)
-  public LoginResponse loginUser(final @RequestBody User user){
+  public LoginResponse loginUser(final @RequestBody User user) {
     return userService.loginUser(user);
   }
 
@@ -60,12 +61,10 @@ public class UserController {
     if (phoneNumber == null) {
       msg.setMessage("phone number is null");
       msg.setMsgCode(0);
-    }
-    else if (userService.findByPhoneNumber(phoneNumber) != null) {
+    } else if (userService.findByPhoneNumber(phoneNumber) != null) {
       msg.setMessage("phone number already exists");
       msg.setMsgCode(1);
-    }
-    else {
+    } else {
       msg.setMessage("phone number doesn't exist");
       msg.setMsgCode(2);
     }

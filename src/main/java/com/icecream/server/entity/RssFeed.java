@@ -19,22 +19,22 @@ public class RssFeed implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @JsonIgnore
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @JsonIgnore
+  private Long id;
 
-    @Column(unique=true)
-    private String url;
+  @Column(unique = true)
+  private String url;
 
-    @Column(name = "channel_name", unique=true)
-    private String channelName;
+  @Column(name = "channel_name", unique = true)
+  private String channelName;
 
-    private String category;
+  private String category;
 
-    @JsonIgnore
-    @ManyToMany(mappedBy = "rssFeedEntities", fetch = FetchType.EAGER)
-    private Set<User> userEntities;
+  @JsonIgnore
+  @ManyToMany(mappedBy = "rssFeedEntities", fetch = FetchType.EAGER)
+  private Set<User> userEntities;
 
     @JsonIgnore
     @OneToMany(mappedBy = "rssFeedEntity", cascade = CascadeType.REMOVE)
@@ -72,53 +72,53 @@ public class RssFeed implements Serializable {
         userEntities.add(user);
     }
 
-    public Long getId() {
-        return id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public String getUrl() {
-        return url;
-    }
+  public String getUrl() {
+    return url;
+  }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
+  public void setUrl(String url) {
+    this.url = url;
+  }
 
-    public String getChannelName() {
-        return channelName;
-    }
+  public String getChannelName() {
+    return channelName;
+  }
 
-    public void setChannelName(String channelName) {
-        this.channelName = channelName;
-    }
+  public void setChannelName(String channelName) {
+    this.channelName = channelName;
+  }
 
-    public String getCategory() {
-      return category;
-    }
+  public String getCategory() {
+    return category;
+  }
 
-    public void setCategory(String category) {
-      this.category = category;
-    }
+  public void setCategory(String category) {
+    this.category = category;
+  }
 
-    public Set<User> getUserEntities() {
-        return userEntities;
-    }
+  public Set<User> getUserEntities() {
+    return userEntities;
+  }
 
-    public void setUserEntities(Set<User> userEntities) {
-        this.userEntities = userEntities;
-    }
+  public void setUserEntities(Set<User> userEntities) {
+    this.userEntities = userEntities;
+  }
 
-    public List<Article> getArticleEntities() {
-        return articleEntities;
-    }
+  public List<Article> getArticleEntities() {
+    return articleEntities;
+  }
 
-    public void setArticleEntities(List<Article> articleEntities) {
-        this.articleEntities = articleEntities;
-    }
+  public void setArticleEntities(List<Article> articleEntities) {
+    this.articleEntities = articleEntities;
+  }
 
     /**
      * String representation of the rss feed.

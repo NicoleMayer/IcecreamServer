@@ -18,9 +18,10 @@ public class LoginResponse {
 
   /**
    * This is a constructor for LoginResponse class.
+   *
    * @param message The description of the response.
    * @param msgCode The number for this message.
-   * @param token The unique string for user identification.
+   * @param token   The unique string for user identification.
    */
   public LoginResponse(String message, int msgCode, String token) {
     this.message = message;
@@ -60,9 +61,9 @@ public class LoginResponse {
   @Override
   public String toString() {
     return "LoginResponse{" +
-            "message='" + message + '\'' +
-            ", msgCode=" + msgCode +
-            ", token='" + token + '\'' +
-            '}';
+        "message='" + message + '\'' +
+        ", msgCode=" + msgCode +
+        ", token='" + token + '\'' +
+        '}';
   }
 }

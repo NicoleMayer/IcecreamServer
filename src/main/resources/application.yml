@@ -4,21 +4,17 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://47.106.243.24:3306/audioBooks?useUnicode=true&characterEncoding=utf-8&useSSL=true
+#    url: jdbc:mysql://47.106.243.24:3306/audioBooks?useUnicode=true&characterEncoding=utf-8&useSSL=true
+    url: jdbc:mysql://39.108.73.166:3306/icecream?useUnicode=true&characterEncoding=utf-8&useSSL=true
     username: root
-    password: 111111
+#    password: 111111
+    password: 123456
   mvc:
     view:
       prefix: /static/
       suffix: .html
-      view-names: html
   jpa:
     hibernate:
 #      ddl-auto: create
       ddl-auto: update
-      connection:
-        characterEncoding: utf-8
     show-sql: true
-
-log4j:
-  debug: true
