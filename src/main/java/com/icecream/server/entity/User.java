@@ -12,7 +12,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "user")
-public class User  {
+public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +31,7 @@ public class User  {
   @ManyToMany(fetch = FetchType.EAGER)
   private Set<RssFeed> rssFeedEntities;
 
-  @Column(name="auth_token")
+  @Column(name = "auth_token")
   private String authtoken;
 
   public String getAuthtoken() {
@@ -74,7 +74,9 @@ public class User  {
     this.password = password;
   }
 
-  public Set<RssFeed> getRssFeedEntities() { return rssFeedEntities; }
+  public Set<RssFeed> getRssFeedEntities() {
+    return rssFeedEntities;
+  }
 
   public void setRssFeedEntities(Set<RssFeed> rssFeedEntities) {
     this.rssFeedEntities = rssFeedEntities;
@@ -86,9 +88,10 @@ public class User  {
 
   /**
    * This is a constructor for User class.
+   *
    * @param phoneNumber The input phone number.
-   * @param username The input username.
-   * @param password The input password.
+   * @param username    The input username.
+   * @param password    The input password.
    */
   public User(String phoneNumber, String username, String password) {
     super();
@@ -106,8 +109,8 @@ public class User  {
   @Override
   public String toString() {
     return "User{" +
-            "id=" + id +
-            ", username=" + username +
-            '}';
+        "id=" + id +
+        ", username=" + username +
+        '}';
   }
 }

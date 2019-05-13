@@ -21,7 +21,8 @@ import java.util.List;
 
 /**
  * This class is a rest controller for rss subscribe
- * @author nicolemayer
+ *
+ * @author NicoleMayer
  */
 @RestController
 public class RssController {
@@ -40,7 +41,8 @@ public class RssController {
 
   /**
    * Welcome page
-   * @return Welcome messgae.
+   *
+   * @return Welcome message.
    */
   @RequestMapping(value = {"/"}, method = RequestMethod.GET)
   public String hello() {
@@ -48,7 +50,8 @@ public class RssController {
   }
 
   /**
-   * User's subscribed channel
+   * User's subscribed channels
+   *
    * @param token verification for user
    * @return FeedsResponse
    */
@@ -58,7 +61,7 @@ public class RssController {
     if (id == null) {
       return new FeedsResponse("wrong token", 0, new HashSet<>());
     }
-    User user = userService.findById(id).get();
+    User user = userService.findById(id).orElse(null);
     if (user == null) {
       return new FeedsResponse("user not find", 1, new HashSet<>());
     }
@@ -67,49 +70,51 @@ public class RssController {
 
   /**
    * Articles for a subscribed channel
+   *
    * @param token verification for user
    * @return ArticlesResponse
    */
   @RequestMapping(value = {"/list/feed/{id}/articles"}, method = RequestMethod.GET)
   public ArticlesResponse getNewestArticlesFromOneFeed(@PathVariable("id") Long id, String token) {
-    Long user_id = userService.verifyToken(token);
-    if (user_id == null) {
+    Long userId = userService.verifyToken(token);
+    if (userId == null) {
       return new ArticlesResponse("wrong token", 0, new ArrayList<>());
     }
-    User user = userService.findById(user_id).get();
+    User user = userService.findById(userId).orElse(null);
     if (user == null) {
       return new ArticlesResponse("user not find", 1, new ArrayList<>());
     }
 
-    RssFeed rssFeed = rssFeedService.findById(id).get();
+    RssFeed rssFeed = rssFeedService.findById(id).orElse(null);
     if (rssFeed == null) {
       return new ArticlesResponse("feed not find", 2, new ArrayList<>());
     }
     List<Article> articles = articleService.find30NewestArticlesFromOneFeed(rssFeed);
-    for (Article article: articles) {
-      article.setDescription(article.getDescription().substring(0,50));
+    for (Article article : articles) {
+      article.setDescription(article.getDescription().substring(0, 50));
     }
     return new ArticlesResponse("succeed", 3, articles);
   }
 
   /**
    * Articles for all subscribed channels
+   *
    * @param token verification for user
    * @return ArticlesResponse
    */
   @RequestMapping(value = {"/list/feed/all/articles"}, method = RequestMethod.GET)
   public ArticlesResponse getNewestArticles(String token) {
-    Long id = userService.verifyToken(token);
-    if (id == null) {
+    Long userId = userService.verifyToken(token);
+    if (userId == null) {
       return new ArticlesResponse("wrong token", 0, new ArrayList<>());
     }
-    User user = userService.findById(id).get();
+    User user = userService.findById(userId).orElse(null);
     if (user == null) {
       return new ArticlesResponse("user not find", 1, new ArrayList<>());
     }
     List<Article> articles = articleService.find30NewestArticlesFromManyFeeds(user.getRssFeedEntities());
-    for (Article article: articles) {
-      article.setDescription(article.getDescription().substring(0,50));
+    for (Article article : articles) {
+      article.setDescription(article.getDescription().substring(0, 50));
     }
     return new ArticlesResponse("succeed", 2, articles);
 
@@ -117,13 +122,14 @@ public class RssController {
 
   /**
    * A article for a given article id
+   *
    * @param token verification for user
    * @return ArticleResponse
    */
   @RequestMapping(value = {"/list/article/{id}"}, method = RequestMethod.GET)
-  public ArticleResponse getOneArticle(@PathVariable("id") Long id, String token){
-    Long user_id = userService.verifyToken(token);
-    if (user_id == null) {
+  public ArticleResponse getOneArticle(@PathVariable("id") Long id, String token) {
+    Long userId = userService.verifyToken(token);
+    if (userId == null) {
       return new ArticleResponse("wrong token", 0);
     }
     Article article = articleService.findById(id);
@@ -141,7 +147,8 @@ public class RssController {
 
   /**
    * Subscribe a new channel
-   * @param token verification for user
+   *
+   * @param token         verification for user
    * @param rssFeedEntity a channel entity
    * @return NormalResponse
    */
@@ -154,7 +161,7 @@ public class RssController {
       normalResponse.setMessage("wrong token");
       return normalResponse;
     }
-    User user = userService.findById(id).get();
+    User user = userService.findById(id).orElse(null);
     if (user == null) {
       normalResponse.setMsgCode(1);
       normalResponse.setMessage("user not find");
@@ -173,27 +180,28 @@ public class RssController {
 
   /**
    * Unsubscribe a channel
-   * @param token verification for user
-   * @param channel_id channel id
+   *
+   * @param token     verification for user
+   * @param channelId channel id
    * @return NormalResponse
    */
   @RequestMapping(value = {"/deleteChannel"}, method = RequestMethod.GET)
-  public NormalResponse deleteChannel(String token, Long channel_id) {
-    Long user_id = userService.verifyToken(token);
+  public NormalResponse deleteChannel(String token, Long channelId) {
+    Long userId = userService.verifyToken(token);
     NormalResponse normalResponse = new NormalResponse("delete a channel");
-    if (user_id == null) {
+    if (userId == null) {
       normalResponse.setMsgCode(0);
       normalResponse.setMessage("wrong token");
       return normalResponse;
     }
-    RssFeed rssFeedEntity = rssFeedService.findById(channel_id).get();
-    User user = userService.findById(user_id).get();
+    RssFeed rssFeedEntity = rssFeedService.findById(channelId).orElse(null);
+    User user = userService.findById(userId).orElse(null);
     if (rssFeedEntity == null) {
       normalResponse.setMsgCode(1);
       normalResponse.setMessage("channel not find");
       return normalResponse;
     }
-    if (!rssFeedService.deleteChannel(rssFeedEntity, user)){
+    if (!rssFeedService.deleteChannel(rssFeedEntity, user)) {
       normalResponse.setMsgCode(2);
       normalResponse.setMessage("delete failed");
     } else {

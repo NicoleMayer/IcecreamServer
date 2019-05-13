@@ -68,9 +68,9 @@ public class RssFeedServiceImpl implements RssFeedService {
         try {
             List<Article> articles = crawlArticles(rssFeedEntity.getUrl());
             articles.forEach(entry -> {
-                Article savedArticles =
+                Article savedArticle =
                         articleRepository.findByRssFeedEntityAndLink(rssFeedEntity, entry.getLink()); //no repeat articles
-                if (savedArticles == null) {
+                if (savedArticle == null) {
                     entry.setRssFeedEntity(rssFeedEntity);
                     articleRepository.save(entry);
                 }

@@ -50,9 +50,9 @@ public class NormalResponse {
   @Override
   public String toString() {
     return "NormalResponse{" +
-            "usage='" + usage + '\'' +
-            ", message='" + message + '\'' +
-            ", msgCode=" + msgCode +
-            '}';
+        "usage='" + usage + '\'' +
+        ", message='" + message + '\'' +
+        ", msgCode=" + msgCode +
+        '}';
   }
 }

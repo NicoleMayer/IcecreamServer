@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
     return userRepository.findById(id);
   }
 
-
+  @Override
   public LoginResponse loginUser(User user) {
     String phoneNumber = user.getPhoneNumber();
     String password = user.getPassword();
@@ -56,8 +56,7 @@ public class UserServiceImpl implements UserService {
       loginResponse.setMessage("login succeed");
       loginResponse.setMsgCode(2);
       loginResponse.setToken(token);
-    }
-    else {
+    } else {
       loginResponse.setMessage("wrong password");
       loginResponse.setMsgCode(1);
       loginResponse.setToken("");
@@ -67,7 +66,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public NormalResponse registerUser(User user){
+  public NormalResponse registerUser(User user) {
     // client already deal with the length of username password, before registering, the phone number has been checked
     // so here I don't handle these problems
     NormalResponse normalResponse = new NormalResponse("register status");
@@ -84,7 +83,7 @@ public class UserServiceImpl implements UserService {
   public Long verifyToken(String token) {
     Long id = null;
     boolean validToken = jwtTokenProvider.validateToken(token);
-    if (validToken == true) {
+    if (validToken) {
       id = jwtTokenProvider.getUserIdFromJWT(token);
     }
 
