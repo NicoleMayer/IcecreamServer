@@ -4,7 +4,6 @@ import com.icecream.server.client.LoginResponse;
 import com.icecream.server.client.NormalResponse;
 import com.icecream.server.entity.User;
 
-import java.util.List;
 import java.util.Optional;
 
 /**

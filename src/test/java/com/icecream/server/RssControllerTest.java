@@ -36,7 +36,8 @@ public class RssControllerTest {
   private static final String ADD_CHANNEL_URL = MAIN_URL + "addChannel";
   private static final String DELETE_CHANNEL_URL = MAIN_URL + "deleteChannel/%d";
 
-  private String token;
+  private transient String token;
+  private static final String MESSAGE = "message";
 
   /**
    * Before testing, get the token of the user
@@ -94,12 +95,12 @@ public class RssControllerTest {
     String url = String.format(ARTICILES_FOR_ONE_CHANNEL_URL+token, 1);
     String response = restTemplate.getForObject(url, String.class);
     JSONObject jsonObject = new JSONObject(response);
-    assertEquals("feed not find", jsonObject.getString("message"));
+    assertEquals("feed not find", jsonObject.getString(MESSAGE));
 
     url = String.format(ARTICILES_FOR_ONE_CHANNEL_URL+token, 23);
     response = restTemplate.getForObject(url, String.class);
     jsonObject = new JSONObject(response);
-    assertEquals("succeed", jsonObject.getString("message"));
+    assertEquals("succeed", jsonObject.getString(MESSAGE));
   }
 
   /**
@@ -109,7 +110,7 @@ public class RssControllerTest {
   public void testGetNewestArticles() throws Exception {
     String response = restTemplate.getForObject(ALL_SUBSCRIBED_ARTICILES_URL+token, String.class);
     JSONObject jsonObject = new JSONObject(response);
-    assertEquals("succeed", jsonObject.getString("message"));
+    assertEquals("succeed", jsonObject.getString(MESSAGE));
     assertEquals("2", jsonObject.getString("msgCode"));
   }
 
@@ -121,12 +122,12 @@ public class RssControllerTest {
     String url = String.format(ONE_ARTICLE_URL+token, 293);
     String response = restTemplate.getForObject(url, String.class);
     JSONObject jsonObject = new JSONObject(response);
-    assertEquals("article find succeed", jsonObject.getString("message"));
+    assertEquals("article find succeed", jsonObject.getString(MESSAGE));
 
     url = String.format(ONE_ARTICLE_URL+token, 1);
     response = restTemplate.getForObject(url, String.class);
     jsonObject = new JSONObject(response);
-    assertEquals("article not find", jsonObject.getString("message"));
+    assertEquals("article not find", jsonObject.getString(MESSAGE));
   }
 
   /**
@@ -136,11 +137,11 @@ public class RssControllerTest {
   public void testSubscribeChannel() throws Exception {
     String response = restTemplate.getForObject(ADD_CHANNEL_URL+token, String.class, new RssFeed("http://www.ifanr.com/feed"));
     JSONObject jsonObject = new JSONObject(response);
-    assertEquals("add succeed", jsonObject.getString("message"));
+    assertEquals("add succeed", jsonObject.getString(MESSAGE));
 
     response = restTemplate.getForObject(ADD_CHANNEL_URL+token, String.class, new RssFeed("http://www.ifanr.com/feed"));
     jsonObject = new JSONObject(response);
-    assertEquals("add failed", jsonObject.getString("message"));
+    assertEquals("add failed", jsonObject.getString(MESSAGE));
   }
 
   /**
@@ -151,12 +152,12 @@ public class RssControllerTest {
     String url = String.format(DELETE_CHANNEL_URL+token, 1);
     String response = restTemplate.getForObject(url, String.class);
     JSONObject jsonObject = new JSONObject(response);
-    assertEquals("channel not find", jsonObject.getString("message"));
+    assertEquals("channel not find", jsonObject.getString(MESSAGE));
 
     url = String.format(DELETE_CHANNEL_URL+token, 27);
     response = restTemplate.getForObject(url, String.class);
     jsonObject = new JSONObject(response);
-    assertEquals("delete succeed", jsonObject.getString("message"));
+    assertEquals("delete succeed", jsonObject.getString(MESSAGE));
   }
 
 

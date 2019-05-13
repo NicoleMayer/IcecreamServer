@@ -9,11 +9,13 @@ import java.util.Optional;
 
 public interface RssFeedRepository extends JpaRepository<RssFeed, Long> {
   List<RssFeed> findByUserEntities(User user);
-  List<RssFeed> findByCategory(String category);
-  RssFeed findByUrl(String url);
-  RssFeed findByChannelName(String channelName);
-  Optional<RssFeed> findById(Long id);
 
-//  List<String>  findDistinctCategory();
+  List<RssFeed> findByCategory(String category);
+
+  RssFeed findByUrl(String url);
+
+  RssFeed findByChannelName(String channelName);
+
+  Optional<RssFeed> findById(Long id);
 
 }

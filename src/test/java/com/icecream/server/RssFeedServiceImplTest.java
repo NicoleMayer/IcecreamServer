@@ -85,14 +85,14 @@ public class RssFeedServiceImplTest {
       rssFeedService.findById(1);
     } catch (Exception e)
     {
-      fail("method should not fail");
+      fail("method FindById should not fail");
     }
 
     try{
       rssFeedService.findById(100);
     } catch (Exception e)
     {
-      fail("method should not fail");
+      fail("method FindById should not fail");
     }
 
   }
@@ -109,14 +109,14 @@ public class RssFeedServiceImplTest {
       rssFeedService.crawlArticles("http://www.ifanr.com/feed");
     } catch (Exception e)
     {
-      fail("method should not fail");
+      fail("method crawlArticles should not fail");
     }
 
     try{
       rssFeedService.crawlArticles("http://www.feng.com/rss.xml");
     } catch (Exception e)
     {
-      fail("method should not fail");
+      fail("method crawlArticles should not fail");
     }
   }
 

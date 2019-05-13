@@ -13,9 +13,12 @@ public class NormalResponse {
   /**
    * This is a constructor for NormalResponse class.
    */
-  public NormalResponse() { }
+  public NormalResponse() {
+  }
+
   /**
    * This is a constructor for NormalResponse class.
+   *
    * @param usage The description of the usage of this response.
    */
   public NormalResponse(String usage) {
@@ -24,6 +27,10 @@ public class NormalResponse {
 
   public String getUsage() {
     return usage;
+  }
+
+  public void setUsage(String usage) {
+    this.usage = usage;
   }
 
   public String getMessage() {
@@ -49,10 +56,10 @@ public class NormalResponse {
    */
   @Override
   public String toString() {
-    return "NormalResponse{" +
-        "usage='" + usage + '\'' +
-        ", message='" + message + '\'' +
-        ", msgCode=" + msgCode +
-        '}';
+    return "NormalResponse{"
+            + "usage='" + usage + '\''
+            + ", message='" + message + '\''
+            + ", msgCode=" + msgCode
+            + '}';
   }
 }

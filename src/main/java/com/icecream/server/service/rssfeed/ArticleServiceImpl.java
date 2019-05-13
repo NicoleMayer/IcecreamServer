@@ -14,27 +14,29 @@ import java.util.Set;
 @Service
 public class ArticleServiceImpl implements ArticleService {
 
-    @Autowired
-    private ArticleRepository articleRepository;
+  @Autowired
+  private transient ArticleRepository articleRepository;
 
-    /**
-     * find 30 newest articles from one feed
-     * @param rssFeed one rssfeed to find newest articles
-     * @return 30 newest articles
-     */
-    public List<Article> find30NewestArticlesFromOneFeed(RssFeed rssFeed) {
-        PageRequest pageRequest = PageRequest.of(0, 30, Sort.Direction.DESC, "publishedTime");
-        return articleRepository.findByRssFeedEntity(rssFeed, pageRequest);
-    }
+  /**
+   * find 30 newest articles from one feed
+   *
+   * @param rssFeed one rssfeed to find newest articles
+   * @return 30 newest articles
+   */
+  public List<Article> find30NewestArticlesFromOneFeed(RssFeed rssFeed) {
+    PageRequest pageRequest = PageRequest.of(0, 30, Sort.Direction.DESC, "publishedTime");
+    return articleRepository.findByRssFeedEntity(rssFeed, pageRequest);
+  }
 
-    /**
-     * find 30 newest articles from many feeds
-     * @param rssFeeds rssfeeds to find newest articles
-     * @return 30 newest articles
-     */
-    public List<Article> find30NewestArticlesFromManyFeeds(Set<RssFeed> rssFeeds) {
-        PageRequest pageRequest = PageRequest.of(0, 30, Sort.Direction.DESC, "publishedTime");
-        return articleRepository.findByRssFeedEntityIsIn(rssFeeds, pageRequest);
-    }
+  /**
+   * find 30 newest articles from many feeds
+   *
+   * @param rssFeeds rssfeeds to find newest articles
+   * @return 30 newest articles
+   */
+  public List<Article> find30NewestArticlesFromManyFeeds(Set<RssFeed> rssFeeds) {
+    PageRequest pageRequest = PageRequest.of(0, 30, Sort.Direction.DESC, "publishedTime");
+    return articleRepository.findByRssFeedEntityIsIn(rssFeeds, pageRequest);
+  }
 
 }

@@ -90,13 +90,13 @@ public class Article {
    */
   @Override
   public String toString() {
-    return "Article{" +
-        "id=" + id +
-        ", title='" + title + '\'' +
-        ", link='" + link + '\'' +
-        ", description='" + description + '\'' +
-        ", publishedTime=" + publishedTime +
-        ", rssFeedEntity=" + rssFeedEntity.getChannelName() +
-        '}';
+    return "Article{"
+            + "id=" + id
+            + ", title='" + title + '\''
+            + ", link='" + link + '\''
+            + ", description='" + description + '\''
+            + ", publishedTime=" + publishedTime
+            + ", rssFeedEntity=" + rssFeedEntity.getChannelName()
+            + '}';
   }
 }

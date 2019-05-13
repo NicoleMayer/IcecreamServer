@@ -1,12 +1,16 @@
 package com.icecream.server.exception;
 
 /**
- * Author: Daniel
+ * This class is for rss exception.
+ *
+ * @author NicoleMayer
  */
 public class RSSException extends Exception {
 
-    public RSSException(Throwable cause) {
-        super(cause);
-    }
+  private static final long serialVersionUID = 1000L;
+
+  public RSSException(Throwable cause) {
+    super(cause);
+  }
 
 }

@@ -12,7 +12,7 @@ task checkstyle(type: Checkstyle) {
     group 'verification'
 
     configFile file('./code_quality_tools/google_checks.xml')
-    source 'src'
+    source 'src/main'
     include '**/*.java'
     exclude '**/gen/**'
 

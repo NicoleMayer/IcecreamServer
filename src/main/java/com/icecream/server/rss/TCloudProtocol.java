@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for tCloudProtocol.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -20,35 +20,34 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
- * 
  */
 @XmlType(name = "tCloudProtocol")
 @XmlEnum
 public enum TCloudProtocol {
 
-    @XmlEnumValue("xml-rpc")
-    XML_RPC("xml-rpc"),
-    @XmlEnumValue("http-post")
-    HTTP_POST("http-post"),
-    @XmlEnumValue("soap")
-    SOAP("soap");
-    private final String value;
+  @XmlEnumValue("xml-rpc")
+  XML_RPC("xml-rpc"),
+  @XmlEnumValue("http-post")
+  HTTP_POST("http-post"),
+  @XmlEnumValue("soap")
+  SOAP("soap");
+  private final String value;
 
-    TCloudProtocol(String v) {
-        value = v;
-    }
+  TCloudProtocol(String v) {
+    value = v;
+  }
 
-    public String value() {
-        return value;
-    }
+  public String value() {
+    return value;
+  }
 
-    public static TCloudProtocol fromValue(String v) {
-        for (TCloudProtocol c: TCloudProtocol.values()) {
-            if (c.value.equals(v)) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(v);
+  public static TCloudProtocol fromValue(String v) {
+    for (TCloudProtocol c : TCloudProtocol.values()) {
+      if (c.value.equals(v)) {
+        return c;
+      }
     }
+    throw new IllegalArgumentException(v);
+  }
 
 }

@@ -4,7 +4,6 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-
 /**
  * This class is a data class for User.
  *
@@ -108,9 +107,9 @@ public class User {
    */
   @Override
   public String toString() {
-    return "User{" +
-        "id=" + id +
-        ", username=" + username +
-        '}';
+    return "User{"
+            + "id=" + id
+            + ", username=" + username
+            + '}';
   }
 }

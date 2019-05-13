@@ -22,9 +22,10 @@ public class ArticlesResponse {
 
   /**
    * This is a constructor for ArticlesResponse class.
+   *
    * @param message The description of the response.
    * @param msgCode The number for this message.
-   * @param data The data of article list if succeed.
+   * @param data    The data of article list if succeed.
    */
   public ArticlesResponse(String message, int msgCode, List<Article> data) {
     this.message = message;
@@ -63,10 +64,10 @@ public class ArticlesResponse {
    */
   @Override
   public String toString() {
-    return "FeedsResponse{" +
-            "message='" + message + '\'' +
-            ", msgCode=" + msgCode +
-            ", data=" + data +
-            '}';
+    return "FeedsResponse{"
+            + "message='" + message + '\''
+            + ", msgCode=" + msgCode
+            + ", data=" + data
+            + '}';
   }
 }

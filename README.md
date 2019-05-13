@@ -99,11 +99,12 @@ URL example: `http://server_ip/addChannel`
 
 ### unsubscribe a channel
 GET
-URL example: `http://server_ip/deleteChannel`
+URL example: `http://server_ip/deleteChannel/{id}`
 
 | Name | Type | Description |
 | - | - | - |
 | token | parameter | check the user |
+| id | parameter | channel id |
 | rssFeedEntity | parameter | basic info about the new channel |
 | id | parameter | channel id |
 | status    | return |0 "wrong token" |

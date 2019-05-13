@@ -60,10 +60,10 @@ public class LoginResponse {
    */
   @Override
   public String toString() {
-    return "LoginResponse{" +
-        "message='" + message + '\'' +
-        ", msgCode=" + msgCode +
-        ", token='" + token + '\'' +
-        '}';
+    return "LoginResponse{"
+            + "message='" + message + '\''
+            + ", msgCode=" + msgCode
+            + ", token='" + token + '\''
+            + '}';
   }
 }

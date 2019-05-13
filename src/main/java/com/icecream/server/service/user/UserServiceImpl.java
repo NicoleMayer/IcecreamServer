@@ -5,6 +5,8 @@ import com.icecream.server.client.LoginResponse;
 import com.icecream.server.client.NormalResponse;
 import com.icecream.server.dao.UserRepository;
 import com.icecream.server.entity.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,30 +20,31 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
   @Autowired
-  private UserRepository userRepository;
+  private transient UserRepository userRepository;
 
   @Autowired
-  private PasswordEncoder passwordEncoder;
+  private transient PasswordEncoder passwordEncoder;
 
   @Autowired
-  private JwtTokenProvider jwtTokenProvider;
+  private transient JwtTokenProvider jwtTokenProvider;
+
+  private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
   @Override
   public User findByPhoneNumber(String phoneNumber) {
-    System.out.println(String.format("Getting user by phone number=%s", phoneNumber));
+    logger.info(String.format("Getting user by phone number=%s", phoneNumber));
     return userRepository.findByPhoneNumber(phoneNumber);
   }
 
   @Override
   public Optional<User> findById(long id) {
-    System.out.println(String.format("Getting user=%d", id));
+    logger.info(String.format("Getting user=%d", id));
     return userRepository.findById(id);
   }
 
   @Override
   public LoginResponse loginUser(User user) {
     String phoneNumber = user.getPhoneNumber();
-    String password = user.getPassword();
 
     User real_user = userRepository.findByPhoneNumber(phoneNumber);
     if (real_user == null) {
@@ -51,6 +54,7 @@ public class UserServiceImpl implements UserService {
     LoginResponse loginResponse = new LoginResponse();
     String encodedPassword = real_user.getPassword();
 
+    String password = user.getPassword();
     if (passwordEncoder.matches(password, encodedPassword)) {
       String token = jwtTokenProvider.generateToken(real_user);
       loginResponse.setMessage("login succeed");

@@ -10,16 +10,16 @@ import java.util.Optional;
 
 public interface RssFeedService {
 
-    boolean addChannel(RssFeed rssFeedEntity, User user);
+  boolean addChannel(RssFeed rssFeedEntity, User user);
 
-    void addArticles(RssFeed rssFeedEntity);
+  void addArticles(RssFeed rssFeedEntity);
 
-    List<Article> crawlArticles(String url) throws RSSException;
+  List<Article> crawlArticles(String url) throws RSSException;
 
-    void reloadChannels();
+  void reloadChannels();
 
-    boolean deleteChannel(RssFeed rssFeedEntity, User user);
+  boolean deleteChannel(RssFeed rssFeedEntity, User user);
 
-    Optional<RssFeed> findById(long id);
+  Optional<RssFeed> findById(long id);
 
 }

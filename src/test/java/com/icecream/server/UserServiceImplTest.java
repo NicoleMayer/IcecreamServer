@@ -89,15 +89,4 @@ public class UserServiceImplTest {
 
   }
 
-  /**
-  *
-  * Method: verifyToken(String token)
-  *
-  */
-  @Test
-  public void testVerifyToken() throws Exception {
-  //TODO: Test goes here...
-  }
-
-
 } 

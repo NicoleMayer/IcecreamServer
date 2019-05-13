@@ -22,9 +22,10 @@ public class FeedsResponse {
 
   /**
    * This is a constructor for FeedsResponse class.
+   *
    * @param message The description of the response.
    * @param msgCode The number for this message.
-   * @param data The data of rss feed list if succeed.
+   * @param data    The data of rss feed list if succeed.
    */
   public FeedsResponse(String message, int msgCode, Set<RssFeed> data) {
     this.message = message;
@@ -63,10 +64,10 @@ public class FeedsResponse {
    */
   @Override
   public String toString() {
-    return "FeedsResponse{" +
-            "message='" + message + '\'' +
-            ", msgCode=" + msgCode +
-            ", data=" + data +
-            '}';
+    return "FeedsResponse{"
+            + "message='" + message + '\''
+            + ", msgCode=" + msgCode
+            + ", data=" + data
+            + '}';
   }
 }

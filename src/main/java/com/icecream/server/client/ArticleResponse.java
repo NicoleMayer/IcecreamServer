@@ -24,6 +24,7 @@ public class ArticleResponse {
 
   /**
    * This is a constructor for ArticleResponse class.
+   *
    * @param message The description of the response.
    * @param msgCode The number for this message.
    */
@@ -31,10 +32,10 @@ public class ArticleResponse {
     this.message = message;
     this.msgCode = msgCode;
     this.title = "";
-    this.link =  "";
-    this.content =  "";
-    this.publishedTime =  new Date();
-    this.channelName =  "";
+    this.link = "";
+    this.content = "";
+    this.publishedTime = new Date();
+    this.channelName = "";
   }
 
   public String getMessage() {
@@ -100,14 +101,14 @@ public class ArticleResponse {
    */
   @Override
   public String toString() {
-    return "ArticleResponse{" +
-            "message='" + message + '\'' +
-            ", msgCode=" + msgCode +
-            ", title='" + title + '\'' +
-            ", link='" + link + '\'' +
-            ", content='" + content + '\'' +
-            ", publishedTime=" + publishedTime +
-            ", channelName='" + channelName + '\'' +
-            '}';
+    return "ArticleResponse{"
+            + "message='" + message + '\''
+            + ", msgCode=" + msgCode
+            + ", title='" + title + '\''
+            + ", link='" + link + '\''
+            + ", content='" + content + '\''
+            + ", publishedTime=" + publishedTime
+            + ", channelName='" + channelName + '\''
+            + '}';
   }
 }

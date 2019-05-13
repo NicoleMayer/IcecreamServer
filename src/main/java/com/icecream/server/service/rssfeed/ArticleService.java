@@ -9,8 +9,8 @@ import java.util.Set;
 
 public interface ArticleService {
 
-    List<Article> find30NewestArticlesFromOneFeed(RssFeed rssFeed);
+  List<Article> find30NewestArticlesFromOneFeed(RssFeed rssFeed);
 
-    List<Article> find30NewestArticlesFromManyFeeds(Set<RssFeed> rssFeeds);
+  List<Article> find30NewestArticlesFromManyFeeds(Set<RssFeed> rssFeeds);
 
 }
