@@ -1,15 +1,13 @@
-
 package com.icecream.server.rss;
 
-import org.w3c.dom.Element;
-
-import javax.xml.bind.annotation.*;
-import javax.xml.namespace.QName;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.xml.bind.annotation.*;
+import javax.xml.namespace.QName;
 
+import org.w3c.dom.Element;
 
 /**
  * An item may represent a "story" -- much like a story in a newspaper or magazine;
@@ -45,16 +43,16 @@ import java.util.Map;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tRssItem", propOrder = {
-        "title",
-        "description",
-        "link",
-        "category",
-        "comments",
-        "enclosure",
-        "guid",
-        "pubDate",
-        "source",
-        "any"
+    "title",
+    "description",
+    "link",
+    "category",
+    "comments",
+    "enclosure",
+    "guid",
+    "pubDate",
+    "source",
+    "any"
 })
 public class TRssItem {
 
@@ -281,6 +279,7 @@ public class TRssItem {
    * the value is the string value of the attribute.
    * the map returned by this method is live, and you can add new attribute
    * by updating the map directly. Because of this design, there's no setter.
+   *
    * @return always non-null
    */
   public Map<QName, String> getOtherAttributes() {

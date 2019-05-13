@@ -1,16 +1,14 @@
-
 package com.icecream.server.rss;
 
-import org.w3c.dom.Element;
-
-import javax.xml.bind.annotation.*;
-import javax.xml.namespace.QName;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.xml.bind.annotation.*;
+import javax.xml.namespace.QName;
 
+import org.w3c.dom.Element;
 
 /**
  * Java class for tRss complex type.
@@ -33,8 +31,8 @@ import java.util.Map;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tRss", propOrder = {
-        "channel",
-        "any"
+    "channel",
+    "any"
 })
 public class TRss {
 

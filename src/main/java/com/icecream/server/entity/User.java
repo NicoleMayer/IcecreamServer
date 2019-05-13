@@ -1,8 +1,8 @@
 package com.icecream.server.entity;
 
-import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.*;
 
 /**
  * This class is a data class for User.
@@ -108,8 +108,8 @@ public class User {
   @Override
   public String toString() {
     return "User{"
-            + "id=" + id
-            + ", username=" + username
-            + '}';
+        + "id=" + id
+        + ", username=" + username
+        + '}';
   }
 }

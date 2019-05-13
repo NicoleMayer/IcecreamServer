@@ -1,18 +1,16 @@
-
 package com.icecream.server.rss;
 
-import org.w3c.dom.Element;
-
-import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import javax.xml.namespace.QName;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import javax.xml.namespace.QName;
 
+import org.w3c.dom.Element;
 
 /**
  * Java class for tRssChannel complex type.
@@ -49,24 +47,24 @@ import java.util.Map;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tRssChannel", propOrder = {
-        "title",
-        "link",
-        "description",
-        "language",
-        "copyright",
-        "pubDate",
-        "lastBuildDate",
-        "category",
-        "generator",
-        "docs",
-        "cloud",
-        "ttl",
-        "image",
-        "textInput",
-        "skipHours",
-        "skipDays",
-        "item",
-        "any"
+    "title",
+    "link",
+    "description",
+    "language",
+    "copyright",
+    "pubDate",
+    "lastBuildDate",
+    "category",
+    "generator",
+    "docs",
+    "cloud",
+    "ttl",
+    "image",
+    "textInput",
+    "skipHours",
+    "skipDays",
+    "item",
+    "any"
 })
 public class TRssChannel {
 

@@ -1,8 +1,8 @@
 
 package com.icecream.server.rss;
 
-import javax.xml.bind.annotation.*;
 import java.math.BigInteger;
+import javax.xml.bind.annotation.*;
 
 
 /**
@@ -23,7 +23,7 @@ import java.math.BigInteger;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tEnclosure", propOrder = {
-        "value"
+    "value"
 })
 public class TEnclosure {
 

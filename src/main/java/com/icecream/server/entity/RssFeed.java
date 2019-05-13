@@ -2,11 +2,11 @@ package com.icecream.server.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.*;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javax.persistence.*;
+
 
 /**
  * This class is a data class for rss feed.
@@ -15,7 +15,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "rss_feed")
-public class RssFeed implements Serializable {
+public class RssFeed {
 
   private static final long serialVersionUID = 1L;
 
@@ -129,10 +129,10 @@ public class RssFeed implements Serializable {
   @Override
   public String toString() {
     return "RssFeed{"
-            + "id=" + id
-            + ", url='" + url + '\''
-            + ", channelName='" + channelName + '\''
-            + ", category='" + category + '\''
-            + '}';
+        + "id=" + id
+        + ", url='" + url + '\''
+        + ", channelName='" + channelName + '\''
+        + ", category='" + category + '\''
+        + '}';
   }
 }

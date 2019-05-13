@@ -11,15 +11,15 @@ import com.icecream.server.entity.User;
 import com.icecream.server.service.rssfeed.ArticleService;
 import com.icecream.server.service.rssfeed.RssFeedService;
 import com.icecream.server.service.user.UserService;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 
 /**
@@ -44,9 +44,10 @@ public class RssController {
 
   /**
    * Constructor of RssController.
-   * @param userService UserService class
-   * @param rssFeedService RssFeedService class
-   * @param articleService ArticleService class
+   *
+   * @param userService       UserService class
+   * @param rssFeedService    RssFeedService class
+   * @param articleService    ArticleService class
    * @param articleRepository ArticleRepository class
    */
   public RssController(UserService userService, RssFeedService rssFeedService,
@@ -130,7 +131,7 @@ public class RssController {
       return new ArticlesResponse(USER_NOT_FIND, 1, new ArrayList<>());
     }
     List<Article> articles = articleService.find30NewestArticlesFromManyFeeds(
-            user.getRssFeedEntities());
+        user.getRssFeedEntities());
     for (Article article : articles) {
       article.setDescription(article.getDescription().substring(0, 50));
     }
@@ -151,7 +152,7 @@ public class RssController {
       return new ArticleResponse(WRONG_TOKEN, 0);
     }
     Article article = articleRepository.findById(id).isPresent()
-            ? articleRepository.findById(id).get() : null;
+        ? articleRepository.findById(id).get() : null;
     if (article == null) {
       return new ArticleResponse("article not find", 1);
     }
@@ -200,7 +201,7 @@ public class RssController {
   /**
    * Unsubscribe a channel.
    *
-   * @param token      verification for user
+   * @param token     verification for user
    * @param channelId channel id
    * @return NormalResponse
    */

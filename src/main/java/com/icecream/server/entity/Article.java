@@ -2,8 +2,8 @@ package com.icecream.server.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.*;
 import java.util.Date;
+import javax.persistence.*;
 
 
 /**
@@ -91,12 +91,12 @@ public class Article {
   @Override
   public String toString() {
     return "Article{"
-            + "id=" + id
-            + ", title='" + title + '\''
-            + ", link='" + link + '\''
-            + ", description='" + description + '\''
-            + ", publishedTime=" + publishedTime
-            + ", rssFeedEntity=" + rssFeedEntity.getChannelName()
-            + '}';
+        + "id=" + id
+        + ", title='" + title + '\''
+        + ", link='" + link + '\''
+        + ", description='" + description + '\''
+        + ", publishedTime=" + publishedTime
+        + ", rssFeedEntity=" + rssFeedEntity.getChannelName()
+        + '}';
   }
 }

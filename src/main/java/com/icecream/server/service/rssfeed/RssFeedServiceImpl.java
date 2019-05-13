@@ -11,21 +11,22 @@ import com.icecream.server.rss.ObjectFactory;
 import com.icecream.server.rss.TRss;
 import com.icecream.server.rss.TRssChannel;
 import com.icecream.server.rss.TRssItem;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 
 
 @Service
@@ -46,7 +47,7 @@ public class RssFeedServiceImpl implements RssFeedService {
   public boolean addChannel(RssFeed rssFeedEntity, User user) {
     RssFeed existRssFeed = rssFeedRepository.findByUrl(rssFeedEntity.getUrl());
     if (existRssFeed == null
-            || existRssFeed.getUserEntities().contains(user)) { //alreay have the feed
+        || existRssFeed.getUserEntities().contains(user)) { //alreay have the feed
       return false;
     }
 
@@ -65,8 +66,8 @@ public class RssFeedServiceImpl implements RssFeedService {
       List<Article> articles = crawlArticles(rssFeedEntity.getUrl());
       articles.forEach(entry -> {
         Article savedArticle =
-                articleRepository.findByRssFeedEntityAndLink(
-                        rssFeedEntity, entry.getLink()); //no repeat articles
+            articleRepository.findByRssFeedEntityAndLink(
+                rssFeedEntity, entry.getLink()); //no repeat articles
         if (savedArticle == null) {
           entry.setRssFeedEntity(rssFeedEntity);
           articleRepository.save(entry);
@@ -108,7 +109,7 @@ public class RssFeedServiceImpl implements RssFeedService {
           article.setDescription(rssItem.getDescription());
           article.setLink(rssItem.getLink());
           Date pubDate = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH)
-                  .parse(rssItem.getPubDate());
+              .parse(rssItem.getPubDate());
           article.setPublishedTime(pubDate);
           list.add(article);
         }

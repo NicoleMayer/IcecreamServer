@@ -3,13 +3,15 @@ package com.icecream.server.service.rssfeed;
 import com.icecream.server.dao.ArticleRepository;
 import com.icecream.server.entity.Article;
 import com.icecream.server.entity.RssFeed;
+
+import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Set;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {

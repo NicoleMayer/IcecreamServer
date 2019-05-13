@@ -2,11 +2,13 @@ package com.icecream.server;
 
 import com.icecream.server.entity.User;
 import io.jsonwebtoken.*;
+
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
 
 @Component
 public class JwtTokenProvider {
@@ -14,15 +16,16 @@ public class JwtTokenProvider {
   private static final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
 
   private static final String jwtSecret = "IceCreamServerJWTSuperSecretKey1234567890"
-          + "IceCreamServerJWTSuperSecretKey123456789"
-          + "0IceCreamServerJWTSuperSecretKey1234567890Ic"
-          + "eCreamServerJWTSuperSecretKey1234567890IceCream"
-          + "ServerJWTSuperSecretKey1234567890";
+      + "IceCreamServerJWTSuperSecretKey123456789"
+      + "0IceCreamServerJWTSuperSecretKey1234567890Ic"
+      + "eCreamServerJWTSuperSecretKey1234567890IceCream"
+      + "ServerJWTSuperSecretKey1234567890";
 
   private static final long jwtExpirationInMs = 604800000; // 1month
 
   /**
    * To generate a token.
+   *
    * @param user a user entity
    * @return the generated token
    */
@@ -31,29 +34,31 @@ public class JwtTokenProvider {
     Date now = new Date();
     Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
     return Jwts.builder()
-            .setSubject(Long.toString(user.getId()))
-            .setIssuedAt(now)
-            .setExpiration(expiryDate)
-            .signWith(SignatureAlgorithm.HS512, jwtSecret)
-            .compact();
+        .setSubject(Long.toString(user.getId()))
+        .setIssuedAt(now)
+        .setExpiration(expiryDate)
+        .signWith(SignatureAlgorithm.HS512, jwtSecret)
+        .compact();
   }
 
   /**
    * To get a user id from token.
+   *
    * @param token a representation of a user
    * @return the id of this user
    */
   public Long getUserIdFromJwt(String token) {
     Claims claims = Jwts.parser()
-            .setSigningKey(jwtSecret)
-            .parseClaimsJws(token)
-            .getBody();
+        .setSigningKey(jwtSecret)
+        .parseClaimsJws(token)
+        .getBody();
 
     return Long.parseLong(claims.getSubject());
   }
 
   /**
    * To check if the token is valid.
+   *
    * @param authToken a representation of a user
    * @return valid or not
    */
