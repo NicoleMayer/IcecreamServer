@@ -2,6 +2,11 @@ package com.icecream.server.client;
 
 import java.util.Date;
 
+/**
+ * This class is a data class for article response.
+ *
+ * @author NicoleMayer
+ */
 public class ArticleResponse {
   private String message;
   private int msgCode;
@@ -11,6 +16,17 @@ public class ArticleResponse {
   private Date publishedTime;
   private String channelName;
 
+  /**
+   * This is a constructor for ArticleResponse class.
+   */
+  public ArticleResponse() {
+  }
+
+  /**
+   * This is a constructor for ArticleResponse class.
+   * @param message The description of the response.
+   * @param msgCode The number for this message.
+   */
   public ArticleResponse(String message, int msgCode) {
     this.message = message;
     this.msgCode = msgCode;
@@ -77,6 +93,11 @@ public class ArticleResponse {
     this.channelName = channelName;
   }
 
+  /**
+   * String representation of the article response.
+   *
+   * @return String stands for the article response.
+   */
   @Override
   public String toString() {
     return "ArticleResponse{" +

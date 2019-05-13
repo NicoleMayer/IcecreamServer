@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -26,12 +25,6 @@ public class UserServiceImpl implements UserService {
 
   @Autowired
   private JwtTokenProvider jwtTokenProvider;
-
-  @Override
-  public List<User> getAllUsers() {
-    System.out.println("Getting all users");
-    return userRepository.findAll();
-  }
 
   @Override
   public User findByPhoneNumber(String phoneNumber) {
@@ -86,12 +79,6 @@ public class UserServiceImpl implements UserService {
     return normalResponse;
   }
 
-
-
-  @Override
-  public List<User> findAll() {
-    return userRepository.findAll();
-  }
 
   @Override
   public Long verifyToken(String token) {

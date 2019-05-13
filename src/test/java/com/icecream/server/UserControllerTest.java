@@ -1,8 +1,8 @@
 package com.icecream.server;
 
+import com.icecream.server.client.LoginResponse;
+import com.icecream.server.client.NormalResponse;
 import com.icecream.server.entity.User;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.client.RestTemplate;
 
@@ -10,10 +10,7 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * UserController Tester.
- *
  * @author nicolemayer
- * @version 1.0
- * @since <pre>Apr 17, 2019</pre>
  */
 public class UserControllerTest {
 
@@ -28,31 +25,16 @@ public class UserControllerTest {
   private static final String REGISTER_URL = MAIN_URL + "signup";
   private static final String BEFORE_REGISTER_URL = MAIN_URL + "before-register";
 
-  private static String VALID_STATE = "{\"state\":\"Valid\"}";
-  private static String DUPLICATE_STATE = "{\"state\":\"DuplicatePhoneNumber\"}";
-  private static String NOUSER_STATE = "{\"state\":\"NoSuchUser\"}";
-  private static String FAIL_STATE = "{\"state\":\"Fail\"}";
-  private static String PHONE = "12345623456";
-
-  @Before
-  public void before() {
-  }
-
-  @After
-  public void after() {
-  }
-
   /**
    * Test when the login is valid.
    */
   @Test
   public void testLoginValid() {
-    assertEquals("valid login", VALID_STATE,
-        restTemplate.postForObject(
+    LoginResponse loginResponse = restTemplate.postForObject(
             LOGIN_URL,
             new User("1234", null, "123456"),
-            String.class)
-    );
+            LoginResponse.class);
+    assertEquals("valid login", "login succeed", loginResponse.getMessage());
   }
 
   /**
@@ -60,38 +42,40 @@ public class UserControllerTest {
    */
   @Test
   public void testLoginInvalid() {
-    assertEquals("invalid login", NOUSER_STATE,
-        restTemplate.postForObject(
+    LoginResponse loginResponse = restTemplate.postForObject(
             LOGIN_URL,
             new User("1234562456", null, "1235656"),
-            String.class)
-    );
+            LoginResponse.class);
+    assertEquals("invalid login", "can't find phone number", loginResponse.getMessage());
+    loginResponse = restTemplate.postForObject(
+            LOGIN_URL,
+            new User("1234", null, "1235656"),
+            LoginResponse.class);
+    assertEquals("invalid login", "wrong password", loginResponse.getMessage());
   }
 
-  /**
-   * Test if the phone is duplicate before registering.
-   */
-  @Test
-  public void testDuplicatePhoneBeforeRegister() {
-    assertEquals("duplicate phone", DUPLICATE_STATE,
-        restTemplate.postForObject(
-            BEFORE_REGISTER_URL,
-            new User(PHONE, null, null),
-            String.class)
-    );
-  }
 
   /**
    * Check if the phone is valid before registering.
    */
   @Test
   public void testValidPhoneBeforeRegister() {
-    assertEquals("valid phone", VALID_STATE,
-        restTemplate.postForObject(
+    NormalResponse normalResponse = restTemplate.postForObject(
             BEFORE_REGISTER_URL,
             new User("12345623477", null, null),
-            String.class)
-    );
+            NormalResponse.class);
+    assertEquals("valid phone", "phone number doesn't exist", normalResponse.getMessage());
+    normalResponse = restTemplate.postForObject(
+            BEFORE_REGISTER_URL,
+            new User("1234", null, null),
+            NormalResponse.class);
+    assertEquals("invalid phone", "phone number already exists", normalResponse.getMessage());
+    normalResponse = restTemplate.postForObject(
+            BEFORE_REGISTER_URL,
+            new User(null, null, null),
+            NormalResponse.class);
+    assertEquals("invalid phone", "phone number is null", normalResponse.getMessage());
+
   }
 
   /**
@@ -99,16 +83,17 @@ public class UserControllerTest {
    */
   @Test
   public void testRegister() {
-    assertEquals("valid register", VALID_STATE,
-        restTemplate.postForObject(
+    NormalResponse normalResponse = restTemplate.postForObject(
             REGISTER_URL,
-                new User("1234", "nicolemayer", "123456"),
-            String.class));
-    assertEquals("valid register", FAIL_STATE,
-            restTemplate.postForObject(
-                    REGISTER_URL,
-                    new User("123456", "nicolemayer", "123456"),
-                    String.class)
-    );
+            new User("12345", "nicolemayer", "123456"),
+            NormalResponse.class);
+    assertEquals("valid register", "register succeed", normalResponse.getMessage());
+
+    normalResponse = restTemplate.postForObject(
+            REGISTER_URL,
+            new User("12345896", "nicolemayer", "123456"),
+            NormalResponse.class);
+    assertEquals("valid register", "register succeed", normalResponse.getMessage());
+
   }
 }

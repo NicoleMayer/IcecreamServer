@@ -1,14 +1,27 @@
 package com.icecream.server.client;
 
+/**
+ * This class is a data class for login response.
+ *
+ * @author NicoleMayer
+ */
 public class LoginResponse {
   private String message;
   private int msgCode;
   private String token;
 
-
+  /**
+   * This is a constructor for LoginResponse class.
+   */
   public LoginResponse() {
   }
 
+  /**
+   * This is a constructor for LoginResponse class.
+   * @param message The description of the response.
+   * @param msgCode The number for this message.
+   * @param token The unique string for user identification.
+   */
   public LoginResponse(String message, int msgCode, String token) {
     this.message = message;
     this.msgCode = msgCode;
@@ -39,6 +52,11 @@ public class LoginResponse {
     this.msgCode = msgCode;
   }
 
+  /**
+   * String representation of the login response.
+   *
+   * @return String stands for the login response.
+   */
   @Override
   public String toString() {
     return "LoginResponse{" +
