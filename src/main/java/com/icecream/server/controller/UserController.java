@@ -70,4 +70,30 @@ public class UserController {
     }
     return msg;
   }
+
+  /**
+   * Get the user's basic information. Currently it is only username.
+   *
+   * @param phone user phone number.
+   * @return username
+   */
+  @RequestMapping(value = {"/userinfo"}, method = RequestMethod.GET)
+  public NormalResponse userInfo(String phone) {
+    NormalResponse msg = new NormalResponse("get the user basic information");
+    if (phone == null) {
+      msg.setMessage("phone number is null");
+      msg.setMsgCode(0);
+    } else {
+      User user = userService.findByPhoneNumber(phone);
+      if (user == null) {
+        msg.setMessage("user not found");
+        msg.setMsgCode(1);
+      } else {
+        msg.setMessage(user.getUsername());
+        msg.setMsgCode(2);
+      }
+    }
+    return msg;
+  }
+
 }
