@@ -1,8 +1,8 @@
 package com.icecream.server.entity;
 
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.*;
 
 /**
  * This class is a data class for User.
@@ -29,17 +29,6 @@ public class User {
 
   @ManyToMany(fetch = FetchType.EAGER)
   private Set<RssFeed> rssFeedEntities;
-
-  @Column(name = "auth_token")
-  private String authtoken;
-
-  public String getAuthtoken() {
-    return authtoken;
-  }
-
-  public void setAuthtoken(String authtoken) {
-    this.authtoken = authtoken;
-  }
 
   public Long getId() {
     return id;

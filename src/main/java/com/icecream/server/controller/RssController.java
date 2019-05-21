@@ -11,15 +11,15 @@ import com.icecream.server.entity.User;
 import com.icecream.server.service.rssfeed.ArticleService;
 import com.icecream.server.service.rssfeed.RssFeedService;
 import com.icecream.server.service.user.UserService;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -228,6 +228,25 @@ public class RssController {
       normalResponse.setMsgCode(3);
       normalResponse.setMessage("delete succeed");
     }
+    return normalResponse;
+  }
+
+  @RequestMapping(value = {"/freshChannel"}, method = RequestMethod.GET)
+  public NormalResponse freshChannel(String token){
+    Long user_id = userService.verifyToken(token);
+    NormalResponse normalResponse = new NormalResponse("fresh channels");
+    if (user_id == null) {
+      normalResponse.setMsgCode(0);
+      normalResponse.setMessage("wrong token");
+      return normalResponse;
+    }
+    User user = userService.findById(user_id).orElse(null);
+    Set<RssFeed> rssFeedSet = user.getRssFeedEntities();
+    for(RssFeed rssFeed: rssFeedSet){
+      rssFeedService.addArticles(rssFeed);
+    }
+    normalResponse.setMsgCode(1);
+    normalResponse.setMessage("update succeed");
     return normalResponse;
   }
 }
