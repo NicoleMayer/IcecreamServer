@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface RssFeedService {
 
-  boolean addChannel(RssFeed rssFeedEntity, User user);
+  boolean addChannel(String url, User user);
 
   void addArticles(RssFeed rssFeedEntity);
 
@@ -18,7 +18,7 @@ public interface RssFeedService {
 
   void reloadChannels();
 
-  boolean deleteChannel(RssFeed rssFeedEntity, User user);
+  boolean deleteChannel(String url, User user);
 
   Optional<RssFeed> findById(long id);
 

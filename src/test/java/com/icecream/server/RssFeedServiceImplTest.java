@@ -14,8 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /** 
  * RssFeedServiceImpl Tester.
@@ -52,7 +51,7 @@ public class RssFeedServiceImplTest {
   @Test
   public void testAddChannelSuccess() throws Exception {
     User user = userService.findById(1).isPresent()?userService.findById(1).get():null;
-    assertEquals(true, rssFeedService.addChannel(new RssFeed("https://36kr.com/feed"), user));
+    assertTrue(rssFeedService.addChannel("https://36kr.com/feed", user));
   }
 
   /**
@@ -61,7 +60,7 @@ public class RssFeedServiceImplTest {
   @Test
   public void testAddChannelFail() throws Exception {
     User user = userService.findById(1).isPresent()?userService.findById(1).get():null;
-    assertEquals(false, rssFeedService.addChannel(new RssFeed("http://www.aaaa.com/feed"), user));
+    assertFalse(rssFeedService.addChannel("http://www.aaaa.com/feed", user));
   }
 
   /**
@@ -70,10 +69,7 @@ public class RssFeedServiceImplTest {
   @Test
   public void testDeleteChannel() throws Exception {
     User user = userService.findById(1).isPresent()?userService.findById(1).get():null;
-    RssFeed rssFeed = rssFeedRepository.findByUrl("https://36kr.com/feed");
-    System.out.println("rssFeed is "+ rssFeed);
-    boolean res = rssFeedService.deleteChannel(rssFeed, user);
-    assertEquals(true, res);
+    assertTrue(rssFeedService.deleteChannel("https://36kr.com/feed", user));
   }
 
   /**

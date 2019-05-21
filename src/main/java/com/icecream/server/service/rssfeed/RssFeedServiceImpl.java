@@ -44,17 +44,17 @@ public class RssFeedServiceImpl implements RssFeedService {
   private static final Logger logger = LoggerFactory.getLogger(RssFeedServiceImpl.class);
 
   @Override
-  public boolean addChannel(RssFeed rssFeedEntity, User user) {
-    RssFeed existRssFeed = rssFeedRepository.findByUrl(rssFeedEntity.getUrl());
+  public boolean addChannel(String url, User user) {
+    RssFeed existRssFeed = rssFeedRepository.findByUrl(url);
     if (existRssFeed == null
-        || existRssFeed.getUserEntities().contains(user)) { //alreay have the feed
+        || existRssFeed.getUserEntities().contains(user)) { //already have the feed
       return false;
     }
 
     if (user.getRssFeedEntities().add(existRssFeed)) {
       userRepository.save(user);
       logger.info("crawl some articles for the new channel");
-      addArticles(rssFeedRepository.findByUrl(rssFeedEntity.getUrl()));
+      addArticles(rssFeedRepository.findByUrl(url));
       return true;
     }
     return false;
@@ -84,8 +84,13 @@ public class RssFeedServiceImpl implements RssFeedService {
   }
 
   @Override
-  public boolean deleteChannel(RssFeed rssFeed, User user) {
-    if (user.getRssFeedEntities().remove(rssFeed)) {
+  public boolean deleteChannel(String url, User user) {
+    RssFeed existRssFeed = rssFeedRepository.findByUrl(url);
+    if (existRssFeed == null
+        || !existRssFeed.getUserEntities().contains(user)) {
+      return false;
+    }
+    if (user.getRssFeedEntities().remove(existRssFeed)) {
       userRepository.save(user);
       return true;
     }

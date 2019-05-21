@@ -168,12 +168,12 @@ public class RssController {
   /**
    * Subscribe a new channel.
    *
-   * @param token         verification for user
-   * @param rssFeedEntity a channel entity
+   * @param token verification for user
+   * @param url   RSS feed url
    * @return NormalResponse
    */
   @RequestMapping(value = {"/addChannel"}, method = RequestMethod.GET)
-  public NormalResponse subscribeChannel(String token, RssFeed rssFeedEntity) {
+  public NormalResponse subscribeChannel(String token, String url) {
     Long id = userService.verifyToken(token);
     NormalResponse normalResponse = new NormalResponse("add a new channel");
     if (id == null) {
@@ -188,7 +188,7 @@ public class RssController {
       return normalResponse;
     }
 
-    if (!rssFeedService.addChannel(rssFeedEntity, user)) {
+    if (!rssFeedService.addChannel(url, user)) {
       normalResponse.setMsgCode(2);
       normalResponse.setMessage("add failed");
     } else {
@@ -201,12 +201,12 @@ public class RssController {
   /**
    * Unsubscribe a channel.
    *
-   * @param token     verification for user
-   * @param channelId channel id
+   * @param token verification for user
+   * @param url   RSS feed url
    * @return NormalResponse
    */
-  @RequestMapping(value = {"/deleteChannel/{id}"}, method = RequestMethod.GET)
-  public NormalResponse deleteChannel(@PathVariable("id") Long channelId, String token) {
+  @RequestMapping(value = {"/deleteChannel"}, method = RequestMethod.GET)
+  public NormalResponse deleteChannel(String token, String url) {
     Long userId = userService.verifyToken(token);
     NormalResponse normalResponse = new NormalResponse("delete a channel");
     if (userId == null) {
@@ -214,14 +214,13 @@ public class RssController {
       normalResponse.setMessage(WRONG_TOKEN);
       return normalResponse;
     }
-    RssFeed rssFeedEntity = rssFeedService.findById(channelId).orElse(null);
-    if (rssFeedEntity == null) {
+    User user = userService.findById(userId).orElse(null);
+    if (user == null) {
       normalResponse.setMsgCode(1);
-      normalResponse.setMessage("channel not find");
+      normalResponse.setMessage(USER_NOT_FIND);
       return normalResponse;
     }
-    User user = userService.findById(userId).orElse(null);
-    if (!rssFeedService.deleteChannel(rssFeedEntity, user)) {
+    if (!rssFeedService.deleteChannel(url, user)) {
       normalResponse.setMsgCode(2);
       normalResponse.setMessage("delete failed");
     } else {

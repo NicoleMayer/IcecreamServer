@@ -96,7 +96,7 @@ public class Article {
         + ", link='" + link + '\''
         + ", description='" + description + '\''
         + ", publishedTime=" + publishedTime
-        + ", rssFeedEntity=" + rssFeedEntity.getChannelName()
+        + ", rssFeedId=" + rssFeedEntity.getId()
         + '}';
   }
 }

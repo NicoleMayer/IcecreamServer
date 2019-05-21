@@ -34,7 +34,7 @@ public class RssControllerTest {
   private static final String ALL_SUBSCRIBED_ARTICILES_URL = MAIN_URL + "list/feed/all/articles";
   private static final String ONE_ARTICLE_URL = MAIN_URL + "list/article/%d";
   private static final String ADD_CHANNEL_URL = MAIN_URL + "addChannel";
-  private static final String DELETE_CHANNEL_URL = MAIN_URL + "deleteChannel/%d";
+  private static final String DELETE_CHANNEL_URL = MAIN_URL + "deleteChannel";
 
   private transient String token;
   private static final String MESSAGE = "message";
@@ -135,11 +135,11 @@ public class RssControllerTest {
   */
   @Test
   public void testSubscribeChannel() throws Exception {
-    String response = restTemplate.getForObject(ADD_CHANNEL_URL+token, String.class, new RssFeed("http://www.ifanr.com/feed"));
+    String response = restTemplate.getForObject(ADD_CHANNEL_URL+token+"&url=http://www.ifanr.com/feed", String.class);
     JSONObject jsonObject = new JSONObject(response);
     assertEquals("add succeed", jsonObject.getString(MESSAGE));
 
-    response = restTemplate.getForObject(ADD_CHANNEL_URL+token, String.class, new RssFeed("http://www.ifanr.com/feed"));
+    response = restTemplate.getForObject(ADD_CHANNEL_URL+token+"&url=http://www.ifanr.com/feed", String.class);
     jsonObject = new JSONObject(response);
     assertEquals("add failed", jsonObject.getString(MESSAGE));
   }
@@ -149,12 +149,12 @@ public class RssControllerTest {
    */
   @Test
   public void testDeleteChannel() throws Exception {
-    String url = String.format(DELETE_CHANNEL_URL+token, 1);
+    String url = DELETE_CHANNEL_URL+token+"&url=http://sdklafjladsfjlasf";
     String response = restTemplate.getForObject(url, String.class);
     JSONObject jsonObject = new JSONObject(response);
     assertEquals("channel not find", jsonObject.getString(MESSAGE));
 
-    url = String.format(DELETE_CHANNEL_URL+token, 27);
+    url =  DELETE_CHANNEL_URL+token+"&url=http://www.ifanr.com/feed";
     response = restTemplate.getForObject(url, String.class);
     jsonObject = new JSONObject(response);
     assertEquals("delete succeed", jsonObject.getString(MESSAGE));
