@@ -109,7 +109,12 @@ public class RssController {
     }
     List<Article> articles = articleService.find30NewestArticlesFromOneFeed(rssFeed);
     for (Article article : articles) {
-      article.setDescription(article.getDescription().substring(0, 50));
+      String desc = article.getDescription();
+      if (desc.length() > 50) {
+        article.setDescription(desc.substring(0, 50));
+      } else {
+        article.setDescription(desc);
+      }
     }
     return new ArticlesResponse("succeed", 3, articles);
   }
@@ -133,7 +138,12 @@ public class RssController {
     List<Article> articles = articleService.find30NewestArticlesFromManyFeeds(
         user.getRssFeedEntities());
     for (Article article : articles) {
-      article.setDescription(article.getDescription().substring(0, 50));
+      String desc = article.getDescription();
+      if (desc.length() > 50) {
+        article.setDescription(desc.substring(0, 50));
+      } else {
+        article.setDescription(desc);
+      }
     }
     return new ArticlesResponse("succeed", 2, articles);
 
@@ -231,7 +241,7 @@ public class RssController {
   }
 
   @RequestMapping(value = {"/freshChannel"}, method = RequestMethod.GET)
-  public NormalResponse freshChannel(String token){
+  public NormalResponse freshChannel(String token) {
     Long user_id = userService.verifyToken(token);
     NormalResponse normalResponse = new NormalResponse("fresh channels");
     if (user_id == null) {
@@ -241,7 +251,7 @@ public class RssController {
     }
     User user = userService.findById(user_id).orElse(null);
     Set<RssFeed> rssFeedSet = user.getRssFeedEntities();
-    for(RssFeed rssFeed: rssFeedSet){
+    for (RssFeed rssFeed : rssFeedSet) {
       rssFeedService.addArticles(rssFeed);
     }
     normalResponse.setMsgCode(1);

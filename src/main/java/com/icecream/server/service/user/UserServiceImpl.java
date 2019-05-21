@@ -74,14 +74,17 @@ public class UserServiceImpl implements UserService {
   @Override
   public NormalResponse registerUser(User user) {
     // client already deal with the length of username password,
-    // before registering, the phone number has been checked
-    // so here I don't handle these problems
     NormalResponse normalResponse = new NormalResponse("register status");
-
-    user.setPassword(passwordEncoder.encode(user.getPassword()));
-    userRepository.save(user);
-    normalResponse.setMessage("register succeed");
-    normalResponse.setMsgCode(0);
+    // avoid duplicate save
+    if (findByPhoneNumber(user.getPhoneNumber()) != null) {
+      normalResponse.setMessage("already registered");
+      normalResponse.setMsgCode(1);
+    } else {
+      user.setPassword(passwordEncoder.encode(user.getPassword()));
+      userRepository.save(user);
+      normalResponse.setMessage("register succeed");
+      normalResponse.setMsgCode(0);
+    }
     return normalResponse;
   }
 
