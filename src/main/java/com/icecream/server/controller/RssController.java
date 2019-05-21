@@ -145,6 +145,7 @@ public class RssController {
         article.setDescription(desc);
       }
     }
+    System.out.println(new ArticlesResponse("succeed", 2, articles));
     return new ArticlesResponse("succeed", 2, articles);
 
   }
@@ -168,7 +169,7 @@ public class RssController {
     }
     ArticleResponse articleResponse = new ArticleResponse("article find succeed", 2);
     articleResponse.setTitle(article.getTitle());
-    articleResponse.setChannelName(article.getRssFeedEntity().getChannelName());
+    articleResponse.setChannelUrl(article.getRssFeedEntity().getUrl());
     articleResponse.setLink(article.getLink());
     articleResponse.setPublishedTime(article.getPublishedTime());
     articleResponse.setContent(article.getDescription());

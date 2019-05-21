@@ -14,7 +14,7 @@ public class ArticleResponse {
   private String link;
   private String content;
   private Date publishedTime;
-  private String channelName;
+  private String channelUrl;
 
   /**
    * This is a constructor for ArticleResponse class.
@@ -35,7 +35,7 @@ public class ArticleResponse {
     this.link = "";
     this.content = "";
     this.publishedTime = new Date();
-    this.channelName = "";
+    this.channelUrl = "";
   }
 
   public String getMessage() {
@@ -86,13 +86,9 @@ public class ArticleResponse {
     this.publishedTime = publishedTime;
   }
 
-  public String getChannelName() {
-    return channelName;
-  }
+  public String getChannelUrl() { return channelUrl; }
 
-  public void setChannelName(String channelName) {
-    this.channelName = channelName;
-  }
+  public void setChannelUrl(String channelUrl) { this.channelUrl = channelUrl; }
 
   /**
    * String representation of the article response.
@@ -108,7 +104,7 @@ public class ArticleResponse {
             + ", link='" + link + '\''
             + ", content='" + content + '\''
             + ", publishedTime=" + publishedTime
-            + ", channelName='" + channelName + '\''
+            + ", channelName='" + channelUrl + '\''
             + '}';
   }
 }

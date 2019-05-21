@@ -1,9 +1,7 @@
 package com.icecream.server.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import java.util.Date;
 import javax.persistence.*;
+import java.util.Date;
 
 
 /**
@@ -32,7 +30,6 @@ public class Article {
   private Date publishedTime;
 
   @ManyToOne
-  @JsonIgnore
   private RssFeed rssFeedEntity;
 
   public Long getId() {
@@ -96,7 +93,7 @@ public class Article {
         + ", link='" + link + '\''
         + ", description='" + description + '\''
         + ", publishedTime=" + publishedTime
-        + ", rssFeedId=" + rssFeedEntity.getId()
+        + ", rssFeedUrl=" + rssFeedEntity.getUrl()
         + '}';
   }
 }
