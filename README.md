@@ -90,7 +90,7 @@ URL example: `http://server_ip/addChannel`
 | Name | Type | Description |
 | - | - | - |
 | token | parameter | check the user |
-| rssFeedEntity | parameter | basic info about the new channel |
+| url | parameter | url of the channel |
 | status    | return |0 "wrong token" |
 | status    | return |1 "user not find" |
 | status    | return |2 "add failed" |
@@ -99,16 +99,14 @@ URL example: `http://server_ip/addChannel`
 
 ### unsubscribe a channel
 GET
-URL example: `http://server_ip/deleteChannel/{id}`
+URL example: `http://server_ip/deleteChannel/`
 
 | Name | Type | Description |
 | - | - | - |
-| token | parameter | check the user |
-| id | parameter | channel id |
-| rssFeedEntity | parameter | basic info about the new channel |
-| id | parameter | channel id |
+| token  | parameter | check the user     |
+| url    | parameter | url of the channel |
 | status    | return |0 "wrong token" |
-| status    | return |1 "channel not find" |
+| status | return    | 1 "user not find"  |
 | status    | return |2 "delete failed" |
 | status    | return |2 "delete succeed" |
 
