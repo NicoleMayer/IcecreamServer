@@ -5,6 +5,7 @@ import com.icecream.server.client.ArticlesResponse;
 import com.icecream.server.client.FeedsResponse;
 import com.icecream.server.client.NormalResponse;
 import com.icecream.server.dao.ArticleRepository;
+import com.icecream.server.dao.RssFeedRepository;
 import com.icecream.server.entity.Article;
 import com.icecream.server.entity.RssFeed;
 import com.icecream.server.entity.User;
@@ -38,6 +39,8 @@ public class RssController {
 
   private final transient ArticleRepository articleRepository;
 
+  private final transient RssFeedRepository rssFeedRepository;
+
 
   private static final transient String WRONG_TOKEN = "wrong token";
   private static final transient String USER_NOT_FIND = "user not find";
@@ -51,11 +54,13 @@ public class RssController {
    * @param articleRepository ArticleRepository class
    */
   public RssController(UserService userService, RssFeedService rssFeedService,
-                       ArticleService articleService, ArticleRepository articleRepository) {
+                       ArticleService articleService, ArticleRepository articleRepository,
+                       RssFeedRepository rssFeedRepository) {
     this.userService = userService;
     this.rssFeedService = rssFeedService;
     this.articleService = articleService;
     this.articleRepository = articleRepository;
+    this.rssFeedRepository = rssFeedRepository;
   }
 
   /**
@@ -85,6 +90,16 @@ public class RssController {
       return new FeedsResponse(USER_NOT_FIND, 1, new HashSet<>());
     }
     return new FeedsResponse("succeed", 2, user.getRssFeedEntities());
+  }
+
+  /**
+   * All subscribed channels.
+   *
+   * @return List<RssFeed>
+   */
+  @RequestMapping(value = {"/list/all/feeds"}, method = RequestMethod.GET)
+  public List<RssFeed> getChannelListForCurrentUser() {
+    return rssFeedRepository.findAll();
   }
 
   /**
