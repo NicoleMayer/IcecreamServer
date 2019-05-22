@@ -2,10 +2,10 @@ package com.icecream.server.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import javax.persistence.*;
 
 
 /**
@@ -39,6 +39,8 @@ public class RssFeed {
   @JsonIgnore
   @OneToMany(mappedBy = "rssFeedEntity", cascade = CascadeType.REMOVE)
   private List<Article> articleEntities;
+
+
 
   /**
    * This is a constructor for RssFeed class.

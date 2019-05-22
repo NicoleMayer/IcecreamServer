@@ -135,12 +135,12 @@ public class RssController {
   }
 
   /**
-   * Articles for all subscribed channels.
+   * Articles for all subscribed channels for one user.
    *
    * @param token verification for user
    * @return ArticlesResponse
    */
-  @RequestMapping(value = {"/list/feed/all/articles"}, method = RequestMethod.GET)
+  @RequestMapping(value = {"/list/user/all/articles"}, method = RequestMethod.GET)
   public ArticlesResponse getNewestArticles(String token) {
     Long userId = userService.verifyToken(token);
     if (userId == null) {
@@ -152,6 +152,28 @@ public class RssController {
     }
     List<Article> articles = articleService.find30NewestArticlesFromManyFeeds(
         user.getRssFeedEntities());
+    for (Article article : articles) {
+      String desc = article.getDescription();
+      if (desc.length() > 50) {
+        article.setDescription(desc.substring(0, 50));
+      } else {
+        article.setDescription(desc);
+      }
+    }
+    return new ArticlesResponse("succeed", 2, articles);
+
+  }
+
+
+  /**
+   * Articles for all subscribed channels.
+   *
+   * @return ArticlesResponse
+   */
+  @RequestMapping(value = {"/list/feed/all/articles"}, method = RequestMethod.GET)
+  public ArticlesResponse getNewestArticles() {
+    List<Article> articles = articleService.find30NewestArticlesFromManyFeeds(rssFeedRepository.findAll());
+    System.out.println(rssFeedRepository.findAll());
     for (Article article : articles) {
       String desc = article.getDescription();
       if (desc.length() > 50) {
@@ -188,6 +210,35 @@ public class RssController {
     articleResponse.setPublishedTime(article.getPublishedTime());
     articleResponse.setContent(article.getDescription());
     return articleResponse;
+  }
+
+  /**
+   * Collected or liked articles for a user
+   *
+   * @param token verification for user
+   * @return ArticleResponse
+   */
+  @RequestMapping(value = {"/list/like/articles"}, method = RequestMethod.GET)
+  public ArticlesResponse getOneArticle(String token) {
+    Long userId = userService.verifyToken(token);
+    if (userId == null) {
+      return new ArticlesResponse(WRONG_TOKEN, 0, new ArrayList<>());
+    }
+    User user = userService.findById(userId).orElse(null);
+    if (user == null) {
+      return new ArticlesResponse(USER_NOT_FIND, 1, new ArrayList<>());
+    }
+    List<Article> articles = new ArrayList<>(user.getCollectedArticles());
+    for (Article article : articles) {
+      String desc = article.getDescription();
+      if (desc.length() > 50) {
+        article.setDescription(desc.substring(0, 50));
+      } else {
+        article.setDescription(desc);
+      }
+    }
+    return new ArticlesResponse("succeed", 2, articles);
+
   }
 
   /**
@@ -251,6 +302,70 @@ public class RssController {
     } else {
       normalResponse.setMsgCode(3);
       normalResponse.setMessage("delete succeed");
+    }
+    return normalResponse;
+  }
+
+  /**
+   * Like a new article.
+   *
+   * @param token verification for user
+   * @return NormalResponse
+   */
+  @RequestMapping(value = {"/like/article/{id}"}, method = RequestMethod.GET)
+  public NormalResponse likeArticle(@PathVariable("id") Long id, String token) {
+    Long user_id = userService.verifyToken(token);
+    NormalResponse normalResponse = new NormalResponse("collect a article");
+    if (user_id == null) {
+      normalResponse.setMsgCode(0);
+      normalResponse.setMessage(WRONG_TOKEN);
+      return normalResponse;
+    }
+    User user = userService.findById(user_id).orElse(null);
+    if (user == null) {
+      normalResponse.setMsgCode(1);
+      normalResponse.setMessage(USER_NOT_FIND);
+      return normalResponse;
+    }
+
+    if (!articleService.likeArticle(user, id)) {
+      normalResponse.setMsgCode(2);
+      normalResponse.setMessage("like failed");
+    } else {
+      normalResponse.setMsgCode(3);
+      normalResponse.setMessage("like succeed");
+    }
+    return normalResponse;
+  }
+
+  /**
+   * Unlike a new article.
+   *
+   * @param token verification for user
+   * @return NormalResponse
+   */
+  @RequestMapping(value = {"/unlike/article/{id}"}, method = RequestMethod.GET)
+  public NormalResponse unlikeArticle(@PathVariable("id") Long id, String token) {
+    Long user_id = userService.verifyToken(token);
+    NormalResponse normalResponse = new NormalResponse("uncollect a article");
+    if (user_id == null) {
+      normalResponse.setMsgCode(0);
+      normalResponse.setMessage(WRONG_TOKEN);
+      return normalResponse;
+    }
+    User user = userService.findById(user_id).orElse(null);
+    if (user == null) {
+      normalResponse.setMsgCode(1);
+      normalResponse.setMessage(USER_NOT_FIND);
+      return normalResponse;
+    }
+
+    if (!articleService.unlikeArticle(user, id)) {
+      normalResponse.setMsgCode(2);
+      normalResponse.setMessage("unlike failed");
+    } else {
+      normalResponse.setMsgCode(3);
+      normalResponse.setMessage("unlike succeed");
     }
     return normalResponse;
   }

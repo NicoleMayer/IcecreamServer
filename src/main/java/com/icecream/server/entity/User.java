@@ -30,6 +30,9 @@ public class User {
   @ManyToMany(fetch = FetchType.EAGER)
   private Set<RssFeed> rssFeedEntities;
 
+  @ManyToMany(fetch = FetchType.EAGER)
+  private Set<Article> collectedArticles;
+
   public Long getId() {
     return id;
   }
@@ -70,6 +73,15 @@ public class User {
     this.rssFeedEntities = rssFeedEntities;
   }
 
+
+  public Set<Article> getCollectedArticles() {
+    return collectedArticles;
+  }
+
+  public void setCollectedArticles(Set<Article> collectedArticles) {
+    this.collectedArticles = collectedArticles;
+  }
+
   public User() {
     super();
   }
@@ -87,6 +99,7 @@ public class User {
     this.username = username;
     this.password = password;
     this.rssFeedEntities = new HashSet<>();
+    this.collectedArticles = new HashSet<>();
   }
 
   /**

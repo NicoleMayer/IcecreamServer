@@ -11,22 +11,21 @@ import com.icecream.server.rss.ObjectFactory;
 import com.icecream.server.rss.TRss;
 import com.icecream.server.rss.TRssChannel;
 import com.icecream.server.rss.TRssItem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 @Service
@@ -43,6 +42,13 @@ public class RssFeedServiceImpl implements RssFeedService {
 
   private static final Logger logger = LoggerFactory.getLogger(RssFeedServiceImpl.class);
 
+  /**
+   * User add a new channel.
+   *
+   * @param url the channel address
+   * @param user wants to add channel
+   * @return succeed or not
+   */
   @Override
   public boolean addChannel(String url, User user) {
     RssFeed existRssFeed = rssFeedRepository.findByUrl(url);
@@ -60,6 +66,11 @@ public class RssFeedServiceImpl implements RssFeedService {
     return false;
   }
 
+  /**
+   * Add new articles for a given rss feed.
+   *
+   * @param rssFeedEntity the channel object
+   */
   @Override
   public void addArticles(RssFeed rssFeedEntity) {
     try {
@@ -78,11 +89,21 @@ public class RssFeedServiceImpl implements RssFeedService {
     }
   }
 
+  /**
+   * Add new articles for all rss feeds in a fixed time.
+   */
   @Scheduled(cron = "0 5/10 0 * *") //TODO 定时任务
   public void reloadChannels() {
     rssFeedRepository.findAll().stream().forEach(this::addArticles);
   }
 
+  /**
+   * Delete a channel
+   *
+   * @param url the channel address
+   * @param user wants to add channel
+   * @return succeed or not
+   */
   @Override
   public boolean deleteChannel(String url, User user) {
     RssFeed existRssFeed = rssFeedRepository.findByUrl(url);
@@ -97,6 +118,12 @@ public class RssFeedServiceImpl implements RssFeedService {
     return false;
   }
 
+  /**
+   * Crawl articles for a given url
+   *
+   * @param source the channel address
+   * @return a list of articles
+   */
   private List<Article> crawlArticles(Source source) throws RssException {
     List<Article> list = new ArrayList<>();
     try {
@@ -126,11 +153,23 @@ public class RssFeedServiceImpl implements RssFeedService {
     return list;
   }
 
+  /**
+   * Crawl articles for a given url
+   *
+   * @param url the channel address
+   * @return a list of articles
+   */
   @Override
   public List<Article> crawlArticles(String url) throws RssException {
     return this.crawlArticles(new StreamSource(url));
   }
 
+  /**
+   * Find a rss feed by id.
+   *
+   * @param id rss feed identification
+   * @return rss feed object
+   */
   @Override
   public Optional<RssFeed> findById(long id) {
     return rssFeedRepository.findById(id);

@@ -20,5 +20,4 @@ public interface RssFeedRepository extends JpaRepository<RssFeed, Long> {
   Optional<RssFeed> findById(Long id);
 
   List<RssFeed> findAll();
-
 }

@@ -1,7 +1,10 @@
 package com.icecream.server.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 
 /**
@@ -29,8 +32,19 @@ public class Article {
   @Column(name = "published_time")
   private Date publishedTime;
 
+  private String record;
+
   @ManyToOne
   private RssFeed rssFeedEntity;
+
+
+  @JsonIgnore
+  @ManyToMany(mappedBy = "collectedArticles", fetch = FetchType.EAGER)
+  private Set<User> userEntities;
+
+  public String getRecord() { return record; }
+
+  public void setRecord(String record) { this.record = record; }
 
   public Long getId() {
     return id;
@@ -78,6 +92,14 @@ public class Article {
 
   public void setRssFeedEntity(RssFeed rssFeedEntity) {
     this.rssFeedEntity = rssFeedEntity;
+  }
+
+  public Set<User> getUserEntities() {
+    return userEntities;
+  }
+
+  public void setUserEntities(Set<User> userEntities) {
+    this.userEntities = userEntities;
   }
 
   /**
