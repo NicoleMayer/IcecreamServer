@@ -32,8 +32,9 @@ public class UserControllerTest {
   public void testLoginValid() {
     LoginResponse loginResponse = restTemplate.postForObject(
             LOGIN_URL,
-            new User("1234", null, "123456"),
+            new User("12345", null, "123456"),
             LoginResponse.class);
+    System.out.println(loginResponse.getToken());
     assertEquals("valid login", "login succeed", loginResponse.getMessage());
   }
 

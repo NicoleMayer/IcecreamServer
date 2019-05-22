@@ -1,5 +1,6 @@
 package com.icecream.server.client;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -103,7 +104,7 @@ public class ArticleResponse {
             + ", title='" + title + '\''
             + ", link='" + link + '\''
             + ", content='" + content + '\''
-            + ", publishedTime=" + publishedTime
+            + ", publishedTime=" + new SimpleDateFormat("dd-MM-yyyy").format(publishedTime) + '\''
             + ", channelName='" + channelUrl + '\''
             + '}';
   }
