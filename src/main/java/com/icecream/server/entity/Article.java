@@ -1,10 +1,5 @@
 package com.icecream.server.entity;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import javax.persistence.*;
 import java.util.Date;
 
@@ -100,19 +95,5 @@ public class Article {
         + ", publishedTime=" + publishedTime
         + ", rssFeedUrl=" + rssFeedEntity.getUrl()
         + '}';
-  }
-
-  @Autowired
-  ObjectMapper mapper;
-  @RequestMapping("serialization")
-  @ResponseBody
-  public String serialization() {
-    try {
-      String str = mapper.writeValueAsString(this.toString());
-      return str;
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    return null;
   }
 }

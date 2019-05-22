@@ -160,7 +160,6 @@ public class RssController {
         article.setDescription(desc);
       }
     }
-    System.out.println(new ArticlesResponse("succeed", 2, articles));
     return new ArticlesResponse("succeed", 2, articles);
 
   }
