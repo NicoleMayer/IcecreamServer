@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -348,18 +349,23 @@ public class RssController {
    */
   @RequestMapping(value = {"/freshRecords"}, method = RequestMethod.GET)
   public RecordResponse freshRecords() {
-    RecordResponse recordResponse = new RecordResponse("succeed",0);
+    RecordResponse recordResponse = new RecordResponse("succeed", 0);
     List<Article> articles = articleRepository.findAll();
-    for (Article article:articles) {
-      if (article.getRecord() == null){
-        String path = "/media/icecream_record/"+article.getId()+"/";
+    for (Article article : articles) {
+      if (article.getRecord() == null) {
+        String path = "/media/icecream_record/" + article.getId() + "/";
         article.setRecord(path);
-        File file=new File(path);
-        if(!file.exists()){
-          file.mkdir();
+        File file = new File(path);
+        if (!file.exists() && file.mkdirs()) {
+          try {
+            if (file.createNewFile()) {
+              recordResponse.addArticleAndRecord(article.getDescription(), article.getRecord());
+              articleRepository.save(article);
+            }
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
         }
-        recordResponse.addArticleAndRecord(article.getDescription(), article.getRecord());
-        articleRepository.save(article);
       }
     }
     return recordResponse;
@@ -368,53 +374,19 @@ public class RssController {
 
   @RequestMapping(value = {"/list/record/{id}"}, method = RequestMethod.GET)
   @ResponseBody
-  public void getOneRecord(@PathVariable("id") Long id, HttpServletRequest request, HttpServletResponse response) throws Exception{
-    String path = "/media/icecream_record/"+id+"/record.mp3";
+  public void getOneRecord(@PathVariable("id") Long id, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    String path = "/media/icecream_record/" + id + "/record.mp3";
 //    String path = "11523.mp3"; // 测试
-    File music = new File(path);
-
-
-    FileInputStream in = new FileInputStream(music);
-    ServletOutputStream out = response.getOutputStream();
-    response.setContentType("audio/mpeg3");
-    byte[] b = null;
-    while(in.available() > 0) {
-      if(in.available() > 10240) {
-        b = new byte[10240];
-      }else {
-        b = new byte[in.available()];
-      }
-      in.read(b, 0, b.length);
-      out.write(b, 0, b.length);
-    }
-    in.close();
-    out.flush();
-    out.close();
+    readWriteFile(response, path, "audio/mpeg3");
   }
+
 
   @RequestMapping(value = {"/list/recordinfo/{id}"}, method = RequestMethod.GET)
   @ResponseBody
-  public void getOneRecordInfo(@PathVariable("id") Long id, HttpServletRequest request, HttpServletResponse response) throws Exception{
-    String path = "/media/icecream_record/"+id+"/record.txt";
+  public void getOneRecordInfo(@PathVariable("id") Long id, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    String path = "/media/icecream_record/" + id + "/record.txt";
 //    String path = "test.txt"; // 测试
-    File music = new File(path);
-
-    FileInputStream in = new FileInputStream(music);
-    ServletOutputStream out = response.getOutputStream();
-    response.setContentType("text/plain");
-    byte[] b = null;
-    while(in.available() > 0) {
-      if(in.available() > 10240) {
-        b = new byte[10240];
-      }else {
-        b = new byte[in.available()];
-      }
-      in.read(b, 0, b.length);
-      out.write(b, 0, b.length);
-    }
-    in.close();
-    out.flush();
-    out.close();
+    readWriteFile(response, path, "text/plain");
   }
 
   /**
@@ -457,5 +429,26 @@ public class RssController {
     normalResponse.setMsgCode(1);
     normalResponse.setMessage("update succeed");
     return normalResponse;
+  }
+
+  private void readWriteFile(HttpServletResponse response, String path, String s) throws IOException {
+    File music = new File(path);
+    FileInputStream in = new FileInputStream(music);
+    ServletOutputStream out = response.getOutputStream();
+    response.setContentType(s);
+    byte[] b;
+    while (in.available() > 0) {
+      if (in.available() > 10240) {
+        b = new byte[10240];
+      } else {
+        b = new byte[in.available()];
+      }
+      int len = in.read(b, 0, b.length);
+      out.write(b, 0, len
+      );
+    }
+    in.close();
+    out.flush();
+    out.close();
   }
 }
