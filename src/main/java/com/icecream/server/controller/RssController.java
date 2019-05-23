@@ -93,7 +93,7 @@ public class RssController {
   }
 
   /**
-   * All subscribed channels.
+   * All channels.
    *
    * @return List<RssFeed>
    */
@@ -125,11 +125,7 @@ public class RssController {
     List<Article> articles = articleService.find30NewestArticlesFromOneFeed(rssFeed);
     for (Article article : articles) {
       String desc = article.getDescription();
-      if (desc.length() > 50) {
-        article.setDescription(desc.substring(0, 50));
-      } else {
-        article.setDescription(desc);
-      }
+      article.setDescription(desc);
     }
     return new ArticlesResponse("succeed", 3, articles);
   }
@@ -154,11 +150,7 @@ public class RssController {
         user.getRssFeedEntities());
     for (Article article : articles) {
       String desc = article.getDescription();
-      if (desc.length() > 50) {
-        article.setDescription(desc.substring(0, 50));
-      } else {
-        article.setDescription(desc);
-      }
+      article.setDescription(desc);
     }
     return new ArticlesResponse("succeed", 2, articles);
 
@@ -176,11 +168,7 @@ public class RssController {
     System.out.println(rssFeedRepository.findAll());
     for (Article article : articles) {
       String desc = article.getDescription();
-      if (desc.length() > 50) {
-        article.setDescription(desc.substring(0, 50));
-      } else {
-        article.setDescription(desc);
-      }
+      article.setDescription(desc);
     }
     return new ArticlesResponse("succeed", 2, articles);
 
@@ -231,11 +219,7 @@ public class RssController {
     List<Article> articles = new ArrayList<>(user.getCollectedArticles());
     for (Article article : articles) {
       String desc = article.getDescription();
-      if (desc.length() > 50) {
-        article.setDescription(desc.substring(0, 50));
-      } else {
-        article.setDescription(desc);
-      }
+      article.setDescription(desc);
     }
     return new ArticlesResponse("succeed", 2, articles);
 
