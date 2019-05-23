@@ -13,7 +13,8 @@ public class NormalResponse {
   /**
    * This is a constructor for NormalResponse class.
    */
-  public NormalResponse() { }
+  public NormalResponse() {
+  }
 
   /**
    * This is a constructor for NormalResponse class.

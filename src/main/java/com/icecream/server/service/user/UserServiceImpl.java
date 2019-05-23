@@ -33,6 +33,7 @@ public class UserServiceImpl implements UserService {
 
   /**
    * Find user by its phone number.
+   *
    * @param phoneNumber user's phone number
    * @return user that has the phone number
    */
@@ -44,6 +45,7 @@ public class UserServiceImpl implements UserService {
 
   /**
    * Find user by its id.
+   *
    * @param id user's id
    * @return user that has the id
    */
@@ -56,6 +58,7 @@ public class UserServiceImpl implements UserService {
 
   /**
    * Login in if the user is valid.
+   *
    * @param user includes phone number and password
    * @return login response
    */
@@ -88,6 +91,7 @@ public class UserServiceImpl implements UserService {
 
   /**
    * Register if the user is valid.
+   *
    * @param user includes phone number and password
    * @return normal response
    */
@@ -111,6 +115,7 @@ public class UserServiceImpl implements UserService {
 
   /**
    * Verify if the token is valid or not.
+   *
    * @param token an identification for the user
    * @return the user's id if valid
    */

@@ -91,9 +91,6 @@ public class RssControllerTest {
     urls.add("http://www.geekpark.net/rss");
     for (int i = 0; i < list.length(); i++) {
       JSONObject channel_info = list.getJSONObject(i);
-      System.out.println("channel name is "+channel_info.getString("channelName"));
-      System.out.println("category is "+channel_info.getString("category"));
-      System.out.println("url is "+channel_info.getString("url"));
       if(!urls.contains(channel_info.getString("url"))){
         fail("The subscribed channel doesn't exist");
       }

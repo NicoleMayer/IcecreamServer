@@ -9,6 +9,8 @@ import com.icecream.server.entity.User;
 import com.icecream.server.service.rssfeed.ArticleService;
 import com.icecream.server.service.rssfeed.RssFeedService;
 import com.icecream.server.service.user.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletOutputStream;
@@ -40,9 +42,12 @@ public class RssController {
 
   private final transient RssFeedRepository rssFeedRepository;
 
+  private static final Logger logger = LoggerFactory.getLogger(RssController.class);
+
 
   private static final transient String WRONG_TOKEN = "wrong token";
   private static final transient String USER_NOT_FIND = "user not find";
+  private static final transient String SUCCEED = "succeed";
 
   /**
    * Constructor of RssController.
@@ -64,6 +69,7 @@ public class RssController {
 
   /**
    * Welcome page.
+   *
    * @return Welcome message
    */
   @RequestMapping(value = {"/"}, method = RequestMethod.GET)
@@ -73,6 +79,7 @@ public class RssController {
 
   /**
    * A user's subscribed channels.
+   *
    * @param token verification for user
    * @return FeedsResponse
    */
@@ -86,12 +93,13 @@ public class RssController {
     if (user == null) {
       return new FeedsResponse(USER_NOT_FIND, 1, new HashSet<>());
     }
-    return new FeedsResponse("succeed", 2, user.getRssFeedEntities());
+    return new FeedsResponse(SUCCEED, 2, user.getRssFeedEntities());
   }
 
   /**
    * Get all channels.
-   * @return List<RssFeed>
+   *
+   * @return a list of rss feed
    */
   @RequestMapping(value = {"/list/all/feeds"}, method = RequestMethod.GET)
   public List<RssFeed> getAllChannelList() {
@@ -120,7 +128,7 @@ public class RssController {
     }
     List<Article> articles = articleService.find30NewestArticlesFromOneFeed(rssFeed);
 
-    return new ArticlesResponse("succeed", 3, articles);
+    return new ArticlesResponse(SUCCEED, 3, articles);
   }
 
   /**
@@ -140,9 +148,9 @@ public class RssController {
       return new ArticlesResponse(USER_NOT_FIND, 1, new ArrayList<>());
     }
     List<Article> articles = articleService.find30NewestArticlesFromManyFeeds(
-        user.getRssFeedEntities());
+            user.getRssFeedEntities());
 
-    return new ArticlesResponse("succeed", 2, articles);
+    return new ArticlesResponse(SUCCEED, 2, articles);
 
   }
 
@@ -154,13 +162,15 @@ public class RssController {
    */
   @RequestMapping(value = {"/list/feed/all/articles"}, method = RequestMethod.GET)
   public ArticlesResponse getNewestArticles() {
-    List<Article> articles = articleService.find30NewestArticlesFromManyFeeds(rssFeedRepository.findAll());
-    return new ArticlesResponse("succeed", 2, articles);
+    List<Article> articles = articleService.find30NewestArticlesFromManyFeeds(
+            rssFeedRepository.findAll());
+    return new ArticlesResponse(SUCCEED, 2, articles);
 
   }
 
   /**
    * A article for a given article id.
+   *
    * @param token verification for user
    * @return ArticleResponse
    */
@@ -171,7 +181,7 @@ public class RssController {
       return new ArticleResponse(WRONG_TOKEN, 0);
     }
     Article article = articleRepository.findById(id).isPresent()
-        ? articleRepository.findById(id).get() : null;
+            ? articleRepository.findById(id).get() : null;
     if (article == null) {
       return new ArticleResponse("article not find", 1);
     }
@@ -186,7 +196,8 @@ public class RssController {
 
 
   /**
-   * Collected or liked articles for a user
+   * Collected or liked articles for a user.
+   *
    * @param token verification for user
    * @return ArticleResponse
    */
@@ -201,11 +212,12 @@ public class RssController {
       return new ArticlesResponse(USER_NOT_FIND, 1, new ArrayList<>());
     }
     List<Article> articles = new ArrayList<>(user.getCollectedArticles());
-    return new ArticlesResponse("succeed", 2, articles);
+    return new ArticlesResponse(SUCCEED, 2, articles);
   }
 
   /**
    * Subscribe a new channel.
+   *
    * @param token verification for user
    * @param url   RSS feed url
    * @return NormalResponse
@@ -276,14 +288,14 @@ public class RssController {
    */
   @RequestMapping(value = {"/like/article/{id}"}, method = RequestMethod.GET)
   public NormalResponse likeArticle(@PathVariable("id") Long id, String token) {
-    Long user_id = userService.verifyToken(token);
+    Long userId = userService.verifyToken(token);
     NormalResponse normalResponse = new NormalResponse("collect a article");
-    if (user_id == null) {
+    if (userId == null) {
       normalResponse.setMsgCode(0);
       normalResponse.setMessage(WRONG_TOKEN);
       return normalResponse;
     }
-    User user = userService.findById(user_id).orElse(null);
+    User user = userService.findById(userId).orElse(null);
     if (user == null) {
       normalResponse.setMsgCode(1);
       normalResponse.setMessage(USER_NOT_FIND);
@@ -302,19 +314,20 @@ public class RssController {
 
   /**
    * Unlike a new article.
+   *
    * @param token verification for user
    * @return NormalResponse
    */
   @RequestMapping(value = {"/unlike/article/{id}"}, method = RequestMethod.GET)
   public NormalResponse unlikeArticle(@PathVariable("id") Long id, String token) {
-    Long user_id = userService.verifyToken(token);
+    Long userId = userService.verifyToken(token);
     NormalResponse normalResponse = new NormalResponse("uncollect a article");
-    if (user_id == null) {
+    if (userId == null) {
       normalResponse.setMsgCode(0);
       normalResponse.setMessage(WRONG_TOKEN);
       return normalResponse;
     }
-    User user = userService.findById(user_id).orElse(null);
+    User user = userService.findById(userId).orElse(null);
     if (user == null) {
       normalResponse.setMsgCode(1);
       normalResponse.setMessage(USER_NOT_FIND);
@@ -334,11 +347,12 @@ public class RssController {
 
   /**
    * Get article's record.
+   *
    * @return RecordResponse
    */
   @RequestMapping(value = {"/freshRecords"}, method = RequestMethod.GET)
   public RecordResponse freshRecords() {
-    RecordResponse recordResponse = new RecordResponse("succeed", 0);
+    RecordResponse recordResponse = new RecordResponse(SUCCEED, 0);
     List<Article> articles = articleRepository.findAll();
     for (Article article : articles) {
       if (article.getRecord() == null) {
@@ -352,7 +366,7 @@ public class RssController {
               articleRepository.save(article);
             }
           } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("create file exception");
           }
         }
       }
@@ -360,11 +374,19 @@ public class RssController {
     return recordResponse;
   }
 
-
+  /**
+   * Return mp3 record.
+   *
+   * @param id       article id
+   * @param request  http request
+   * @param response http response
+   * @throws Exception exception
+   */
   @RequestMapping(value = {"/list/record_mp3/{id}"}, method = RequestMethod.GET)
   @ResponseBody
-  public void getOneRecordMp3(@PathVariable("id") Long id, HttpServletRequest request, HttpServletResponse response) throws Exception{
-    String path = "/media/icecream_record/"+id+"/record.mp3";
+  public void getOneRecordMp3(@PathVariable("id") Long id, HttpServletRequest request,
+                              HttpServletResponse response) throws Exception {
+    String path = "/media/icecream_record/" + id + "/record.mp3";
     File music = new File(path);
 
 
@@ -372,10 +394,10 @@ public class RssController {
     ServletOutputStream out = response.getOutputStream();
     response.setContentType("audio/mpeg3");
     byte[] b = null;
-    while(in.available() > 0) {
-      if(in.available() > 10240) {
+    while (in.available() > 0) {
+      if (in.available() > 10240) {
         b = new byte[10240];
-      }else {
+      } else {
         b = new byte[in.available()];
       }
       in.read(b, 0, b.length);
@@ -386,21 +408,29 @@ public class RssController {
     out.close();
   }
 
-
+  /**
+   * Return record info.
+   *
+   * @param id       article id
+   * @param request  http request
+   * @param response http response
+   * @throws Exception exceptoon
+   */
   @RequestMapping(value = {"/list/record_info/{id}"}, method = RequestMethod.GET)
   @ResponseBody
-  public void getOneRecordInfo(@PathVariable("id") Long id, HttpServletRequest request, HttpServletResponse response) throws Exception{
-    String path = "/media/icecream_record/"+id+"/record.txt";
+  public void getOneRecordInfo(@PathVariable("id") Long id, HttpServletRequest request,
+                               HttpServletResponse response) throws Exception {
+    String path = "/media/icecream_record/" + id + "/record.txt";
     File music = new File(path);
 
     FileInputStream in = new FileInputStream(music);
     ServletOutputStream out = response.getOutputStream();
     response.setContentType("text/plain");
     byte[] b = null;
-    while(in.available() > 0) {
-      if(in.available() > 10240) {
+    while (in.available() > 0) {
+      if (in.available() > 10240) {
         b = new byte[10240];
-      }else {
+      } else {
         b = new byte[in.available()];
       }
       in.read(b, 0, b.length);
@@ -413,6 +443,7 @@ public class RssController {
 
   /**
    * Checks the token.
+   *
    * @param token user token.
    * @return Normal response.
    */

@@ -48,7 +48,8 @@ public class RssFeedServiceImpl implements RssFeedService {
 
   /**
    * User add a new channel.
-   * @param url the channel address
+   *
+   * @param url  the channel address
    * @param user wants to add channel
    * @return succeed or not
    */
@@ -59,8 +60,8 @@ public class RssFeedServiceImpl implements RssFeedService {
       return false;
     }
 
-    for(RssFeed rssFeed: user.getRssFeedEntities()){
-      if(rssFeed.getId() == existRssFeed.getId()){
+    for (RssFeed rssFeed : user.getRssFeedEntities()) {
+      if (rssFeed.getId().equals(existRssFeed.getId())) {
         return false;
       }
     }
@@ -71,6 +72,7 @@ public class RssFeedServiceImpl implements RssFeedService {
 
   /**
    * Add new articles for a given rss feed.
+   *
    * @param rssFeedEntity the channel object
    */
   @Override
@@ -79,8 +81,8 @@ public class RssFeedServiceImpl implements RssFeedService {
       List<Article> articles = crawlArticles(rssFeedEntity.getUrl());
       articles.forEach(entry -> {
         Article savedArticle =
-            articleRepository.findByRssFeedEntityAndLink(
-                rssFeedEntity, entry.getLink()); //no repeat articles
+                articleRepository.findByRssFeedEntityAndLink(
+                        rssFeedEntity, entry.getLink()); //no repeat articles
         if (savedArticle == null) {
           entry.setRssFeedEntity(rssFeedEntity);
           articleRepository.save(entry);
@@ -102,7 +104,8 @@ public class RssFeedServiceImpl implements RssFeedService {
 
   /**
    * Delete a channel.
-   * @param url the channel address
+   *
+   * @param url  the channel address
    * @param user wants to add channel
    * @return succeed or not
    */
@@ -112,8 +115,8 @@ public class RssFeedServiceImpl implements RssFeedService {
     if (existRssFeed == null) {
       return false;
     }
-    for(RssFeed rssFeed: user.getRssFeedEntities()){
-      if(rssFeed.getId() == existRssFeed.getId()){
+    for (RssFeed rssFeed : user.getRssFeedEntities()) {
+      if (rssFeed.getId().equals(existRssFeed.getId())) {
         user.getRssFeedEntities().remove(rssFeed);
         userRepository.save(user);
         return true;
@@ -124,6 +127,7 @@ public class RssFeedServiceImpl implements RssFeedService {
 
   /**
    * Crawl articles for a given source.
+   *
    * @param source the channel address
    * @return a list of articles
    */
@@ -144,7 +148,7 @@ public class RssFeedServiceImpl implements RssFeedService {
           article.setDescription(rssItem.getDescription());
           article.setLink(rssItem.getLink());
           Date pubDate = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH)
-              .parse(rssItem.getPubDate());
+                  .parse(rssItem.getPubDate());
           article.setPublishedTime(pubDate);
           list.add(article);
         }
@@ -157,7 +161,8 @@ public class RssFeedServiceImpl implements RssFeedService {
   }
 
   /**
-   * Crawl articles for a given url
+   * Crawl articles for a given url.
+   *
    * @param url the channel address
    * @return a list of articles
    */
@@ -168,6 +173,7 @@ public class RssFeedServiceImpl implements RssFeedService {
 
   /**
    * Find a rss feed by id.
+   *
    * @param id rss feed identification
    * @return rss feed object
    */

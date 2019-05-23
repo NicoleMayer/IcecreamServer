@@ -13,6 +13,7 @@ public class IceCreamServerApplication {
 
   /**
    * Run the spring application.
+   *
    * @param args arguments for spring application
    */
   public static void main(String[] args) {

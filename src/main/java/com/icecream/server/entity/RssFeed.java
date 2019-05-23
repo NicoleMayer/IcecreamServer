@@ -125,10 +125,10 @@ public class RssFeed {
   @Override
   public String toString() {
     return "RssFeed{"
-        + "id=" + id
-        + ", url='" + url + '\''
-        + ", channelName='" + channelName + '\''
-        + ", category='" + category + '\''
-        + '}';
+            + "id=" + id
+            + ", url='" + url + '\''
+            + ", channelName='" + channelName + '\''
+            + ", category='" + category + '\''
+            + '}';
   }
 }

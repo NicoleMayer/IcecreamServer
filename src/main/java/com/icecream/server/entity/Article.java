@@ -44,9 +44,13 @@ public class Article {
   @ManyToMany(mappedBy = "collectedArticles", fetch = FetchType.EAGER)
   private Set<User> userEntities;
 
-  public String getRecord() { return record; }
+  public String getRecord() {
+    return record;
+  }
 
-  public void setRecord(String record) { this.record = record; }
+  public void setRecord(String record) {
+    this.record = record;
+  }
 
   public Long getId() {
     return id;
@@ -96,9 +100,13 @@ public class Article {
     this.rssFeedEntity = rssFeedEntity;
   }
 
-  public Set<User> getUserEntities() { return userEntities; }
+  public Set<User> getUserEntities() {
+    return userEntities;
+  }
 
-  public void setUserEntities(Set<User> userEntities) { this.userEntities = userEntities; }
+  public void setUserEntities(Set<User> userEntities) {
+    this.userEntities = userEntities;
+  }
 
   /**
    * String representation of the article.
@@ -108,12 +116,12 @@ public class Article {
   @Override
   public String toString() {
     return "Article{"
-        + "id=" + id
-        + ", title='" + title + '\''
-        + ", link='" + link + '\''
-        + ", description='" + description + '\''
-        + ", publishedTime=" + publishedTime
-        + ", rssFeedUrl=" + rssFeedEntity.getUrl()
-        + '}';
+            + "id=" + id
+            + ", title='" + title + '\''
+            + ", link='" + link + '\''
+            + ", description='" + description + '\''
+            + ", publishedTime=" + publishedTime
+            + ", rssFeedUrl=" + rssFeedEntity.getUrl()
+            + '}';
   }
 }
