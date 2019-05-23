@@ -17,11 +17,8 @@ import java.util.Set;
 @Table(name = "rss_feed")
 public class RssFeed {
 
-  private static final long serialVersionUID = 1L;
-
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @JsonIgnore
   private Long id;
 
   @Column(unique = true)
@@ -39,7 +36,6 @@ public class RssFeed {
   @JsonIgnore
   @OneToMany(mappedBy = "rssFeedEntity", cascade = CascadeType.REMOVE)
   private List<Article> articleEntities;
-
 
 
   /**
@@ -69,9 +65,7 @@ public class RssFeed {
   @JsonIgnore
   public RssFeed(User user, String url) {
     this.url = url;
-    if (userEntities == null) {
-      userEntities = new HashSet<>();
-    }
+    userEntities = new HashSet<>();
     userEntities.add(user);
   }
 
