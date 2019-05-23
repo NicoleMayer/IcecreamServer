@@ -353,7 +353,7 @@ public class RssController {
     if (userId == null) {
       normalResponse.setMsgCode(0);
       normalResponse.setMessage(WRONG_TOKEN);
-    } else if (userService.findById(userId).isPresent()) {
+    } else if (!userService.findById(userId).isPresent()) {
       normalResponse.setMsgCode(1);
       normalResponse.setMessage(USER_NOT_FIND);
     } else {
