@@ -143,6 +143,7 @@ URL example: `http://server_ip/list/like/articles/`
 ### collect an article
 GET
 URL example: `http://server_ip/like/article/{id}`
+
 | Name | Type | Description |
 | - | - | - |
 | token | parameter | check the user |
@@ -154,6 +155,7 @@ URL example: `http://server_ip/like/article/{id}`
 ### uncollect an article
 GET
 URL example: `http://server_ip/unlike/article/{id}`
+
 | Name | Type | Description |
 | - | - | - |
 | token | parameter | check the user |
@@ -165,6 +167,7 @@ URL example: `http://server_ip/unlike/article/{id}`
 ### fresh the sound of article
 GET
 URL example: `http://server_ip/freshRecords`
+
 | Name | Type | Description |
 | - | - | - |
 | status    | return |0  "succeed" |
@@ -172,6 +175,7 @@ URL example: `http://server_ip/freshRecords`
 ### get the record mp3 of an article
 GET
 URL example: `http://server_ip/list/record_mp3/{id}`
+
 | Name | Type | Description |
 | - | - | - |
 | response | parameter | HttpServletResponse  |
@@ -180,6 +184,7 @@ URL example: `http://server_ip/list/record_mp3/{id}`
 ### get the record info of an article
 GET
 URL example: `http://server_ip/list/record_info/{id}`
+
 | Name | Type | Description |
 | - | - | - |
 | response | parameter | HttpServletResponse  |
@@ -189,6 +194,7 @@ URL example: `http://server_ip/list/record_info/{id}`
 ### check the token
 GET
 URL example: `http://server_ip/checkToken`
+
 | Name | Type | Description |
 | - | - | - |
 | token | parameter | check the user |
@@ -198,16 +204,27 @@ URL example: `http://server_ip/checkToken`
 
 ## classes
 ### entity
-
+![entity](src/main/resources/images/entity_field.png)
 ### dao
-
+![dao](src/main/resources/images/dao_field.png)
 ### service
-#### ArticleService
-#### RssFeedService
-#### UserService
-
+![services](src/main/resources/images/service_classes.png)
 
 ### controller
+![user](src/main/resources/images/userController.png)
+
+![rss](src/main/resources/images/rsscontroller.png)
+
+
+### response
+
+![response](src/main/resources/images/response.png)
+
+
+### configure 
+
+![configure](src/main/resources/images/configure_classes.png)
+
 
 ## Tests
 inside `test/com/icecream/server/controller`
