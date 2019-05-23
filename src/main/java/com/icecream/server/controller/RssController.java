@@ -417,7 +417,28 @@ public class RssController {
     out.close();
   }
 
-
+  /**
+   * Checks the token.
+   *
+   * @param token user token.
+   * @return Normal response.
+   */
+  @RequestMapping(value = {"/checkToken"}, method = RequestMethod.GET)
+  public NormalResponse checkToken(String token) {
+    Long userId = userService.verifyToken(token);
+    NormalResponse normalResponse = new NormalResponse("check token");
+    if (userId == null) {
+      normalResponse.setMsgCode(0);
+      normalResponse.setMessage(WRONG_TOKEN);
+    } else if (!userService.findById(userId).isPresent()) {
+      normalResponse.setMsgCode(1);
+      normalResponse.setMessage(USER_NOT_FIND);
+    } else {
+      normalResponse.setMsgCode(2);
+      normalResponse.setMessage("valid");
+    }
+    return normalResponse;
+  }
 
   @RequestMapping(value = {"/freshChannel"}, method = RequestMethod.GET)
   public NormalResponse freshChannel(String token) {
