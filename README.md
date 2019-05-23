@@ -100,6 +100,8 @@ URL example: `http://server_ip/list/article/{id}`
 | status    | return |1 "article not find" |
 | status    | return |2 "article find succeed" |
 
+
+
 ### subscribe a new channel
 GET
 URL example: `http://server_ip/addChannel`
@@ -111,7 +113,7 @@ URL example: `http://server_ip/addChannel`
 | status    | return |0 "wrong token" |
 | status    | return |1 "user not find" |
 | status    | return |2 "add failed" |
-| status    | return |2 "add succeed" |
+| status    | return |3 "add succeed" |
 
 
 ### unsubscribe a channel
@@ -137,6 +139,62 @@ URL example: `http://server_ip/list/like/articles/`
 | status    | return |0 "wrong token" |
 | status | return    | 1 "user not find"  |
 | status    | return |2 "succeed" |
+
+### collect an article
+GET
+URL example: `http://server_ip/like/article/{id}`
+| Name | Type | Description |
+| - | - | - |
+| token | parameter | check the user |
+| id | parameter | article id |
+| status    | return |0 "wrong token" |
+| status    | return |1 "user not find" |
+| status    | return |2 "succeed" |
+
+### uncollect an article
+GET
+URL example: `http://server_ip/unlike/article/{id}`
+| Name | Type | Description |
+| - | - | - |
+| token | parameter | check the user |
+| id | parameter | article id |
+| status    | return |0 "wrong token" |
+| status    | return |1 "user not find" |
+| status    | return |2 "succeed" |
+
+### fresh the sound of article
+GET
+URL example: `http://server_ip/freshRecords`
+| Name | Type | Description |
+| - | - | - |
+| status    | return |0  "succeed" |
+
+### get the record mp3 of an article
+GET
+URL example: `http://server_ip/list/record_mp3/{id}`
+| Name | Type | Description |
+| - | - | - |
+| response | parameter | HttpServletResponse  |
+| id | parameter | article id |
+
+### get the record info of an article
+GET
+URL example: `http://server_ip/list/record_info/{id}`
+| Name | Type | Description |
+| - | - | - |
+| response | parameter | HttpServletResponse  |
+| id | parameter | article id |
+
+
+### check the token
+GET
+URL example: `http://server_ip/checkToken`
+| Name | Type | Description |
+| - | - | - |
+| token | parameter | check the user |
+| status    | return |0 "wrong token" |
+| status    | return |1 "user not find" |
+| status    | return |2 "valid" |
 
 ## classes
 ### entity

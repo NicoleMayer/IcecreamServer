@@ -90,11 +90,11 @@ public class RssController {
   }
 
   /**
-   * All channels.
+   * Get all channels.
    * @return List<RssFeed>
    */
   @RequestMapping(value = {"/list/all/feeds"}, method = RequestMethod.GET)
-  public List<RssFeed> getChannelListForCurrentUser() {
+  public List<RssFeed> getAllChannelList() {
     return rssFeedRepository.findAll();
   }
 
@@ -148,7 +148,7 @@ public class RssController {
 
 
   /**
-   * Articles for all subscribed channels.
+   * Articles for all channels.
    *
    * @return ArticlesResponse
    */
@@ -161,7 +161,6 @@ public class RssController {
 
   /**
    * A article for a given article id.
-   *
    * @param token verification for user
    * @return ArticleResponse
    */
@@ -188,12 +187,11 @@ public class RssController {
 
   /**
    * Collected or liked articles for a user
-   *
    * @param token verification for user
    * @return ArticleResponse
    */
   @RequestMapping(value = {"/list/like/articles"}, method = RequestMethod.GET)
-  public ArticlesResponse getOneArticle(String token) {
+  public ArticlesResponse getCollectedArticles(String token) {
     Long userId = userService.verifyToken(token);
     if (userId == null) {
       return new ArticlesResponse(WRONG_TOKEN, 0, new ArrayList<>());
@@ -208,7 +206,6 @@ public class RssController {
 
   /**
    * Subscribe a new channel.
-   *
    * @param token verification for user
    * @param url   RSS feed url
    * @return NormalResponse
@@ -305,7 +302,6 @@ public class RssController {
 
   /**
    * Unlike a new article.
-   *
    * @param token verification for user
    * @return NormalResponse
    */
@@ -338,7 +334,6 @@ public class RssController {
 
   /**
    * Get article's record.
-   *
    * @return RecordResponse
    */
   @RequestMapping(value = {"/freshRecords"}, method = RequestMethod.GET)
@@ -366,9 +361,9 @@ public class RssController {
   }
 
 
-  @RequestMapping(value = {"/list/record/{id}"}, method = RequestMethod.GET)
+  @RequestMapping(value = {"/list/record_mp3/{id}"}, method = RequestMethod.GET)
   @ResponseBody
-  public void getOneRecord(@PathVariable("id") Long id, HttpServletRequest request, HttpServletResponse response) throws Exception{
+  public void getOneRecordMp3(@PathVariable("id") Long id, HttpServletRequest request, HttpServletResponse response) throws Exception{
     String path = "/media/icecream_record/"+id+"/record.mp3";
     File music = new File(path);
 
@@ -392,7 +387,7 @@ public class RssController {
   }
 
 
-  @RequestMapping(value = {"/list/recordinfo/{id}"}, method = RequestMethod.GET)
+  @RequestMapping(value = {"/list/record_info/{id}"}, method = RequestMethod.GET)
   @ResponseBody
   public void getOneRecordInfo(@PathVariable("id") Long id, HttpServletRequest request, HttpServletResponse response) throws Exception{
     String path = "/media/icecream_record/"+id+"/record.txt";
@@ -418,7 +413,6 @@ public class RssController {
 
   /**
    * Checks the token.
-   *
    * @param token user token.
    * @return Normal response.
    */
