@@ -218,7 +218,7 @@ URL example: `http://server_ip/checkToken`
 
 ### response
 
-![response](src/main/resources/images/response.png)
+![response](src/main/resources/images/response_field.png)
 
 
 ### configure 
