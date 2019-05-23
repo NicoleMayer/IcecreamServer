@@ -1,9 +1,6 @@
 package com.icecream.server.controller;
 
-import com.icecream.server.client.ArticleResponse;
-import com.icecream.server.client.ArticlesResponse;
-import com.icecream.server.client.FeedsResponse;
-import com.icecream.server.client.NormalResponse;
+import com.icecream.server.client.*;
 import com.icecream.server.dao.ArticleRepository;
 import com.icecream.server.dao.RssFeedRepository;
 import com.icecream.server.entity.Article;
@@ -12,11 +9,13 @@ import com.icecream.server.entity.User;
 import com.icecream.server.service.rssfeed.ArticleService;
 import com.icecream.server.service.rssfeed.RssFeedService;
 import com.icecream.server.service.user.UserService;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -212,6 +211,7 @@ public class RssController {
     return articleResponse;
   }
 
+
   /**
    * Collected or liked articles for a user
    *
@@ -369,6 +369,85 @@ public class RssController {
     }
     return normalResponse;
   }
+
+
+  /**
+   * Get article's record.
+   *
+   * @return RecordResponse
+   */
+  @RequestMapping(value = {"/freshRecords"}, method = RequestMethod.GET)
+  public RecordResponse freshRecords() {
+    RecordResponse recordResponse = new RecordResponse("succeed",0);
+    List<Article> articles = articleRepository.findAll();
+    for (Article article:articles) {
+      if (article.getRecord() == null){
+        String path = "/media/icecream_record/"+article.getId()+"/";
+        article.setRecord(path);
+        File file=new File(path);
+        if(!file.exists()){
+          file.mkdir();
+        }
+        recordResponse.addArticleAndRecord(article.getDescription(), article.getRecord());
+        articleRepository.save(article);
+      }
+    }
+    return recordResponse;
+  }
+
+
+  @RequestMapping(value = {"/list/record/{id}"}, method = RequestMethod.GET)
+  @ResponseBody
+  public void getOneRecord(@PathVariable("id") Long id, HttpServletRequest request, HttpServletResponse response) throws Exception{
+    String path = "/media/icecream_record/"+id+"/record.mp3";
+//    String path = "11523.mp3"; // 测试
+    File music = new File(path);
+
+
+    FileInputStream in = new FileInputStream(music);
+    ServletOutputStream out = response.getOutputStream();
+    response.setContentType("audio/mpeg3");
+    byte[] b = null;
+    while(in.available() > 0) {
+      if(in.available() > 10240) {
+        b = new byte[10240];
+      }else {
+        b = new byte[in.available()];
+      }
+      in.read(b, 0, b.length);
+      out.write(b, 0, b.length);
+    }
+    in.close();
+    out.flush();
+    out.close();
+  }
+
+  @RequestMapping(value = {"/list/recordinfo/{id}"}, method = RequestMethod.GET)
+  @ResponseBody
+  public void getOneRecordInfo(@PathVariable("id") Long id, HttpServletRequest request, HttpServletResponse response) throws Exception{
+    String path = "/media/icecream_record/"+id+"/record.txt";
+//    String path = "test.txt"; // 测试
+    File music = new File(path);
+
+    FileInputStream in = new FileInputStream(music);
+    ServletOutputStream out = response.getOutputStream();
+    response.setContentType("text/plain");
+    byte[] b = null;
+    while(in.available() > 0) {
+      if(in.available() > 10240) {
+        b = new byte[10240];
+      }else {
+        b = new byte[in.available()];
+      }
+      in.read(b, 0, b.length);
+      out.write(b, 0, b.length);
+    }
+    in.close();
+    out.flush();
+    out.close();
+  }
+
+
 
   @RequestMapping(value = {"/freshChannel"}, method = RequestMethod.GET)
   public NormalResponse freshChannel(String token) {

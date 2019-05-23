@@ -92,13 +92,14 @@ public class RssFeedServiceImpl implements RssFeedService {
   /**
    * Add new articles for all rss feeds in a fixed time.
    */
-  @Scheduled(cron = "0 5/10 0 * *") //TODO 定时任务
+  @Scheduled(cron = "0 0/5 10 * * ?") //TODO 定时任务
   public void reloadChannels() {
     rssFeedRepository.findAll().stream().forEach(this::addArticles);
+    logger.info("finish fixed time task!");
   }
 
   /**
-   * Delete a channel
+   * Delete a channel.
    *
    * @param url the channel address
    * @param user wants to add channel
@@ -119,7 +120,7 @@ public class RssFeedServiceImpl implements RssFeedService {
   }
 
   /**
-   * Crawl articles for a given url
+   * Crawl articles for a given url.
    *
    * @param source the channel address
    * @return a list of articles
