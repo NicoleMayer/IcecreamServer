@@ -92,7 +92,7 @@ public class RssController {
   }
 
   /**
-   * All subscribed channels.
+   * All channels.
    *
    * @return List<RssFeed>
    */
@@ -122,14 +122,7 @@ public class RssController {
       return new ArticlesResponse("feed not find", 2, new ArrayList<>());
     }
     List<Article> articles = articleService.find30NewestArticlesFromOneFeed(rssFeed);
-    for (Article article : articles) {
-      String desc = article.getDescription();
-      if (desc.length() > 50) {
-        article.setDescription(desc.substring(0, 50));
-      } else {
-        article.setDescription(desc);
-      }
-    }
+
     return new ArticlesResponse("succeed", 3, articles);
   }
 
@@ -151,14 +144,7 @@ public class RssController {
     }
     List<Article> articles = articleService.find30NewestArticlesFromManyFeeds(
         user.getRssFeedEntities());
-    for (Article article : articles) {
-      String desc = article.getDescription();
-      if (desc.length() > 50) {
-        article.setDescription(desc.substring(0, 50));
-      } else {
-        article.setDescription(desc);
-      }
-    }
+
     return new ArticlesResponse("succeed", 2, articles);
 
   }
@@ -173,14 +159,7 @@ public class RssController {
   public ArticlesResponse getNewestArticles() {
     List<Article> articles = articleService.find30NewestArticlesFromManyFeeds(rssFeedRepository.findAll());
     System.out.println(rssFeedRepository.findAll());
-    for (Article article : articles) {
-      String desc = article.getDescription();
-      if (desc.length() > 50) {
-        article.setDescription(desc.substring(0, 50));
-      } else {
-        article.setDescription(desc);
-      }
-    }
+
     return new ArticlesResponse("succeed", 2, articles);
 
   }
@@ -202,7 +181,7 @@ public class RssController {
     if (article == null) {
       return new ArticleResponse("article not find", 1);
     }
-    ArticleResponse articleResponse = new ArticleResponse("article find succeed", 2);
+    ArticleResponse articleResponse = new ArticleResponse("find article successfully", 2);
     articleResponse.setTitle(article.getTitle());
     articleResponse.setChannelUrl(article.getRssFeedEntity().getUrl());
     articleResponse.setLink(article.getLink());
@@ -229,16 +208,7 @@ public class RssController {
       return new ArticlesResponse(USER_NOT_FIND, 1, new ArrayList<>());
     }
     List<Article> articles = new ArrayList<>(user.getCollectedArticles());
-    for (Article article : articles) {
-      String desc = article.getDescription();
-      if (desc.length() > 50) {
-        article.setDescription(desc.substring(0, 50));
-      } else {
-        article.setDescription(desc);
-      }
-    }
     return new ArticlesResponse("succeed", 2, articles);
-
   }
 
   /**
