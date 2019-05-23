@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -342,18 +343,23 @@ public class RssController {
    */
   @RequestMapping(value = {"/freshRecords"}, method = RequestMethod.GET)
   public RecordResponse freshRecords() {
-    RecordResponse recordResponse = new RecordResponse("succeed",0);
+    RecordResponse recordResponse = new RecordResponse("succeed", 0);
     List<Article> articles = articleRepository.findAll();
-    for (Article article:articles) {
-      if (article.getRecord() == null){
-        String path = "/media/icecream_record/"+article.getId()+"/";
+    for (Article article : articles) {
+      if (article.getRecord() == null) {
+        String path = "/media/icecream_record/" + article.getId() + "/";
         article.setRecord(path);
-        File file=new File(path);
-        if(!file.exists()){
-          file.mkdir();
+        File file = new File(path);
+        if (!file.exists() && file.mkdirs()) {
+          try {
+            if (file.createNewFile()) {
+              recordResponse.addArticleAndRecord(article.getDescription(), article.getRecord());
+              articleRepository.save(article);
+            }
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
         }
-        recordResponse.addArticleAndRecord(article.getDescription(), article.getRecord());
-        articleRepository.save(article);
       }
     }
     return recordResponse;
@@ -384,6 +390,7 @@ public class RssController {
     out.flush();
     out.close();
   }
+
 
   @RequestMapping(value = {"/list/recordinfo/{id}"}, method = RequestMethod.GET)
   @ResponseBody
