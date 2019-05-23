@@ -27,7 +27,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-
+/**
+ * This is the Service implementation for {@link RssFeed}.
+ *
+ * @author NicoleMayer
+ */
 @Service
 public class RssFeedServiceImpl implements RssFeedService {
 
@@ -44,7 +48,6 @@ public class RssFeedServiceImpl implements RssFeedService {
 
   /**
    * User add a new channel.
-   *
    * @param url the channel address
    * @param user wants to add channel
    * @return succeed or not
@@ -52,23 +55,22 @@ public class RssFeedServiceImpl implements RssFeedService {
   @Override
   public boolean addChannel(String url, User user) {
     RssFeed existRssFeed = rssFeedRepository.findByUrl(url);
-    if (existRssFeed == null
-        || existRssFeed.getUserEntities().contains(user)) { //already have the feed
+    if (existRssFeed == null) {
       return false;
     }
 
-    if (user.getRssFeedEntities().add(existRssFeed)) {
-      userRepository.save(user);
-      logger.info("crawl some articles for the new channel");
-      addArticles(rssFeedRepository.findByUrl(url));
-      return true;
+    for(RssFeed rssFeed: user.getRssFeedEntities()){
+      if(rssFeed.getId() == existRssFeed.getId()){
+        return false;
+      }
     }
-    return false;
+    user.getRssFeedEntities().add(existRssFeed);
+    userRepository.save(user);
+    return true;
   }
 
   /**
    * Add new articles for a given rss feed.
-   *
    * @param rssFeedEntity the channel object
    */
   @Override
@@ -92,15 +94,14 @@ public class RssFeedServiceImpl implements RssFeedService {
   /**
    * Add new articles for all rss feeds in a fixed time.
    */
-  @Scheduled(cron = "0 0/5 10 * * ?") //TODO 定时任务
-  public void reloadChannels() {
+  @Scheduled(cron = "0 0 0,2,4,6,8,10,12,14,16,18,20,22 * * ?")
+  private void reloadChannels() {
     rssFeedRepository.findAll().stream().forEach(this::addArticles);
     logger.info("finish fixed time task!");
   }
 
   /**
    * Delete a channel.
-   *
    * @param url the channel address
    * @param user wants to add channel
    * @return succeed or not
@@ -108,20 +109,21 @@ public class RssFeedServiceImpl implements RssFeedService {
   @Override
   public boolean deleteChannel(String url, User user) {
     RssFeed existRssFeed = rssFeedRepository.findByUrl(url);
-    if (existRssFeed == null
-        || !existRssFeed.getUserEntities().contains(user)) {
+    if (existRssFeed == null) {
       return false;
     }
-    if (user.getRssFeedEntities().remove(existRssFeed)) {
-      userRepository.save(user);
-      return true;
+    for(RssFeed rssFeed: user.getRssFeedEntities()){
+      if(rssFeed.getId() == existRssFeed.getId()){
+        user.getRssFeedEntities().remove(rssFeed);
+        userRepository.save(user);
+        return true;
+      }
     }
     return false;
   }
 
   /**
-   * Crawl articles for a given url.
-   *
+   * Crawl articles for a given source.
    * @param source the channel address
    * @return a list of articles
    */
@@ -156,7 +158,6 @@ public class RssFeedServiceImpl implements RssFeedService {
 
   /**
    * Crawl articles for a given url
-   *
    * @param url the channel address
    * @return a list of articles
    */
@@ -167,7 +168,6 @@ public class RssFeedServiceImpl implements RssFeedService {
 
   /**
    * Find a rss feed by id.
-   *
    * @param id rss feed identification
    * @return rss feed object
    */

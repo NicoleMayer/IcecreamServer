@@ -1,5 +1,6 @@
 package com.icecream.server.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -30,6 +31,7 @@ public class Article {
   private String description;
 
   @Column(name = "published_time")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private Date publishedTime;
 
   private String record;
@@ -94,13 +96,9 @@ public class Article {
     this.rssFeedEntity = rssFeedEntity;
   }
 
-  public Set<User> getUserEntities() {
-    return userEntities;
-  }
+  public Set<User> getUserEntities() { return userEntities; }
 
-  public void setUserEntities(Set<User> userEntities) {
-    this.userEntities = userEntities;
-  }
+  public void setUserEntities(Set<User> userEntities) { this.userEntities = userEntities; }
 
   /**
    * String representation of the article.

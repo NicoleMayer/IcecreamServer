@@ -16,6 +16,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+
+/**
+ * This is the Service implementation for {@link Article}.
+ *
+ * @author NicoleMayer
+ */
 @Service
 public class ArticleServiceImpl implements ArticleService {
 
@@ -26,9 +32,9 @@ public class ArticleServiceImpl implements ArticleService {
   private transient UserRepository userRepository;
 
   private static final Logger logger = LoggerFactory.getLogger(ArticleServiceImpl.class);
+
   /**
    * find 30 newest articles from one feed.
-   *
    * @param rssFeed one rssfeed to find newest articles
    * @return 30 newest articles
    */
@@ -39,7 +45,6 @@ public class ArticleServiceImpl implements ArticleService {
 
   /**
    * find 30 newest articles from many feeds.
-   *
    * @param rssFeeds rssfeeds to find newest articles
    * @return 30 newest articles
    */
@@ -50,7 +55,6 @@ public class ArticleServiceImpl implements ArticleService {
 
   /**
    * find 30 newest articles from many feeds.
-   *
    * @param rssFeeds rssfeeds to find newest articles
    * @return 30 newest articles
    */
@@ -62,7 +66,6 @@ public class ArticleServiceImpl implements ArticleService {
 
   /**
    * Like a given article.
-   *
    * @param user who want to collect an article
    * @param id which article to collect
    * @return succeed or not
@@ -70,9 +73,15 @@ public class ArticleServiceImpl implements ArticleService {
   @Override
   public boolean likeArticle(User user, Long id) {
     Article article = articleRepository.findById(id).orElse(null);
-    if (article == null
-            || article.getUserEntities().contains(user)) { //already like the article
+    if (article == null) {
       return false;
+    }
+
+    //already like the article
+    for(Article article1: user.getCollectedArticles()){
+      if(article1.getId() == article.getId()){
+        return false;
+      }
     }
 
     if (user.getCollectedArticles().add(article)) {
@@ -85,7 +94,6 @@ public class ArticleServiceImpl implements ArticleService {
 
   /**
    * Unlike a given article.
-   *
    * @param user who want to uncollect an article
    * @param id which article to uncollect
    * @return succeed or not
@@ -93,15 +101,17 @@ public class ArticleServiceImpl implements ArticleService {
   @Override
   public boolean unlikeArticle(User user, Long id) {
     Article article = articleRepository.findById(id).orElse(null);
-    if (article == null
-            || !article.getUserEntities().contains(user)) { //don't have the article
+    if (article == null) {
       return false;
     }
 
-    if (user.getCollectedArticles().remove(article)) {
-      userRepository.save(user);
-      logger.info("unlike article succeed");
-      return true;
+    for(Article article1: user.getCollectedArticles()){
+      if(article1.getId() == article.getId()){
+        user.getCollectedArticles().remove(article1);
+        userRepository.save(user);
+        logger.info("unlike article succeed");
+        return true;
+      }
     }
     return false;
   }

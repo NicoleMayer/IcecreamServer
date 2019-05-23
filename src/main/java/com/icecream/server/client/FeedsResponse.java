@@ -17,8 +17,7 @@ public class FeedsResponse {
   /**
    * This is a constructor for FeedsResponse class.
    */
-  public FeedsResponse() {
-  }
+  public FeedsResponse() { }
 
   /**
    * This is a constructor for FeedsResponse class.
@@ -53,9 +52,7 @@ public class FeedsResponse {
     return data;
   }
 
-  public void setData(Set<RssFeed> data) {
-    this.data = data;
-  }
+  public void setData(Set<RssFeed> data) { this.data = data; }
 
   /**
    * String representation of the channel response.

@@ -2,14 +2,16 @@ package com.icecream.server;
 
 import com.icecream.server.entity.User;
 import io.jsonwebtoken.*;
-
-import java.util.Date;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 
+
+/**
+ * Configure the jwt token.
+ */
 @Component
 public class JwtTokenProvider {
 
@@ -25,7 +27,6 @@ public class JwtTokenProvider {
 
   /**
    * To generate a token.
-   *
    * @param user a user entity
    * @return the generated token
    */
@@ -43,7 +44,6 @@ public class JwtTokenProvider {
 
   /**
    * To get a user id from token.
-   *
    * @param token a representation of a user
    * @return the id of this user
    */
@@ -58,7 +58,6 @@ public class JwtTokenProvider {
 
   /**
    * To check if the token is valid.
-   *
    * @param authToken a representation of a user
    * @return valid or not
    */
@@ -78,6 +77,5 @@ public class JwtTokenProvider {
       logger.error("JWT claims string is empty.");
     }
     return false;
-
   }
 }

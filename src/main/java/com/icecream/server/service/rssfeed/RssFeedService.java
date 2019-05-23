@@ -8,6 +8,12 @@ import com.icecream.server.exception.RssException;
 import java.util.List;
 import java.util.Optional;
 
+
+/**
+ * This is the Service interface for {@link RssFeed}.
+ *
+ * @author NicoleMayer
+ */
 public interface RssFeedService {
 
   boolean addChannel(String url, User user);
@@ -15,8 +21,6 @@ public interface RssFeedService {
   void addArticles(RssFeed rssFeedEntity);
 
   List<Article> crawlArticles(String url) throws RssException;
-
-  void reloadChannels();
 
   boolean deleteChannel(String url, User user);
 

@@ -1,5 +1,7 @@
 package com.icecream.server.client;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -14,6 +16,7 @@ public class ArticleResponse {
   private String title;
   private String link;
   private String content;
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private Date publishedTime;
   private String channelUrl;
 

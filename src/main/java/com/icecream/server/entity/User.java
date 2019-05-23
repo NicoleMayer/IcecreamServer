@@ -30,7 +30,7 @@ public class User {
   @ManyToMany(fetch = FetchType.EAGER)
   private Set<RssFeed> rssFeedEntities;
 
-  @ManyToMany(fetch = FetchType.EAGER)
+  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private Set<Article> collectedArticles;
 
   public Long getId() {
@@ -72,7 +72,6 @@ public class User {
   public void setRssFeedEntities(Set<RssFeed> rssFeedEntities) {
     this.rssFeedEntities = rssFeedEntities;
   }
-
 
   public Set<Article> getCollectedArticles() {
     return collectedArticles;

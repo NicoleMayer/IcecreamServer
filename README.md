@@ -47,6 +47,14 @@ URL example: `http://server_ip/list/feeds`
 | status    | return |1 "user not find" |
 | status    | return |2 "succeed" |
 
+### list all channels
+GET
+URL example: `http://server_ip/list/all/feeds`
+
+| Name | Type | Description |
+| - | - | - |
+| List<RssFeed>    | return |list of rssfeed |
+
 ### articles for a subscribed channel
 GET
 URL example: `http://server_ip/list/feed/{id}/articles`
@@ -62,7 +70,7 @@ URL example: `http://server_ip/list/feed/{id}/articles`
 
 ### articles for all subscribed channels
 GET
-URL example: `http://server_ip/list/feed/all/articles`
+URL example: `http://server_ip/list/user/all/articles`
 
 | Name | Type | Description |
 | - | - | - |
@@ -70,6 +78,15 @@ URL example: `http://server_ip/list/feed/all/articles`
 | status    | return |0 "wrong token" |
 | status    | return |1 "user not find" |
 | status    | return |2 "succeed" |
+
+### articles for all channels
+GET
+URL example: `http://server_ip/list/feed/all/articles`
+
+| Name | Type | Description |
+| - | - | - |
+| status    | return | ArticlesResponse |
+
 
 ### article for a given article id
 GET
@@ -110,13 +127,36 @@ URL example: `http://server_ip/deleteChannel/`
 | status    | return |2 "delete failed" |
 | status    | return |2 "delete succeed" |
 
+### collected articles
+GET
+URL example: `http://server_ip/list/like/articles/`
+
+| Name | Type | Description |
+| - | - | - |
+| token  | parameter | check the user     |
+| status    | return |0 "wrong token" |
+| status | return    | 1 "user not find"  |
+| status    | return |2 "succeed" |
+
+## classes
+### entity
+
+### dao
+
+### service
+#### ArticleService
+#### RssFeedService
+#### UserService
+
+
+### controller
 
 ## Tests
 inside `test/com/icecream/server/controller`
-### UserControllerTest
-Use `RestTemplate` to test the function of login and register. 
-I write 5 tests for login and my results are correct. 
-I write 9 tests for register and find some bugs. 
+I write tests for each public method in UserServiceImpl, RssFeedServiceImpl
+ArticleServiceImpl, UserController, RssController and JwtTokenProvider.
+Since methods in rss folder is from open source, which is used to parse rss source,
+so I don't write tests for code in it.
 
 ## Next plans
 * [X] Use token to keep login state
@@ -126,3 +166,6 @@ I write 9 tests for register and find some bugs.
 * [X] Some weird logic about update a channel and subscirbe channel
   * determine if the sources are given by the app and user can't add a customized rss feed
 
+* [X] Make crawling articles an automatic task
+* [X] MP3 record storage / reading handling
+* [ ] Classify the channels 

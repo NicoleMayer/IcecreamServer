@@ -8,17 +8,17 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Set;
 
-
+/**
+ * This class is used for database query.
+ *
+ * @author NicoleMayer
+ */
 public interface ArticleRepository extends JpaRepository<Article, Long> {
-  List<Article> findByRssFeedEntity(RssFeed rssFeedEntity);
 
   List<Article> findByRssFeedEntity(RssFeed rssFeedEntity, Pageable pageable);
-
-  List<Article> findByRssFeedEntityIsIn(Set<RssFeed> rssFeedEntity);
 
   List<Article> findByRssFeedEntityIsIn(Set<RssFeed> rssFeedEntity, Pageable pageable);
 
   Article findByRssFeedEntityAndLink(RssFeed rssFeedEntity, String link);
 
-  List<Article> findByTitleIsLike(String searchWords);
 }

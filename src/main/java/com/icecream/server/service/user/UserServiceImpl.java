@@ -31,18 +31,34 @@ public class UserServiceImpl implements UserService {
 
   private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
+  /**
+   * Find user by its phone number.
+   * @param phoneNumber user's phone number
+   * @return user that has the phone number
+   */
   @Override
   public User findByPhoneNumber(String phoneNumber) {
     logger.info(String.format("Getting user by phone number=%s", phoneNumber));
     return userRepository.findByPhoneNumber(phoneNumber);
   }
 
+  /**
+   * Find user by its id.
+   * @param id user's id
+   * @return user that has the id
+   */
   @Override
   public Optional<User> findById(long id) {
     logger.info(String.format("Getting user=%d", id));
     return userRepository.findById(id);
   }
 
+
+  /**
+   * Login in if the user is valid.
+   * @param user includes phone number and password
+   * @return login response
+   */
   @Override
   public LoginResponse loginUser(User user) {
     String phoneNumber = user.getPhoneNumber();
@@ -70,6 +86,11 @@ public class UserServiceImpl implements UserService {
     return loginResponse;
   }
 
+  /**
+   * Register if the user is valid.
+   * @param user includes phone number and password
+   * @return normal response
+   */
   @Override
   public NormalResponse registerUser(User user) {
     // client already deal with the length of username password,
@@ -88,6 +109,11 @@ public class UserServiceImpl implements UserService {
   }
 
 
+  /**
+   * Verify if the token is valid or not.
+   * @param token an identification for the user
+   * @return the user's id if valid
+   */
   @Override
   public Long verifyToken(String token) {
     Long id = null;

@@ -19,7 +19,6 @@ import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 /**
@@ -64,7 +63,6 @@ public class RssController {
 
   /**
    * Welcome page.
-   *
    * @return Welcome message
    */
   @RequestMapping(value = {"/"}, method = RequestMethod.GET)
@@ -73,8 +71,7 @@ public class RssController {
   }
 
   /**
-   * User's subscribed channels.
-   *
+   * A user's subscribed channels.
    * @param token verification for user
    * @return FeedsResponse
    */
@@ -93,7 +90,6 @@ public class RssController {
 
   /**
    * All channels.
-   *
    * @return List<RssFeed>
    */
   @RequestMapping(value = {"/list/all/feeds"}, method = RequestMethod.GET)
@@ -158,8 +154,6 @@ public class RssController {
   @RequestMapping(value = {"/list/feed/all/articles"}, method = RequestMethod.GET)
   public ArticlesResponse getNewestArticles() {
     List<Article> articles = articleService.find30NewestArticlesFromManyFeeds(rssFeedRepository.findAll());
-    System.out.println(rssFeedRepository.findAll());
-
     return new ArticlesResponse("succeed", 2, articles);
 
   }
@@ -370,7 +364,6 @@ public class RssController {
   @ResponseBody
   public void getOneRecord(@PathVariable("id") Long id, HttpServletRequest request, HttpServletResponse response) throws Exception{
     String path = "/media/icecream_record/"+id+"/record.mp3";
-//    String path = "11523.mp3"; // 测试
     File music = new File(path);
 
 
@@ -396,7 +389,6 @@ public class RssController {
   @ResponseBody
   public void getOneRecordInfo(@PathVariable("id") Long id, HttpServletRequest request, HttpServletResponse response) throws Exception{
     String path = "/media/icecream_record/"+id+"/record.txt";
-//    String path = "test.txt"; // 测试
     File music = new File(path);
 
     FileInputStream in = new FileInputStream(music);
@@ -437,25 +429,6 @@ public class RssController {
       normalResponse.setMsgCode(2);
       normalResponse.setMessage("valid");
     }
-    return normalResponse;
-  }
-
-  @RequestMapping(value = {"/freshChannel"}, method = RequestMethod.GET)
-  public NormalResponse freshChannel(String token) {
-    Long user_id = userService.verifyToken(token);
-    NormalResponse normalResponse = new NormalResponse("fresh channels");
-    if (user_id == null) {
-      normalResponse.setMsgCode(0);
-      normalResponse.setMessage("wrong token");
-      return normalResponse;
-    }
-    User user = userService.findById(user_id).orElse(null);
-    Set<RssFeed> rssFeedSet = user.getRssFeedEntities();
-    for (RssFeed rssFeed : rssFeedSet) {
-      rssFeedService.addArticles(rssFeed);
-    }
-    normalResponse.setMsgCode(1);
-    normalResponse.setMessage("update succeed");
     return normalResponse;
   }
 }

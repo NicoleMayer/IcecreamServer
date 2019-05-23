@@ -7,7 +7,11 @@ import com.icecream.server.entity.User;
 import java.util.List;
 import java.util.Set;
 
-
+/**
+ * This is the Service interface for {@link Article}.
+ *
+ * @author NicoleMayer
+ */
 public interface ArticleService {
 
   List<Article> find30NewestArticlesFromOneFeed(RssFeed rssFeed);
