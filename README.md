@@ -202,6 +202,28 @@ URL example: `http://server_ip/checkToken`
 | status    | return |1 "user not find" |
 | status    | return |2 "valid" |
 
+### fresh the subscribed channels
+POST
+URL example: `http://server_ip/freshChannels`
+
+| Name | Type | Description |
+| - | - | - |
+| token | parameter | check the user |
+| status    | return |0 "wrong token" |
+| status    | return |1 "update succeed" |
+
+### fresh one channel
+POST
+URL example: `http://server_ip/freshChannel`
+
+| Name | Type | Description |
+| - | - | - |
+| token | parameter | check the user |
+| rssFeed | parameter | the channel to fresh |
+| status    | return |0 "wrong token" |
+| status    | return |1 "update succeed" |
+
+
 ## classes
 ### entity
 ![entity](src/main/resources/images/entity_field.png)

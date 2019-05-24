@@ -25,7 +25,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   protected void configure(HttpSecurity http) throws Exception {
     http.csrf().disable().authorizeRequests().antMatchers("/signin",
             "/signup",
-            "/before-register")
+            "/before-register",
+            "/freshChannel",
+            "/freshChannels")
             .permitAll();
   }
 

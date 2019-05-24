@@ -1,16 +1,18 @@
 package com.icecream.server;
 
 import com.icecream.server.client.LoginResponse;
+import com.icecream.server.client.NormalResponse;
+import com.icecream.server.dao.RssFeedRepository;
+import com.icecream.server.entity.RssFeed;
 import com.icecream.server.entity.User;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -23,9 +25,12 @@ public class RssControllerTest {
 
   private final transient RestTemplate restTemplate = new RestTemplate();
 
+  @Autowired
+  private transient RssFeedRepository rssFeedRepository;
+
   private static final String PROTOCOL = "http";
   private static final String HOST = "localhost";
-  private static final String PORT = "8080";
+  private static final String PORT = "8081";
   private static final String MAIN_URL = PROTOCOL + "://" + HOST + ":" + PORT + "/";
 
   private static final String LOGIN_URL = MAIN_URL + "signin";
@@ -39,17 +44,20 @@ public class RssControllerTest {
   private static final String ADD_CHANNEL_URL = MAIN_URL + "addChannel";
   private static final String DELETE_CHANNEL_URL = MAIN_URL + "deleteChannel";
 
-  private static final String COLLECTED_ARTICLES_URL = MAIN_URL + "/list/like/articles";
+  private static final String COLLECTED_ARTICLES_URL = MAIN_URL + "list/like/articles";
 
 
-  private static final String LIKE_ARTICLE_URL = MAIN_URL + "/like/article/%d";
-  private static final String UNLIKE_ARTICLE_URL = MAIN_URL + "/unlike/article/%d";
-  private static final String FRESH_RECORD_URL = MAIN_URL + "/freshRecords";
+  private static final String LIKE_ARTICLE_URL = MAIN_URL + "like/article/%d";
+  private static final String UNLIKE_ARTICLE_URL = MAIN_URL + "unlike/article/%d";
+  private static final String FRESH_RECORD_URL = MAIN_URL + "freshRecords";
 
-  private static final String GET_MP3_URL = MAIN_URL + "/list/record_mp3/%d";
-  private static final String GET_MP3_INFO_URL = MAIN_URL + "/list/record_info/%d";
+  private static final String GET_MP3_URL = MAIN_URL + "list/record_mp3/%d";
+  private static final String GET_MP3_INFO_URL = MAIN_URL + "list/record_info/%d";
+  private static final String FRESH_CHANNEL_URL = MAIN_URL + "freshChannel";
+  private static final String FRESH_CHANNELS_URL = MAIN_URL + "freshChannels";
 
   private transient String token;
+  private transient String token_org;
   private static final String MESSAGE = "message";
 
   /**
@@ -61,6 +69,7 @@ public class RssControllerTest {
             LOGIN_URL,
             new User("12345", null, "123456"),
             LoginResponse.class);
+    token_org = loginResponse.getToken();
     token = "?token=" + loginResponse.getToken();
   }
 
@@ -275,6 +284,44 @@ public class RssControllerTest {
     catch (Exception e){
       fail("shouldn't fail");
     }
+  }
+
+  /**
+   * Test for getting all subscribed channels.
+   */
+  @Test
+  public void testFreshChannels() throws Exception {
+    String url = FRESH_CHANNELS_URL;
+    NormalResponse normalResponse = null;
+    try{
+      normalResponse = restTemplate.postForObject(url, token_org, NormalResponse.class);
+    }
+    catch (Exception e){
+      fail("shouldn't fail");
+    }
+    if (normalResponse == null){
+      fail("shouldn't be null");
+    }
+    assertEquals("update succeed", normalResponse.getMessage());
+  }
+
+  /**
+   * Test for getting only one specific channel.
+   */
+  @Test
+  public void testFreshOneChannel() throws Exception {
+    String url = FRESH_CHANNEL_URL;
+    RssFeed rssFeed = rssFeedRepository.findByUrl("http://www.geekpark.net/rss");
+    NormalResponse normalResponse = null;
+    Map<String, Object> hashMap = new HashMap<>();
+    hashMap.put("token", token_org);
+    hashMap.put("rssFeed", rssFeed);;
+    normalResponse = restTemplate.postForObject(url, hashMap, NormalResponse.class);
+
+    if (normalResponse == null){
+      fail("shouldn't be null");
+    }
+    assertEquals("update succeed", normalResponse.getMessage());
   }
 
 }

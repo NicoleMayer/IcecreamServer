@@ -26,6 +26,8 @@ import javax.xml.transform.stream.StreamSource;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This is the Service implementation for {@link RssFeed}.
@@ -145,7 +147,7 @@ public class RssFeedServiceImpl implements RssFeedService {
         for (TRssItem rssItem : items) {
           Article article = new Article();
           article.setTitle(rssItem.getTitle());
-          article.setDescription(rssItem.getDescription());
+          article.setDescription(parseHtml(rssItem.getDescription()));
           article.setLink(rssItem.getLink());
           Date pubDate = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH)
                   .parse(rssItem.getPubDate());
@@ -180,6 +182,31 @@ public class RssFeedServiceImpl implements RssFeedService {
   @Override
   public Optional<RssFeed> findById(long id) {
     return rssFeedRepository.findById(id);
+  }
+
+  /**
+   * Remove html element in the content
+   * @param htmlStr HTML content
+   * @return non-html content
+   */
+  private String parseHtml(String htmlStr){
+    String regEx_script="<script[^>]*?>[\\s\\S]*?<\\/script>";
+    String regEx_style="<style[^>]*?>[\\s\\S]*?<\\/style>";
+    String regEx_html="<[^>]+>";
+
+    Pattern p_script=Pattern.compile(regEx_script,Pattern.CASE_INSENSITIVE);
+    Matcher m_script=p_script.matcher(htmlStr);
+    htmlStr=m_script.replaceAll("");
+
+    Pattern p_style=Pattern.compile(regEx_style,Pattern.CASE_INSENSITIVE);
+    Matcher m_style=p_style.matcher(htmlStr);
+    htmlStr=m_style.replaceAll("");
+
+    Pattern p_html=Pattern.compile(regEx_html,Pattern.CASE_INSENSITIVE);
+    Matcher m_html=p_html.matcher(htmlStr);
+    htmlStr=m_html.replaceAll("");
+
+    return htmlStr.trim();
   }
 }
 
