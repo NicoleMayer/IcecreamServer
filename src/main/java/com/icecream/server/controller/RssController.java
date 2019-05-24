@@ -493,7 +493,7 @@ public class RssController {
    * @param token token.
    * @return normal response.
    */
-  @RequestMapping(value = {"/freshChannels"}, method = RequestMethod.POST)
+  @RequestMapping(value = {"/freshChannels"}, method = RequestMethod.GET)
   public NormalResponse freshChannels(String token) {
     Long user_id = userService.verifyToken(token);
     NormalResponse normalResponse = new NormalResponse("fresh channels");
