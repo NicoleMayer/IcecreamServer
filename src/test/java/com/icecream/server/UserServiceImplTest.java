@@ -1,18 +1,18 @@
 package com.icecream.server;
 
-        import com.icecream.server.client.LoginResponse;
-        import com.icecream.server.client.NormalResponse;
-        import com.icecream.server.entity.User;
-        import com.icecream.server.service.user.UserService;
-        import org.junit.Test;
-        import org.junit.runner.RunWith;
-        import org.springframework.beans.factory.annotation.Autowired;
-        import org.springframework.boot.test.context.SpringBootTest;
-        import org.springframework.test.context.junit4.SpringRunner;
-        import org.springframework.web.client.RestTemplate;
+import com.icecream.server.client.LoginResponse;
+import com.icecream.server.client.NormalResponse;
+import com.icecream.server.entity.User;
+import com.icecream.server.service.user.UserService;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.client.RestTemplate;
 
-        import static org.junit.Assert.assertEquals;
-        import static org.junit.Assert.fail;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * UserServiceImpl Tester.

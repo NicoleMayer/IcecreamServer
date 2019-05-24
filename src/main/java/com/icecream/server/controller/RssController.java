@@ -493,7 +493,7 @@ public class RssController {
    * @param token token.
    * @return normal response.
    */
-  @RequestMapping(value = {"/freshChannel"}, method = RequestMethod.GET)
+  @RequestMapping(value = {"/freshChannels"}, method = RequestMethod.POST)
   public NormalResponse freshChannels(String token) {
     Long user_id = userService.verifyToken(token);
     NormalResponse normalResponse = new NormalResponse("fresh channels");
@@ -518,7 +518,7 @@ public class RssController {
    * @param token token.
    * @return normal response.
    */
-  @RequestMapping(value = {"/freshChannel"}, method = RequestMethod.GET)
+  @RequestMapping(value = {"/freshChannel"}, method = RequestMethod.POST)
   public NormalResponse freshOneChannel(String token, RssFeed rssFeed) {
     Long user_id = userService.verifyToken(token);
     NormalResponse normalResponse = new NormalResponse("fresh channels");
