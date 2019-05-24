@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -151,7 +150,7 @@ public class RssController {
       return new ArticlesResponse(USER_NOT_FOUND, 1, new ArrayList<>());
     }
     List<Article> articles = articleService.find30NewestArticlesFromManyFeeds(
-            user.getRssFeedEntities());
+        user.getRssFeedEntities());
 
     return new ArticlesResponse(SUCCEED, 2, articles);
 
@@ -166,7 +165,7 @@ public class RssController {
   @RequestMapping(value = {"/list/feed/all/articles"}, method = RequestMethod.GET)
   public ArticlesResponse getNewestArticles() {
     List<Article> articles = articleService.find30NewestArticlesFromManyFeeds(
-            rssFeedRepository.findAll());
+        rssFeedRepository.findAll());
     return new ArticlesResponse(SUCCEED, 2, articles);
 
   }
@@ -184,7 +183,7 @@ public class RssController {
       return new ArticleResponse(WRONG_TOKEN, 0);
     }
     Article article = articleRepository.findById(id).isPresent()
-            ? articleRepository.findById(id).get() : null;
+        ? articleRepository.findById(id).get() : null;
     if (article == null) {
       return new ArticleResponse("article not find", 1);
     }
@@ -362,15 +361,10 @@ public class RssController {
         String path = "/media/icecream_record/" + article.getId() + "/";
         article.setRecord(path);
         File file = new File(path);
-        if (!file.exists() && file.mkdirs()) {
-          try {
-            if (file.createNewFile()) {
-              recordResponse.addArticleAndRecord(article.getDescription(), article.getRecord());
-              articleRepository.save(article);
-            }
-          } catch (IOException e) {
-            logger.error("create file exception");
-          }
+        if (!file.exists()) {
+          recordResponse.addArticleAndRecord(article.getDescription(), article.getRecord());
+          articleRepository.save(article);
+          // do not need to create file here.
         }
       }
     }
@@ -389,9 +383,9 @@ public class RssController {
   @ResponseBody
   public void getOneRecordMp3(@PathVariable("id") Long id, HttpServletRequest request,
                               HttpServletResponse response) throws Exception {
+    // TODO change path
     String path = "/media/icecream_record/" + id + "/record.mp3";
-    File music = new File(path);
-    FileInputStream in = new FileInputStream(music);
+    FileInputStream in = new FileInputStream(new File(path));
     ServletOutputStream out = response.getOutputStream();
     response.setContentType("audio/mpeg3");
     byte[] b = null;
@@ -401,8 +395,7 @@ public class RssController {
       } else {
         b = new byte[in.available()];
       }
-      in.read(b, 0, b.length);
-      out.write(b, 0, b.length);
+      out.write(b, 0, in.read(b, 0, b.length));
     }
     in.close();
     out.flush();
@@ -415,17 +408,17 @@ public class RssController {
    * @param id       article id
    * @param request  http request
    * @param response http response
-   * @throws Exception exceptoon
+   * @throws Exception exception
    */
   @RequestMapping(value = {"/list/record_info/{id}"}, method = RequestMethod.GET)
   @ResponseBody
   public void getOneRecordInfo(@PathVariable("id") Long id, HttpServletRequest request,
                                HttpServletResponse response) throws Exception {
-    String path = "/media/icecream_record/" + id + "/record.txt";
-    File music = new File(path);
-    FileInputStream in = new FileInputStream(music);
+    // TODO change path
+    String path = "/media/icecream_record/" + id + "/record.json";
+    FileInputStream in = new FileInputStream(new File(path));
     ServletOutputStream out = response.getOutputStream();
-    response.setContentType("text/plain");
+    response.setContentType("application/json");
     byte[] b = null;
     while (in.available() > 0) {
       if (in.available() > 10240) {
@@ -433,8 +426,7 @@ public class RssController {
       } else {
         b = new byte[in.available()];
       }
-      in.read(b, 0, b.length);
-      out.write(b, 0, b.length);
+      out.write(b, 0, in.read(b, 0, b.length));
     }
     in.close();
     out.flush();
