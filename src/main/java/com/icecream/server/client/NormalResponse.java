@@ -12,23 +12,10 @@ public class NormalResponse {
 
   /**
    * This is a constructor for NormalResponse class.
-   */
-  public NormalResponse() { }
-
-  /**
-   * This is a constructor for NormalResponse class.
    *
    * @param usage The description of the usage of this response.
    */
   public NormalResponse(String usage) {
-    this.usage = usage;
-  }
-
-  public String getUsage() {
-    return usage;
-  }
-
-  public void setUsage(String usage) {
     this.usage = usage;
   }
 

@@ -164,7 +164,7 @@ URL example: `http://server_ip/unlike/article/{id}`
 | status    | return |1 "user not find" |
 | status    | return |2 "succeed" |
 
-### fresh the sound of article
+### fresh the speech of articles
 GET
 URL example: `http://server_ip/freshRecords`
 
