@@ -35,6 +35,7 @@ public class ArticleServiceImpl implements ArticleService {
 
   /**
    * find 30 newest articles from one feed.
+   *
    * @param rssFeed one rssfeed to find newest articles
    * @return 30 newest articles
    */
@@ -45,6 +46,7 @@ public class ArticleServiceImpl implements ArticleService {
 
   /**
    * find 30 newest articles from many feeds.
+   *
    * @param rssFeeds rssfeeds to find newest articles
    * @return 30 newest articles
    */
@@ -55,6 +57,7 @@ public class ArticleServiceImpl implements ArticleService {
 
   /**
    * find 30 newest articles from many feeds.
+   *
    * @param rssFeeds rssfeeds to find newest articles
    * @return 30 newest articles
    */
@@ -66,8 +69,9 @@ public class ArticleServiceImpl implements ArticleService {
 
   /**
    * Like a given article.
+   *
    * @param user who want to collect an article
-   * @param id which article to collect
+   * @param id   which article to collect
    * @return succeed or not
    */
   @Override
@@ -78,8 +82,8 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     //already like the article
-    for(Article article1: user.getCollectedArticles()){
-      if(article1.getId() == article.getId()){
+    for (Article article1 : user.getCollectedArticles()) {
+      if (article1.getId().equals(article.getId())) {
         return false;
       }
     }
@@ -94,8 +98,9 @@ public class ArticleServiceImpl implements ArticleService {
 
   /**
    * Unlike a given article.
+   *
    * @param user who want to uncollect an article
-   * @param id which article to uncollect
+   * @param id   which article to uncollect
    * @return succeed or not
    */
   @Override
@@ -105,8 +110,8 @@ public class ArticleServiceImpl implements ArticleService {
       return false;
     }
 
-    for(Article article1: user.getCollectedArticles()){
-      if(article1.getId() == article.getId()){
+    for (Article article1 : user.getCollectedArticles()) {
+      if (article1.getId().equals(article.getId())) {
         user.getCollectedArticles().remove(article1);
         userRepository.save(user);
         logger.info("unlike article succeed");

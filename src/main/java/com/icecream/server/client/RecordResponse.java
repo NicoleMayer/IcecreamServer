@@ -11,38 +11,42 @@ import java.util.List;
 public class RecordResponse {
   private String message;
   private int msgCode;
-  private List<ArticleAndRecord> articleAndRecords;
+  private transient List<ArticleAndRecord> articleAndRecords;
+
   /**
    * This class is a inner class for record response.
    *
    * @author NicoleMayer
    */
-  class ArticleAndRecord{
+  class ArticleAndRecord {
     String content;
-    String record_path;
+    String recordPath;
 
-    public String getContent() { return content; }
+    public String getContent() {
+      return content;
+    }
 
     public void setContent(String content) {
       this.content = content;
     }
 
-    public String getRecord_path() {
-      return record_path;
+    public String getRecordPath() {
+      return recordPath;
     }
 
-    public void setRecord_path(String record_path) {
-      this.record_path = record_path;
+    public void setRecordPath(String recordPath) {
+      this.recordPath = recordPath;
     }
 
     /**
      * This is a constructor for ArticleAndRecord class.
-     * @param content article's content
-     * @param record_path path to store the record info
+     *
+     * @param content     article's content
+     * @param recordPath path to store the record info
      */
-    public ArticleAndRecord(String content, String record_path) {
+    public ArticleAndRecord(String content, String recordPath) {
       this.content = content;
-      this.record_path = record_path;
+      this.recordPath = recordPath;
     }
   }
 
@@ -66,17 +70,20 @@ public class RecordResponse {
     return articleAndRecords;
   }
 
-  public void setArticleAndRecords(List<ArticleAndRecord> articleAndRecords) { this.articleAndRecords = articleAndRecords; }
+  public void setArticleAndRecords(List<ArticleAndRecord> articleAndRecords) {
+    this.articleAndRecords = articleAndRecords;
+  }
 
   /**
    * Add new articleAndRecords to the list variable.
    *
-   * @param content article's content
-   * @param record_path path to store the record info
+   * @param content     article's content
+   * @param recordPath path to store the record info
    */
-  public void addArticleAndRecord(String content, String record_path) {
-    this.articleAndRecords.add(new ArticleAndRecord(content, record_path));
+  public void addArticleAndRecord(String content, String recordPath) {
+    this.articleAndRecords.add(new ArticleAndRecord(content, recordPath));
   }
+
   /**
    * This is a constructor for RecordResponse class.
    *

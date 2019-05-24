@@ -64,10 +64,10 @@ public class ArticlesResponse {
    */
   @Override
   public String toString() {
-    return "ArticlesResponse{" +
-            "message='" + message + '\'' +
-            ", msgCode=" + msgCode +
-            ", data=" + data +
-            '}';
+    return "ArticlesResponse{"
+            + "message='" + message + '\''
+            + ", msgCode=" + msgCode + '\''
+            + ", data=" + data + '\''
+            + '}';
   }
 }

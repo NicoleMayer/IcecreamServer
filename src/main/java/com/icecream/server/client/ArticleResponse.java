@@ -2,7 +2,6 @@ package com.icecream.server.client;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -90,9 +89,13 @@ public class ArticleResponse {
     this.publishedTime = publishedTime;
   }
 
-  public String getChannelUrl() { return channelUrl; }
+  public String getChannelUrl() {
+    return channelUrl;
+  }
 
-  public void setChannelUrl(String channelUrl) { this.channelUrl = channelUrl; }
+  public void setChannelUrl(String channelUrl) {
+    this.channelUrl = channelUrl;
+  }
 
   /**
    * String representation of the article response.
@@ -107,7 +110,7 @@ public class ArticleResponse {
             + ", title='" + title + '\''
             + ", link='" + link + '\''
             + ", content='" + content + '\''
-            + ", publishedTime=" + new SimpleDateFormat("dd-MM-yyyy").format(publishedTime) + '\''
+            + ", publishedTime=" + publishedTime + '\''
             + ", channelName='" + channelUrl + '\''
             + '}';
   }

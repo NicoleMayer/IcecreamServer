@@ -17,8 +17,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   /**
    * Override the method in spring security.
+   *
    * @param http the http request
-   * @throws Exception
+   * @throws Exception exception
    */
   @Override
   protected void configure(HttpSecurity http) throws Exception {
@@ -30,6 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   /**
    * Bean class for password encryption strategy.
+   *
    * @return a password encryption algorithm
    */
   @Bean

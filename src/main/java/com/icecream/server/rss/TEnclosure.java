@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.*;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tEnclosure", propOrder = {
-    "value"
+        "value"
 })
 public class TEnclosure {
 
