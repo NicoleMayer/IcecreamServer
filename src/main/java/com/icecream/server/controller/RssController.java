@@ -20,10 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 /**
@@ -487,6 +484,52 @@ public class RssController {
         normalResponse.setMessage(jsonObject.toString());
       }
     }
+    return normalResponse;
+  }
+
+  /**
+   * Fresh all subscribed channels.
+   *
+   * @param token token.
+   * @return normal response.
+   */
+  @RequestMapping(value = {"/freshChannel"}, method = RequestMethod.GET)
+  public NormalResponse freshChannels(String token) {
+    Long user_id = userService.verifyToken(token);
+    NormalResponse normalResponse = new NormalResponse("fresh channels");
+    if (user_id == null) {
+      normalResponse.setMsgCode(0);
+      normalResponse.setMessage("wrong token");
+      return normalResponse;
+    }
+    User user = userService.findById(user_id).orElse(null);
+    Set<RssFeed> rssFeedSet = user.getRssFeedEntities();
+    for (RssFeed rssFeed : rssFeedSet) {
+      rssFeedService.addArticles(rssFeed);
+    }
+    normalResponse.setMsgCode(1);
+    normalResponse.setMessage("update succeed");
+    return normalResponse;
+  }
+
+  /**
+   * Fresh only one channel.
+   *
+   * @param token token.
+   * @return normal response.
+   */
+  @RequestMapping(value = {"/freshChannel"}, method = RequestMethod.GET)
+  public NormalResponse freshOneChannel(String token, RssFeed rssFeed) {
+    Long user_id = userService.verifyToken(token);
+    NormalResponse normalResponse = new NormalResponse("fresh channels");
+    if (user_id == null) {
+      normalResponse.setMsgCode(0);
+      normalResponse.setMessage("wrong token");
+      return normalResponse;
+    }
+    rssFeedService.addArticles(rssFeed);
+    normalResponse.setMsgCode(1);
+    normalResponse.setMessage("update succeed");
     return normalResponse;
   }
 

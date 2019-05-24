@@ -17,4 +17,4 @@ spring:
     hibernate:
 #      ddl-auto: create
       ddl-auto: update
-    show-sql: true
+    show-sql: false
