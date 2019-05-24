@@ -20,6 +20,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 
@@ -42,7 +45,6 @@ public class RssController {
   private final transient RssFeedRepository rssFeedRepository;
 
   private static final Logger logger = LoggerFactory.getLogger(RssController.class);
-
 
   private static final transient String WRONG_TOKEN = "wrong token";
   private static final transient String USER_NOT_FOUND = "user not found";
@@ -380,7 +382,6 @@ public class RssController {
   @ResponseBody
   public void getOneRecordMp3(@PathVariable("id") Long id, HttpServletRequest request,
                               HttpServletResponse response) throws Exception {
-    // TODO change path
     String path = "/media/icecream_record/" + id + "/record.mp3";
     FileInputStream in = new FileInputStream(new File(path));
     ServletOutputStream out = response.getOutputStream();
@@ -403,31 +404,14 @@ public class RssController {
    * Return record info.
    *
    * @param id       article id
-   * @param request  http request
-   * @param response http response
    * @throws Exception exception
    */
   @RequestMapping(value = {"/list/record_info/{id}"}, method = RequestMethod.GET)
   @ResponseBody
-  public void getOneRecordInfo(@PathVariable("id") Long id, HttpServletRequest request,
-                               HttpServletResponse response) throws Exception {
-    // TODO change path
+  public String getOneRecordInfo(@PathVariable("id") Long id) throws Exception {
     String path = "/media/icecream_record/" + id + "/record.json";
-    FileInputStream in = new FileInputStream(new File(path));
-    ServletOutputStream out = response.getOutputStream();
-    response.setContentType("application/json");
-    byte[] b = null;
-    while (in.available() > 0) {
-      if (in.available() > 10240) {
-        b = new byte[10240];
-      } else {
-        b = new byte[in.available()];
-      }
-      out.write(b, 0, in.read(b, 0, b.length));
-    }
-    in.close();
-    out.flush();
-    out.close();
+    byte[] encoded = Files.readAllBytes(Paths.get(path));
+    return new String(encoded, StandardCharsets.UTF_8);
   }
 
   /**
